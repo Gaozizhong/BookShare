@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cn.a1949science.www.bookshare.Home_Page"
+    android:background="#ebecf0"
+    android:id="@+id/home__page">
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <include layout="@layout/activity_menu_page" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ebecf0">
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/booklist"
+                    android:dividerHeight="10dp"
+                    android:divider="#ebecf0"
+                    android:layout_marginTop="65dp" />
+
+                <ImageButton
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:id="@+id/shortcut"
+                    android:layout_marginBottom="50dp"
+                    android:layout_marginRight="30dp"
+                    android:src="@drawable/shortcut"
+                    android:scaleType="fitXY"
+                    android:background="#00000000"
+                    android:layout_gravity="right|bottom" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:background="#ffffff">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:id="@+id/menuImg"
+                        android:src="@mipmap/ic_menu_black_48dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_alignTop="@+id/searchImg"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:id="@+id/searchImg"
+                        android:src="@mipmap/ic_search_black_48dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp" />
+
+                </RelativeLayout>
+
+                <Button
+                    android:layout_width="55dp"
+                    android:layout_height="40dp"
+                    android:text="分享"
+                    android:id="@+id/shareBtn"
+                    android:layout_gravity="right|bottom"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginBottom="150dp"
+                    android:visibility="gone" />
+
+                <Button
+                    android:layout_width="55dp"
+                    android:layout_height="40dp"
+                    android:text="归还"
+                    android:id="@+id/returnBtn"
+                    android:layout_gravity="right|bottom"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginBottom="110dp"
+                    android:visibility="gone" />
+
+            </FrameLayout>
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+
+
+</FrameLayout>

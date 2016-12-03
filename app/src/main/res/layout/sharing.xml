@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ebecf0"
+    android:id="@+id/sharing_Dialog">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="2dp"
+        android:background="#ffffff"
+        android:gravity="center_vertical|center_horizontal"
+        android:id="@+id/linearLayout9"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:nestedScrollingEnabled="true" >
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="书名"
+            android:id="@+id/bookName_sharing"
+            android:textSize="14sp"
+            android:gravity="left|center_horizontal" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText"
+            android:gravity="left"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="2dp"
+        android:background="#ffffff"
+        android:gravity="center_vertical|center_horizontal"
+        android:id="@+id/linearLayout12"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:nestedScrollingEnabled="true" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="图书介绍"
+            android:id="@+id/textView22"
+            android:textSize="14sp"
+            android:gravity="left|center_horizontal" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText4"
+            android:gravity="left"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="2dp"
+        android:background="#ffffff"
+        android:gravity="center_vertical|center_horizontal"
+        android:id="@+id/linearLayout10"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:nestedScrollingEnabled="true" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="作者"
+            android:id="@+id/textView18"
+            android:textSize="14sp"
+            android:gravity="left|center_horizontal" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText2"
+            android:gravity="left"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="2dp"
+        android:background="#ffffff"
+        android:gravity="center_vertical|center_horizontal"
+        android:id="@+id/linearLayout11"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:nestedScrollingEnabled="true" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="借出时间"
+            android:id="@+id/textView19"
+            android:textSize="14sp"
+            android:gravity="left|center_horizontal" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText3"
+            android:gravity="left"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+</TableLayout>

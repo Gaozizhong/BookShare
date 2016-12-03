@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BookShare</string>
+    <string name="adviceHint">请提出您的宝贵意见</string>
+    <string name="okBtn">确认</string>
+</resources>

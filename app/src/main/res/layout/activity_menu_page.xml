@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cn.a1949science.www.bookshare.Menu_page"
+    android:background="#ebecf0"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="#ffffff" >
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/before"
+            android:src="@drawable/before"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="#ffffff"
+        android:layout_marginTop="40px"
+        android:gravity="center_vertical|center_horizontal"
+        android:weightSum="1"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:id="@+id/userInfo"
+        android:nestedScrollingEnabled="true">
+
+        <ImageView
+            android:layout_width="200px"
+            android:layout_height="200px"
+            android:id="@+id/favicon"
+            android:src="@drawable/favicon"
+            android:layout_marginLeft="40dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="暖倾心"
+            android:id="@+id/nickname"
+            android:textSize="20dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|center_horizontal" />
+
+        <ImageView
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:id="@+id/imageView8"
+            android:src="@drawable/after"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#ffffff"
+        android:layout_marginTop="40px"
+        android:gravity="center_vertical|center_horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:id="@+id/shared"
+        android:nestedScrollingEnabled="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="我分享的"
+            android:id="@+id/myShare"
+            android:textSize="14dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|center_horizontal" />
+
+        <ImageView
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:id="@+id/imageView4"
+            android:src="@drawable/after" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="2px"
+        android:background="#ffffff"
+        android:gravity="center_vertical|center_horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:id="@+id/read"
+        android:nestedScrollingEnabled="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="我看过的"
+            android:id="@+id/myRead"
+            android:textSize="14dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|center_horizontal" />
+
+        <ImageView
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:id="@+id/imageView5"
+            android:src="@drawable/after" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="2px"
+        android:background="#ffffff"
+        android:gravity="center_vertical|center_horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:id="@+id/like"
+        android:nestedScrollingEnabled="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="我喜欢的"
+            android:id="@+id/myLike"
+            android:textSize="14dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|center_horizontal" />
+
+        <ImageView
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:id="@+id/imageView6"
+            android:src="@drawable/after" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="2px"
+        android:background="#ffffff"
+        android:gravity="center_vertical|center_horizontal"
+        android:id="@+id/advice"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:nestedScrollingEnabled="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="意见反馈"
+            android:id="@+id/myAdvice"
+            android:textSize="14dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|center_horizontal" />
+
+        <ImageView
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:id="@+id/imageView7"
+            android:src="@drawable/after" />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="退出登录"
+        android:id="@+id/button"
+        android:background="#ffffff"
+        android:layout_marginTop="180dp" />
+
+</LinearLayout>
