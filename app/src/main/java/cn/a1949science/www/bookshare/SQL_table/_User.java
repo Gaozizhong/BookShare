@@ -1,0 +1,64 @@
+package cn.a1949science.www.bookshare.SQL_table;
+
+import cn.bmob.v3.BmobUser;
+
+/**
+ * Created by 高子忠 on 2016/12/4.
+ */
+public class _User extends BmobUser {
+
+//    username: 用户的用户名（必需）。
+//    password: 用户的密码（必需）。
+//    email: 用户的电子邮件地址（可选）。
+//    emailVerified:邮箱认证状态（可选）。
+//    mobilePhoneNumber：手机号码（可选）。
+//    mobilePhoneNumberVerified：手机号码的认证状态（可选）
+
+    //用户序号
+    private Integer userNum;
+    //用户性别
+    private Boolean usersex;
+    //用户学校
+    private String userSchool;
+    //宿舍号
+    private String userDorm;
+    //班级
+    private String userClass;
+    //学号
+    private Integer studentID;
+    //借书状态
+    private Boolean needReturn;
+
+    public Integer getUserNum(){return userNum;}
+    public void setUserNum(String userNum){this.userNum =  Integer.parseInt(userNum);}
+
+    public Boolean getUsersex() {return usersex;}
+    public void setUsersex(Boolean usersex){this.usersex = usersex;}
+
+    public String getUserSchool() {
+        return userSchool;
+    }
+    public void setUserSchool(String userSchool) {
+        this.userSchool = userSchool;
+    }
+
+    public String getUserDorm() {
+        return userDorm;
+    }
+    public void setUserDorm(String userDorm) {
+        this.userDorm = userDorm;
+    }
+
+    public String getUserClass() {
+        return userClass;
+    }
+    public void setUserClass(String userClass) {
+        this.userClass = userClass;
+    }
+
+    public Integer getStudentID(){return studentID;}
+    public void setStudentID(String studentID){this.studentID =  Integer.parseInt(studentID);}
+
+    public Boolean getNeedReturn() {return needReturn;}
+    public void setNeedReturn(Boolean needReturn){this.needReturn = needReturn;}
+}
