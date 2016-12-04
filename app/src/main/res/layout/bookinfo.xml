@@ -54,13 +54,9 @@
             android:id="@+id/bookName"
             android:textSize="14dp"
             android:gravity="center_horizontal"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:layout_marginRight="35dp" />
 
-        <ImageView
-            android:layout_width="100px"
-            android:layout_height="100px"
-            android:id="@+id/after"
-            android:src="@drawable/after" />
     </LinearLayout>
 
     <LinearLayout
@@ -89,13 +85,9 @@
             android:id="@+id/writename"
             android:textSize="14dp"
             android:gravity="center_horizontal"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:layout_marginRight="35dp" />
 
-        <ImageView
-            android:layout_width="100px"
-            android:layout_height="100px"
-            android:id="@+id/imageView"
-            android:src="@drawable/after" />
     </LinearLayout>
 
     <LinearLayout
@@ -124,13 +116,9 @@
             android:id="@+id/time"
             android:textSize="14dp"
             android:gravity="center_horizontal"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:layout_marginRight="35dp" />
 
-        <ImageView
-            android:layout_width="100px"
-            android:layout_height="100px"
-            android:id="@+id/imageView2"
-            android:src="@drawable/after" />
     </LinearLayout>
 
     <LinearLayout
@@ -162,8 +150,8 @@
             android:layout_weight="1" />
 
         <ImageView
-            android:layout_width="100px"
-            android:layout_height="100px"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:id="@+id/imageView3"
             android:src="@drawable/after" />
     </LinearLayout>
@@ -189,7 +177,23 @@
                 android:layout_height="30dp"
                 android:id="@+id/likeBtn"
                 android:background="#ffffff"
-                android:src="@mipmap/favourit"
+                android:src="@mipmap/favourite"
+                android:scaleType="fitXY" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="150px"
+            android:layout_height="150px"
+            android:background="#ffffff"
+            android:gravity="center_vertical|center_horizontal" >
+
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/imageButton"
+                android:background="#ffffff"
+                android:src="@mipmap/not_seen"
                 android:scaleType="fitXY" />
         </LinearLayout>
 
