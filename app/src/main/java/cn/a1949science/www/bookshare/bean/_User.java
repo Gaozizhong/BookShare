@@ -1,5 +1,6 @@
-package cn.a1949science.www.bookshare.SQL_table;
+package cn.a1949science.www.bookshare.bean;
 
+import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobUser;
 
 /**
