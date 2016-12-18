@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="cn.a1949science.www.bookshare.RegisterPage"
-    android:gravity="center_vertical|center_horizontal">
+    android:gravity="center_vertical|center_horizontal"
+    android:background="@mipmap/login">
 
     <LinearLayout
         android:orientation="horizontal"

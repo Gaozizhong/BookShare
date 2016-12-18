@@ -1,6 +1,5 @@
 package cn.a1949science.www.bookshare;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -11,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import cn.a1949science.www.bookshare.bean.MyUser;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.sms.BmobSMS;
 import cn.bmob.sms.exception.BmobException;
