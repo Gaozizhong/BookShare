@@ -33,9 +33,12 @@
             android:layout_height="55dp"
             android:ems="10"
             android:id="@+id/gender"
-            android:hint="请输入性别"
+            android:hint="请选择性别"
             android:selectAllOnFocus="true"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false" />
     </LinearLayout>
 
     <LinearLayout
@@ -48,9 +51,12 @@
             android:layout_height="55dp"
             android:ems="10"
             android:id="@+id/school"
-            android:hint="请输入学校"
+            android:hint="请选择学校"
             android:selectAllOnFocus="true"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:clickable="false" />
     </LinearLayout>
 
     <LinearLayout
@@ -63,9 +69,12 @@
             android:layout_height="55dp"
             android:ems="10"
             android:id="@+id/dorm"
-            android:hint="请输入宿舍号"
+            android:hint="请选择宿舍号"
             android:selectAllOnFocus="true"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:focusableInTouchMode="false"
+            android:focusable="false"
+            android:clickable="false" />
     </LinearLayout>
 
     <LinearLayout
@@ -78,9 +87,12 @@
             android:layout_height="55dp"
             android:ems="10"
             android:id="@+id/Class"
-            android:hint="请输入年级"
+            android:hint="请选择年级"
             android:selectAllOnFocus="true"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false" />
     </LinearLayout>
 
     <LinearLayout

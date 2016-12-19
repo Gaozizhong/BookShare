@@ -21,21 +21,22 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Home_Page"/>
-        <activity android:name=".Book_Info" />
-        <activity android:name=".Menu_page" />
-        <activity android:name=".User_Info" />
-        <activity android:name=".Advice_Page" />
-        <activity android:name=".Detail_Info" />
-        <activity android:name=".My_Book_List" />
-        <activity android:name=".Login_Page">
+        <activity android:name=".AppStart">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Login_Page"/>
         <activity android:name=".RegisterPage"/>
+        <activity android:name=".Home_Page" />
+        <activity android:name=".Book_Info" />
+        <activity android:name=".Menu_page" />
+        <activity android:name=".User_Info" />
+        <activity android:name=".Advice_Page" />
+        <activity android:name=".Detail_Info" />
+        <activity android:name=".My_Book_List" />
     </application>
 
 </manifest>

@@ -1,8 +1,10 @@
 package cn.a1949science.www.bookshare;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -24,6 +26,7 @@ public class RegisterPage extends AppCompatActivity {
     Button getCode,registerOk;
     EditText name,gender,school,dorm,Class,phoneNum,code,password,password2;
     MyCountTimer timer;
+    boolean sex1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +128,118 @@ public class RegisterPage extends AppCompatActivity {
             }
         });
 
+        gender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                final String[] sex = {"男","女"};
+                builder.setSingleChoiceItems(sex, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (sex[i] == "男") {
+                            sex1 = true;
+                        } else {
+                            sex1 = false;
+                        }
+                        gender.setText(sex[i]);
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.show();
+            }
+        });
+
+        school.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                final String[] schoolText = {"河北工业大学——北辰校区","河北工业大学——红桥校区"};
+                builder.setSingleChoiceItems(schoolText, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        school.setText(schoolText[i]);
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.show();
+            }
+        });
+        dorm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final AlertDialog.Builder builder1 = new AlertDialog.Builder(mContext);
+                final String[] dromText = {"西一","西二","西三","西四","西五",
+                        "东一","东二","东三","东四", "东五","东六", "东七","东八","东九",
+                        "其他"};
+                builder1.setSingleChoiceItems(dromText, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dorm.setText(dromText[i]);
+
+                        final AlertDialog.Builder builder2 = new AlertDialog.Builder(mContext);
+                        final String[] drom2Text = {"A","B"};
+                        builder2.setSingleChoiceItems(drom2Text, 0, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dorm.setText(dorm.getText().toString()+drom2Text[i]);
+
+                                final AlertDialog.Builder builder3 = new AlertDialog.Builder(mContext);
+                                final String[] drom3Text = {"1","2","3","4","5"};
+                                builder3.setSingleChoiceItems(drom3Text, 0, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dorm.setText(dorm.getText().toString()+drom3Text[i]);
+
+                                        final AlertDialog.Builder builder4 = new AlertDialog.Builder(mContext);
+                                        final String[] drom4Text = {"01","02","03","04","05","06","07","08","09","10"
+                                                ,"11","12","13","14","15","16","17","18","19","20"
+                                                ,"21","22","23","24","25","26","27","28","29","30"
+                                                ,"31","32","33","34","35","36","37","38","39","40"
+                                                ,"41","42","43","44","45","46","47","48","49","50"
+                                                ,"51","52","53","54","55","56","57","58","59","60"};
+                                        builder4.setSingleChoiceItems(drom4Text, 0, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                dorm.setText(dorm.getText().toString()+drom4Text[i]);
+                                                dialogInterface.dismiss();
+                                            }
+                                        });
+                                        builder4.show();
+
+                                        dialogInterface.dismiss();
+                                    }
+                                });
+                                builder3.show();
+
+                                dialogInterface.dismiss();
+                            }
+                        });
+                        builder2.show();
+
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder1.show();
+            }
+        });
+
+        Class.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                final String[] classsText = {"大一","大二","大三","大四","研一","研二","研三","博士"};
+                builder.setSingleChoiceItems(classsText, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Class.setText(classsText[i]);
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.show();
+            }
+        });
+
+
     }
 
     //注册
@@ -152,6 +267,7 @@ public class RegisterPage extends AppCompatActivity {
         //注册
         _User user = new _User();
         user.setUsername(name.getText().toString());
+        user.setUsersex(sex1);
         user.setUserSchool(school.getText().toString());
         user.setUserDorm(dorm.getText().toString());
         user.setUserClass(Class.getText().toString());
