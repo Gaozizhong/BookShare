@@ -7,6 +7,7 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -117,7 +118,6 @@ public class RegisterPage extends AppCompatActivity {
                     public void done(BmobException e) {
                         if (e == null) {
                             registerUser();
-                            finish();
 
                         } else {
                             Toast.makeText(mContext, "验证失败", Toast.LENGTH_SHORT).show();
@@ -128,6 +128,7 @@ public class RegisterPage extends AppCompatActivity {
             }
         });
 
+        //选择性别
         gender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,6 +150,7 @@ public class RegisterPage extends AppCompatActivity {
             }
         });
 
+        //选择学校
         school.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -164,6 +166,8 @@ public class RegisterPage extends AppCompatActivity {
                 builder.show();
             }
         });
+
+        //选择宿舍号
         dorm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -262,6 +266,11 @@ public class RegisterPage extends AppCompatActivity {
             Toast.makeText(mContext, "请输入11位有效号码", Toast.LENGTH_LONG).show();
             return;
         }
+        if(password.getText().toString().length()>18&&password.getText().toString().length()<6)
+        {
+            Toast.makeText(mContext, "请输入6~18位密码", Toast.LENGTH_LONG).show();
+            return;
+        }
 
 
         //注册
@@ -279,9 +288,10 @@ public class RegisterPage extends AppCompatActivity {
             public void done(_User s, cn.bmob.v3.exception.BmobException e) {
                 if (e == null) {
                     Toast.makeText(mContext, "注册成功！", Toast.LENGTH_LONG).show();
+                    finish();
                     return;
                 } else {
-                    return;
+                    Toast.makeText(mContext, "手机号已被注册！", Toast.LENGTH_LONG).show();
                 }
             }
         });

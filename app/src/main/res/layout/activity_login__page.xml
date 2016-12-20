@@ -51,7 +51,7 @@
             android:selectAllOnFocus="true"
             android:layout_centerHorizontal="true"
             android:layout_weight="1"
-            android:inputType="number" />
+            android:inputType="textPassword" />
 
     </LinearLayout>
 

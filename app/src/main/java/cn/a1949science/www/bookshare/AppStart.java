@@ -1,11 +1,18 @@
 package cn.a1949science.www.bookshare;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+
+import cn.bmob.sms.BmobSMS;
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobUser;
+import okhttp3.internal.Internal;
 
 public class AppStart extends AppCompatActivity {
 
@@ -15,6 +22,14 @@ public class AppStart extends AppCompatActivity {
         /*setContentView(R.layout.activity_app_start);*/
         final View view = View.inflate(this, R.layout.activity_app_start, null);
         setContentView(view);
+
+        /*沉浸式标题栏*/
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
+
+        Bmob.initialize(this, "13d736220ecc496d7dcb63c7cf918ba7");
 
         AlphaAnimation aa = new AlphaAnimation(0.3f,1.0f);
         //设置持续时间
@@ -36,8 +51,15 @@ public class AppStart extends AppCompatActivity {
     }
 
         private void redirectTo(){
-            Intent intent = new Intent(this, Login_Page.class);
-            startActivity(intent);
-            finish();
+            BmobUser bmobUser = BmobUser.getCurrentUser();
+            if (bmobUser != null) {
+                Intent intent = new Intent(this, Home_Page.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Intent intent = new Intent(this, Login_Page.class);
+                startActivity(intent);
+                finish();
+            }
         }
 }

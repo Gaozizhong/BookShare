@@ -27,9 +27,11 @@ import java.util.List;
 import java.util.Map;
 
 import static cn.a1949science.www.bookshare.R.layout.activity_home__page;
+import static okhttp3.internal.Internal.instance;
 
 
 public class Home_Page extends AppCompatActivity {
+    public Context home = Home_Page.this;
     Context mContext = Home_Page.this;
     FrameLayout next_layout;
     Button shareBtn,returnBtn;

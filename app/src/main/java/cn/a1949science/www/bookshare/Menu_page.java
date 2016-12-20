@@ -93,6 +93,9 @@ public class Menu_page extends AppCompatActivity {
             public void onClick(View view) {
                 BmobUser.logOut();
                 BmobUser currentUser = BmobUser.getCurrentUser();
+                Intent intent = new Intent(Menu_page.this, Login_Page.class);
+                startActivity(intent);
+                finish();
             }
         });
 
