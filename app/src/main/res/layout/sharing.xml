@@ -6,6 +6,12 @@
     android:background="#ebecf0"
     android:id="@+id/sharing_Dialog">
 
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/bookPicture"
+        android:text="上传图书图片"/>
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -32,7 +38,7 @@
         <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/editText"
+            android:id="@+id/bookName"
             android:gravity="left"
             android:layout_weight="1" />
 
@@ -62,7 +68,7 @@
         <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/editText4"
+            android:id="@+id/describe"
             android:gravity="left"
             android:layout_weight="1" />
     </LinearLayout>
@@ -91,7 +97,7 @@
         <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/editText2"
+            android:id="@+id/bookWriter"
             android:gravity="left"
             android:layout_weight="1" />
 
@@ -121,8 +127,9 @@
         <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/editText3"
+            android:id="@+id/shareTime"
             android:gravity="left"
+            android:inputType="number"
             android:layout_weight="1" />
 
     </LinearLayout>

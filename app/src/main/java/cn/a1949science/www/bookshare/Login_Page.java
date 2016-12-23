@@ -70,7 +70,7 @@ public class Login_Page extends AppCompatActivity {
                             progress.setMessage("正在登录中...");
                             progress.setCanceledOnTouchOutside(false);
                             progress.show();
-                            Toast.makeText(mContext, "登录成功", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(mContext, "登录成功", Toast.LENGTH_SHORT).show();
                             //跳转到主页面
                             Intent it = new Intent(mContext,Home_Page.class);
                             startActivity(it);

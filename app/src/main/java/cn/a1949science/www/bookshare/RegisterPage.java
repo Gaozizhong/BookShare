@@ -111,6 +111,30 @@ public class RegisterPage extends AppCompatActivity {
         registerOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if (TextUtils.isEmpty(name.getText().toString())) {
+                    Toast.makeText(mContext, "用户名不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (TextUtils.isEmpty(password.getText().toString())) {
+                    Toast.makeText(mContext, "密码不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!(password.getText().toString()).equals(password2.getText().toString())) {
+                    Toast.makeText(mContext, "两次密码不相同", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(password.getText().toString().length()>18||password.getText().toString().length()<6)
+                {
+                    Toast.makeText(mContext, "请输入6~18位密码", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(phoneNum.getText().toString().length()!=11)
+                {
+                    Toast.makeText(mContext, "请输入11位有效号码", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 //验证验证码
                 BmobSMS.verifySmsCode(mContext, String.valueOf(phoneNum.getText()), String.valueOf(code.getText()),
                         new VerifySMSCodeListener() {
@@ -137,7 +161,7 @@ public class RegisterPage extends AppCompatActivity {
                 builder.setSingleChoiceItems(sex, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (sex[i] == "男") {
+                        if (sex[i].equals("男")) {
                             sex1 = true;
                         } else {
                             sex1 = false;
@@ -249,28 +273,7 @@ public class RegisterPage extends AppCompatActivity {
     //注册
     private void registerUser(){
 
-        if (TextUtils.isEmpty(name.getText().toString())) {
-            Toast.makeText(mContext, "用户名不能为空", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (TextUtils.isEmpty(password.getText().toString())) {
-            Toast.makeText(mContext, "密码不能为空", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (!(password.getText().toString()).equals(password2.getText().toString())) {
-            Toast.makeText(mContext, "两次密码不能相同", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(phoneNum.getText().toString().length()!=11)
-        {
-            Toast.makeText(mContext, "请输入11位有效号码", Toast.LENGTH_LONG).show();
-            return;
-        }
-        if(password.getText().toString().length()>18&&password.getText().toString().length()<6)
-        {
-            Toast.makeText(mContext, "请输入6~18位密码", Toast.LENGTH_LONG).show();
-            return;
-        }
+
 
 
         //注册

@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Book_Info extends AppCompatActivity {
+public class Book_detail extends AppCompatActivity {
 
     ImageView before;
     ListView list;
