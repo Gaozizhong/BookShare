@@ -20,7 +20,6 @@ import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.SaveListener;
 
 public class Login_Page extends AppCompatActivity {
-    private static String TAG="===Login_Page===";
     Context mContext = Login_Page.this;
     Button login,register;
     EditText phoneNum,password;

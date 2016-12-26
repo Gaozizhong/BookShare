@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!-- 允许读使用拍照 -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <!--加入外部存储设备的权限-->
+    <!-- 加入外部存储设备的权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -32,8 +32,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Login_Page"/>
-        <activity android:name=".RegisterPage"/>
+        <activity android:name=".Login_Page" />
+        <activity android:name=".RegisterPage" />
         <activity android:name=".Home_Page" />
         <activity android:name=".Book_detail" />
         <activity android:name=".Menu_page" />
@@ -41,6 +41,7 @@
         <activity android:name=".Advice_Page" />
         <activity android:name=".Detail_Info" />
         <activity android:name=".My_Book_List" />
+        <activity android:name=".EditPassword"/>
     </application>
 
 </manifest>

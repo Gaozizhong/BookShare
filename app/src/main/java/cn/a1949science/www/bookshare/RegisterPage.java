@@ -19,6 +19,7 @@ import cn.bmob.sms.exception.BmobException;
 import cn.bmob.sms.listener.RequestSMSCodeListener;
 import cn.bmob.sms.listener.VerifySMSCodeListener;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.listener.SaveListener;
 
 public class RegisterPage extends AppCompatActivity {
@@ -35,6 +36,7 @@ public class RegisterPage extends AppCompatActivity {
         setContentView(R.layout.activity_register_page);
         Bmob.initialize(this, "13d736220ecc496d7dcb63c7cf918ba7");
         BmobSMS.initialize(mContext,"13d736220ecc496d7dcb63c7cf918ba7");
+
 
         findView();
         onClick();
@@ -272,9 +274,6 @@ public class RegisterPage extends AppCompatActivity {
 
     //注册
     private void registerUser(){
-
-
-
 
         //注册
         _User user = new _User();

@@ -173,9 +173,9 @@ public class Home_Page extends AppCompatActivity {
                             @Override
                             public void done(BmobException e) {
                                 if (e == null) {
-                                    Toast.makeText(mContext, "上传成功:" /*+ bmobFile.getFileUrl()*/, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, "上传成功" , Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(mContext, "上传失败:" /*+ e.getMessage()*/, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, "上传失败" , Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });

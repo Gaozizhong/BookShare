@@ -26,4 +26,8 @@ public class User_Info extends AppCompatActivity {
         Intent it = new Intent(this,Detail_Info.class);
         startActivity(it);
     }
+    public void goToEditPassword(View view) {
+        Intent it = new Intent(this,EditPassword.class);
+        startActivity(it);
+    }
 }
