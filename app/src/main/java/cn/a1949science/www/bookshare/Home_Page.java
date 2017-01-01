@@ -1,6 +1,7 @@
 package cn.a1949science.www.bookshare;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -41,9 +42,11 @@ import java.util.Map;
 import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadFileListener;
 
@@ -71,7 +74,7 @@ public class Home_Page extends AppCompatActivity {
     private String[] books = new String[]
             {"偷影子的人", "岛上书店", "摆渡人", "大唐李白·少年游",
                     "大唐李白·凤凰台", "大唐李白·将进酒"};
-    private String[] writers = new String[]
+    public String[] writers = new String[]
             {"[法]马克·李维", "[美]加布瑞埃拉·泽文", "[英]克莱尔·麦克福尔",
                     "[中]张大春", "[中]张大春", "[中]张大春"};
     private int[] imageIds = new int[]
@@ -79,9 +82,7 @@ public class Home_Page extends AppCompatActivity {
                     R.drawable.datanglibai1, R.drawable.datanglibai2, R.drawable.datanglibai3};
     private Uri fileUri;
     private static final int PHOTO_REQUEST_CAREMA = 1;// 拍照
-    private static final int PHOTO_REQUEST_GALLERY = 2;// 从相册中选择
-    private static final int PHOTO_REQUEST_CUT = 3;// 结果
-    private static final String PHOTO_FILE_NAME = "book_photo.jpg";
+    private static final int PHOTO_REQUEST_GALLERY = 2;// 从
     String picturePath;
 
     @Override
@@ -93,6 +94,31 @@ public class Home_Page extends AppCompatActivity {
         findView();
         onClick();
 
+        //查找book
+        BmobQuery<Book_Info> query = new BmobQuery<Book_Info>();
+        //按照时间降序
+        query.addWhereExists("ownerNum");
+        query.findObjects(new FindListener<Book_Info>() {
+            @Override
+            public void done(List<Book_Info> list, BmobException e) {
+                if (e == null) {
+                    int i=0;
+                    for (Book_Info book_info : list) {
+                        books[i] = book_info.getBookName();
+                        writers[i] = book_info.getBookWriter();
+                        //Toast.makeText(mContext, writers[5], Toast.LENGTH_SHORT).show();
+                        book_info.getBookPicture();
+                        i++;
+                    }
+
+                    //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        Toast.makeText(mContext, writers[1], Toast.LENGTH_SHORT).show();
 
         List<Map<String, Object>> listItems = new ArrayList<>();
         for (int i = 0; i < books.length; i++) {
@@ -161,36 +187,6 @@ public class Home_Page extends AppCompatActivity {
         dlg.show();
     }
 
-    //上传图书图片
-    private void updateBookPicture(String picturePath) {
-        final BmobFile bmobFile = new BmobFile(new File(picturePath));
-        new AlertDialog.Builder(mContext)
-                .setMessage("上传此图片？")
-                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        bmobFile.uploadblock(new UploadFileListener() {
-                            @Override
-                            public void done(BmobException e) {
-                                if (e == null) {
-                                    Toast.makeText(mContext, "上传成功" , Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(mContext, "上传失败" , Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                    }
-                })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(mContext, "请重新选择图片", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .show();
-
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -206,7 +202,7 @@ public class Home_Page extends AppCompatActivity {
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             picturePath = cursor.getString(columnIndex);
             cursor.close();
-            updateBookPicture(picturePath);
+            //updateBookPicture(picturePath);
 
         } else if (requestCode == PHOTO_REQUEST_CAREMA) {
             Uri tookImage = data.getData();
@@ -224,9 +220,46 @@ public class Home_Page extends AppCompatActivity {
         }
     }
 
+    //上传图书图片
+    private BmobFile updateBookPicture(String picturePath) {
+        final BmobFile bmobFile = new BmobFile(new File(picturePath));
+        new AlertDialog.Builder(mContext)
+                .setMessage("上传此图片？")
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //等待框
+                        final ProgressDialog progressDialog = new ProgressDialog(mContext);
+                        progressDialog.setMessage("正在上传...");
+                        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        progressDialog.show();
+                        //上传图片
+                        bmobFile.uploadblock(new UploadFileListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                if (e == null) {
+                                    Toast.makeText(mContext, "上传成功" , Toast.LENGTH_SHORT).show();
+                                    progressDialog.dismiss();
+                                } else {
+                                    Toast.makeText(mContext, "上传失败" , Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(mContext, "请重新选择图片", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .show();
+        return bmobFile;
+    }
 
     //点击事件
     private void onClick() {
+        //分享按钮
         shareBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -255,15 +288,16 @@ public class Home_Page extends AppCompatActivity {
                                         || bookWriter.getText().toString() .equals("") || shareTime.getText().toString() .equals("")) {
                                     Toast.makeText(mContext, "信息不全！！！", Toast.LENGTH_SHORT).show();
                                 } else {
+                                    final String picturePath;
                                     _User bmobUser = BmobUser.getCurrentUser(_User.class);
                                     Integer username = bmobUser.getUserNum();
                                     Book_Info book = new Book_Info();
                                     book.setOwnerNum(username.toString());
-                                    //book.setBookPicture(picturePath);
                                     book.setBookName(bookName.getText().toString());
                                     book.setBookDescribe(describe.getText().toString());
                                     book.setBookWriter(bookWriter.getText().toString());
                                     book.setkeepTime(shareTime.getText().toString());
+                                    //book.setBookPicture(bmobFile);
                                     book.save(new SaveListener<String>() {
                                         @Override
                                         public void done(String s, BmobException e) {
@@ -288,6 +322,7 @@ public class Home_Page extends AppCompatActivity {
             }
         });
 
+        //归还按钮
         returnBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -369,5 +404,10 @@ public class Home_Page extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    //显示列表
+    private void displayList() {
+
     }
 }

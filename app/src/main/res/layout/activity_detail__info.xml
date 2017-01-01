@@ -29,7 +29,7 @@
         android:layout_height="50dp"
         android:background="#ffffff"
         android:gravity="center_vertical|center_horizontal"
-        android:id="@+id/linearLayout3"
+        android:id="@+id/editDorm"
         android:layout_marginTop="1dp"
         android:paddingLeft="15dp"
         android:paddingRight="10dp">
@@ -40,7 +40,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="宿舍号"
             android:id="@+id/textView5"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:layout_weight="1"
             android:gravity="left|center_vertical" />
 
@@ -48,9 +48,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="西四B350"
-            android:id="@+id/textView6"
-            android:textSize="14dp"
+            android:id="@+id/dorm"
+            android:textSize="14sp"
             android:layout_weight="1"
             android:gravity="center_vertical|right" />
 
@@ -67,7 +66,7 @@
         android:layout_height="50dp"
         android:background="#ffffff"
         android:gravity="center_vertical|center_horizontal"
-        android:id="@+id/linearLayout4"
+        android:id="@+id/editPhone"
         android:layout_marginTop="1dp"
         android:paddingLeft="15dp"
         android:paddingRight="10dp">
@@ -78,7 +77,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="联系电话"
             android:id="@+id/textView7"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:layout_weight="1"
             android:gravity="left|center_vertical" />
 
@@ -86,9 +85,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="13582601738"
-            android:id="@+id/textView8"
-            android:textSize="14dp"
+            android:id="@+id/phoneNum"
+            android:textSize="14sp"
             android:layout_weight="1"
             android:gravity="center_vertical|right" />
 
@@ -105,7 +103,7 @@
         android:layout_height="50dp"
         android:background="#ffffff"
         android:gravity="center_vertical|center_horizontal"
-        android:id="@+id/linearLayout5"
+        android:id="@+id/editClass"
         android:layout_marginTop="1dp"
         android:paddingLeft="15dp"
         android:paddingRight="10dp">
@@ -116,7 +114,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="年级"
             android:id="@+id/textView9"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:layout_weight="1"
             android:gravity="left|center_vertical" />
 
@@ -124,9 +122,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="大二"
-            android:id="@+id/textView10"
-            android:textSize="14dp"
+            android:id="@+id/Class"
+            android:textSize="14sp"
             android:layout_weight="1"
             android:gravity="center_vertical|right" />
 
@@ -143,7 +140,7 @@
         android:layout_height="50dp"
         android:background="#ffffff"
         android:gravity="center_vertical|center_horizontal"
-        android:id="@+id/linearLayout6"
+        android:id="@+id/editSchool"
         android:layout_marginTop="1dp"
         android:paddingLeft="15dp"
         android:paddingRight="10dp">
@@ -154,7 +151,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="学校"
             android:id="@+id/textView11"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:layout_weight="1"
             android:gravity="left|center_vertical" />
 
@@ -162,9 +159,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="河北工业大学-北辰校区"
-            android:id="@+id/textView12"
-            android:textSize="14dp"
+            android:id="@+id/school"
+            android:textSize="14sp"
             android:layout_weight="1"
             android:gravity="center_vertical|right" />
 
@@ -181,7 +177,7 @@
         android:layout_height="50dp"
         android:background="#ffffff"
         android:gravity="center_vertical|center_horizontal"
-        android:id="@+id/linearLayout7"
+        android:id="@+id/editGender"
         android:layout_marginTop="1dp"
         android:paddingLeft="15dp"
         android:paddingRight="10dp">
@@ -192,7 +188,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="性别"
             android:id="@+id/textView13"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:layout_weight="1"
             android:gravity="left|center_vertical" />
 
@@ -200,9 +196,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="男"
-            android:id="@+id/textView14"
-            android:textSize="14dp"
+            android:id="@+id/gender"
+            android:textSize="14sp"
             android:layout_weight="1"
             android:gravity="center_vertical|right" />
 
@@ -219,44 +214,7 @@
         android:layout_height="50dp"
         android:background="#ffffff"
         android:gravity="center_vertical|center_horizontal"
-        android:id="@+id/linearLayout8"
-        android:layout_marginTop="1dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="姓名"
-            android:id="@+id/name"
-            android:textSize="16dp"
-            android:layout_weight="1"
-            android:gravity="left|center_vertical" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="高子中"
-            android:id="@+id/textView16"
-            android:textSize="14dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|right" />
-
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:id="@+id/imageView18"
-            android:src="@drawable/after" />
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#ffffff"
-        android:gravity="center_vertical|center_horizontal"
-        android:id="@+id/linearLayout9"
+        android:id="@+id/editname"
         android:layout_marginTop="1dp"
         android:paddingLeft="15dp"
         android:paddingRight="10dp">
@@ -267,27 +225,23 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="姓名"
             android:id="@+id/name1"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:layout_weight="1"
             android:gravity="left|center_vertical" />
 
-        <EditText
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView17"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="高子中"
-            android:textSize="14dp"
+            android:id="@+id/name"
+            android:textSize="14sp"
             android:layout_weight="1"
-            android:gravity="right"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:editable="false" />
+            android:gravity="center_vertical|right" />
 
         <ImageView
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:id="@+id/imageView19"
+            android:id="@+id/imageView18"
             android:src="@drawable/after" />
     </LinearLayout>
 </LinearLayout>

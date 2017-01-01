@@ -13,6 +13,7 @@ import android.widget.Toast;
 import cn.bmob.sms.BmobSMS;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 
 public class EditPassword extends AppCompatActivity {
@@ -51,6 +52,7 @@ public class EditPassword extends AppCompatActivity {
         EditOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Bmob.initialize(mContext, "13d736220ecc496d7dcb63c7cf918ba7");
                 if (TextUtils.isEmpty(oldPassword.getText().toString())) {
                     Toast.makeText(mContext, "请输入旧密码", Toast.LENGTH_SHORT).show();
                     return;
@@ -63,7 +65,7 @@ public class EditPassword extends AppCompatActivity {
                     Toast.makeText(mContext, "新密码不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (!(oldPassword.getText().toString()).equals(newPassword1.getText().toString())) {
+                if ((oldPassword.getText().toString()).equals(newPassword1.getText().toString())) {
                     Toast.makeText(mContext, "新旧密码不能相同", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -76,15 +78,23 @@ public class EditPassword extends AppCompatActivity {
                     Toast.makeText(mContext, "请输入6~18位密码", Toast.LENGTH_LONG).show();
                     return;
                 }
+                //修改密码
+                BmobUser.updateCurrentUserPassword(oldPassword.getText().toString(), newPassword1.getText().toString(),
+                        new UpdateListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                if (e == null) {
+                                    Toast.makeText(mContext, "密码修改成功", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(mContext, "密码修改失败"+ e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
             }
-
-            /* if(e==null){
-                        Toast.makeText(EditPassword.this, "密码修改成功，可以用新密码进行登录啦", Toast.LENGTH_SHORT).show();
-                    }else{
-                        Toast.makeText(EditPassword.this, "密码修改失败", Toast.LENGTH_SHORT).show();
-                    }*/
-            //修改密码
         });
+    }
+
+    private void Editing() {
 
     }
 }
