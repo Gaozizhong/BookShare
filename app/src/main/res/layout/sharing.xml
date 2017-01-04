@@ -6,17 +6,11 @@
     android:background="#ebecf0"
     android:id="@+id/sharing_Dialog">
 
-    <Button
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:id="@+id/bookPicture"
-        android:text="上传图书图片"/>
-
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="2dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:background="#ffffff"
         android:gravity="center_vertical|center_horizontal"
         android:id="@+id/linearLayout9"
@@ -39,15 +33,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/bookName"
-            android:gravity="left"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:gravity="center" />
 
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:background="#ffffff"
         android:gravity="center_vertical|center_horizontal"
@@ -69,14 +63,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/describe"
-            android:gravity="left"
+            android:gravity="center"
             android:layout_weight="1" />
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:background="#ffffff"
         android:gravity="center_vertical|center_horizontal"
@@ -98,15 +92,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/bookWriter"
-            android:gravity="left"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:gravity="center" />
 
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:background="#ffffff"
         android:gravity="center_vertical|center_horizontal"
@@ -128,10 +122,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/shareTime"
-            android:gravity="left"
+            android:gravity="center"
             android:inputType="number"
             android:layout_weight="1" />
 
     </LinearLayout>
+
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/bookPicture"
+        android:text="上传图书图片"/>
 
 </TableLayout>
