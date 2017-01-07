@@ -2,20 +2,18 @@ package cn.a1949science.www.bookshare;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,16 +26,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean._User;
@@ -50,18 +42,10 @@ import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadFileListener;
 
-import static android.R.attr.data;
-import static cn.a1949science.www.bookshare.R.id.book;
-import static cn.a1949science.www.bookshare.R.id.bookName;
-import static cn.a1949science.www.bookshare.R.id.bookPicture;
-import static cn.a1949science.www.bookshare.R.id.bookWriter;
-import static cn.a1949science.www.bookshare.R.id.name;
-import static cn.a1949science.www.bookshare.R.id.shareTime;
 import static cn.a1949science.www.bookshare.R.layout.activity_home__page;
 
 
 public class Home_Page extends AppCompatActivity {
-    public Context home = Home_Page.this;
     Context mContext = Home_Page.this;
     FrameLayout next_layout;
     Button shareBtn,returnBtn;
@@ -69,21 +53,13 @@ public class Home_Page extends AppCompatActivity {
     ImageButton shortCut;
     ImageView searchImg;
     ImageView menuImg;
-    ListView list;
+    ListView listview;
     boolean clicked  = false;
-    private String[] books = new String[]
-            {"偷影子的人", "岛上书店", "摆渡人", "大唐李白·少年游",
-                    "大唐李白·凤凰台", "大唐李白·将进酒"};
-    public String[] writers = new String[]
-            {"[法]马克·李维", "[美]加布瑞埃拉·泽文", "[英]克莱尔·麦克福尔",
-                    "[中]张大春", "[中]张大春", "[中]张大春"};
-    private int[] imageIds = new int[]
-            {R.drawable.touyingzideren, R.drawable.daoshangshudian, R.drawable.baiduren,
-                    R.drawable.datanglibai1, R.drawable.datanglibai2, R.drawable.datanglibai3};
     private Uri fileUri;
     private static final int PHOTO_REQUEST_CAREMA = 1;// 拍照
-    private static final int PHOTO_REQUEST_GALLERY = 2;// 从
+    private static final int PHOTO_REQUEST_GALLERY = 2;// 从相册选取照片
     String picturePath="";
+    private File imageFile = null;//照片文件
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,24 +69,7 @@ public class Home_Page extends AppCompatActivity {
 
         findView();
         onClick();
-
-        List<Map<String, Object>> listItems = new ArrayList<>();
-        for (int i = 0; i < books.length; i++) {
-            Map<String, Object> listItem = new HashMap<>();
-            listItem.put("imageName", imageIds[i]);
-            listItem.put("bookName", books[i]);
-            listItem.put("writerName", writers[i]);
-            listItems.add(listItem);
-        }
-        //创建一个SimpleAdapter
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this, listItems,
-                R.layout.booklist_item,
-                new String[]{"imageName", "bookName", "writerName"},
-                new int[]{R.id.image, R.id.book, R.id.writer});
-
-        //为ListView设置Adapter
-        assert list != null;
-        list.setAdapter(simpleAdapter);
+        displayList();
 
     }
     //查找地址
@@ -119,7 +78,7 @@ public class Home_Page extends AppCompatActivity {
         shortCut = (ImageButton) findViewById(R.id.shortcut);
         searchImg = (ImageView) findViewById(R.id.searchImg);
         menuImg = (ImageView) findViewById(R.id.menuImg);
-        list = (ListView) findViewById(R.id.booklist);
+        listview = (ListView) findViewById(R.id.booklist);
         shareBtn = (Button) findViewById(R.id.shareBtn);
         returnBtn = (Button) findViewById(R.id.returnBtn);
     }
@@ -140,17 +99,21 @@ public class Home_Page extends AppCompatActivity {
                         } else {
                             //进入相机前判断下sdcard是否可用，可用进行存储
                             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                                //激活相机
+                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                 //获取系统的公用图像文件路径
-                                String dir = Environment.getExternalStoragePublicDirectory
+                                picturePath = Environment.getExternalStoragePublicDirectory
                                         (Environment.DIRECTORY_PICTURES).toString();
                                 //利用当前时间组合成一个不会重复的文件名
                                 String fname = "p"+ System.currentTimeMillis() +".jpg";
                                 //按前面的路径和文件名创建Uri对象
-                                fileUri = Uri.parse("file://" + dir + "/" + fname);
-                                //激活相机
-                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                File out = new File(picturePath,fname);
+                                fileUri = Uri.fromFile(out);
                                 //将uri加到拍照Intent的额外数据中
                                 intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+                                //保存照片的质量
+                                intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
+                                //启动相机拍照
                                 startActivityForResult(intent, PHOTO_REQUEST_CAREMA);
                             } else {
                                 Toast.makeText(mContext, "未找到存储卡，无法存储照片！", Toast.LENGTH_SHORT).show();
@@ -175,9 +138,12 @@ public class Home_Page extends AppCompatActivity {
 
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             picturePath = cursor.getString(columnIndex);
+            //Toast.makeText(mContext, picturePath, Toast.LENGTH_SHORT).show();
             cursor.close();
 
-        } else if (requestCode == PHOTO_REQUEST_CAREMA) {
+        } else if (requestCode == PHOTO_REQUEST_CAREMA && data != null) {
+
+            Toast.makeText(mContext, picturePath, Toast.LENGTH_SHORT).show();
             Uri tookImage = data.getData();
             //Toast.makeText(mContext, tookImage.toString(), Toast.LENGTH_SHORT).show();
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
@@ -225,7 +191,7 @@ public class Home_Page extends AppCompatActivity {
                                 } else {
                                     final BmobFile bmobFile = new BmobFile(new File(picturePath));
                                     new AlertDialog.Builder(mContext)
-                                            .setMessage("上传此图片？")
+                                            .setMessage("上传此图片？"+picturePath)
                                             .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -263,6 +229,7 @@ public class Home_Page extends AppCompatActivity {
                                                                 });
                                                             } else {
                                                                 Toast.makeText(mContext, "上传失败" , Toast.LENGTH_SHORT).show();
+                                                                progressDialog.dismiss();
                                                             }
                                                         }
                                                     });
@@ -375,47 +342,44 @@ public class Home_Page extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                Bundle data = new Bundle();
-                //利用Intent传递数据
-                data.putInt("imageid", imageIds[i]);
-                data.putString("bookname", books[i]);
-                data.putString("writername", writers[i]);
-                Intent intent = new Intent(mContext, Book_detail.class);
-                intent.putExtras(data);
-                startActivity(intent);
-            }
-        });
     }
 
     //显示列表
     private void displayList() {
         //查找book
-        BmobQuery<Book_Info> query = new BmobQuery<Book_Info>();
-        //按照时间降序
+        BmobQuery<Book_Info> query = new BmobQuery<>();
+        //查找出有ownerNum的信息
         query.addWhereExists("ownerNum");
         query.findObjects(new FindListener<Book_Info>() {
             @Override
-            public void done(List<Book_Info> list, BmobException e) {
+            public void done(final List<Book_Info> list, BmobException e) {
                 if (e == null) {
-                    int i=0;
-                    for (Book_Info book_info : list) {
-                        books[i] = book_info.getBookName();
-                        writers[i] = book_info.getBookWriter();
-                        //Toast.makeText(mContext, writers[5], Toast.LENGTH_SHORT).show();
-                        book_info.getBookPicture();
-                        i++;
+                    final int[] bookNum = new int[list.size()];
+                    for (int i=0;i<list.size();i++) {
+                        bookNum[i] = list.get(i).getBookNum();
                     }
+                    listview.setAdapter(new MyAdapter(mContext,list));
 
+                    listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                            Bundle data = new Bundle();
+                            //利用Intent传递数据
+                            //data.putString("imageid", list.get(i).getBookPicture().getFileUrl());
+                            data.putInt("booknum",bookNum[i]);
+                            data.putString("objectId",list.get(i).getObjectId());
+                            Intent intent = new Intent(mContext, Book_detail.class);
+                            intent.putExtras(data);
+                            startActivity(intent);
+                        }
+                    });
                     //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
     }
 }

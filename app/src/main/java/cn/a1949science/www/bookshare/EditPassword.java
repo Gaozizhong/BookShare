@@ -85,6 +85,7 @@ public class EditPassword extends AppCompatActivity {
                             public void done(BmobException e) {
                                 if (e == null) {
                                     Toast.makeText(mContext, "密码修改成功", Toast.LENGTH_SHORT).show();
+                                    finish();
                                 } else {
                                     Toast.makeText(mContext, "密码修改失败"+ e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }

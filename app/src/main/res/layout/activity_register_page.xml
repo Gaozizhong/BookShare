@@ -173,8 +173,8 @@
             android:id="@+id/password"
             android:hint="请设置密码"
             android:selectAllOnFocus="true"
-            android:inputType="numberPassword"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:inputType="textPassword" />
     </LinearLayout>
 
     <LinearLayout
@@ -189,8 +189,8 @@
             android:id="@+id/password2"
             android:hint="请再次设置密码"
             android:selectAllOnFocus="true"
-            android:inputType="numberPassword"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:inputType="textPassword" />
     </LinearLayout>
 
     <Button

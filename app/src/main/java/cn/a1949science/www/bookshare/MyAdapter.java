@@ -50,15 +50,13 @@ public class MyAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
+        //新增一个内部类ViewHolder,用于对控件的实例进行缓存
         final ViewHolder viewHolder;
         if (view == null) {
             String bookName;
             String bookWriter;
-            BmobFile bookPicture;
             bookName = list.get(i).getBookName();
             bookWriter = list.get(i).getBookWriter();
-            bookPicture = list.get(i).getBookPicture();
-            System.out.println(bookPicture.getFileUrl());
             LayoutInflater inflater = LayoutInflater.from(context);
             //实例化一个布局文件
             view = inflater.inflate(R.layout.booklist_item, null);
@@ -66,7 +64,7 @@ public class MyAdapter extends BaseAdapter {
             viewHolder.image = (ImageView) view.findViewById(R.id.image);
             viewHolder.book = (TextView) view.findViewById(R.id.book);
             viewHolder.writer = (TextView) view.findViewById(R.id.writer);
-            view.setTag(viewHolder);
+            view.setTag(viewHolder);//将viewHolder存储在view中
             //不能直接在主线程中进行从网络端获取图片，而需要单独开一个子线程完成从网络端获取图片
             new Thread(new Runnable() {
                 @Override
@@ -81,7 +79,6 @@ public class MyAdapter extends BaseAdapter {
                     viewHolder.image.post(new Runnable() {
                         @Override
                         public void run() {
-                            System.out.println("*******************************");
                             //将图片放到视图中
                             viewHolder.image.setImageBitmap(bitmap);
                         }
