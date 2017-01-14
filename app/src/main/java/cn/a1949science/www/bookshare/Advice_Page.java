@@ -1,15 +1,24 @@
 package cn.a1949science.www.bookshare;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import cn.a1949science.www.bookshare.bean.Advice_Info;
+import cn.a1949science.www.bookshare.bean._User;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 
 public class Advice_Page extends AppCompatActivity {
 
-    SQLiteDatabase db;
     ImageView before;
+    Button advBtn;
+    EditText content;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,25 +26,15 @@ public class Advice_Page extends AppCompatActivity {
         findView();
         onClick();
 
-       /* db = SQLiteDatabase.openOrCreateDatabase(this.getFilesDir().toString() + "/advice.db3", null);
-        Button btn = (Button) findViewById(R.id.advBtn);
-        assert btn != null;
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String advcontent = ((EditText) findViewById(R.id.editText)).getText().toString();
-                try
-                {
-                    insertData(db,advcontent);
 
-                }
-            }
-        });*/
     }
     //查找地址
     private void findView(){
         before = (ImageView) findViewById(R.id.before);
+        advBtn = (Button) findViewById(R.id.advBtn);
+        content = (EditText) findViewById(R.id.content);
     }
+
     //点击事件
     protected void onClick(){
         assert before != null;
@@ -45,6 +44,32 @@ public class Advice_Page extends AppCompatActivity {
                 finish();
             }
         });
+
+        advBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                _User bmobUser = BmobUser.getCurrentUser(_User.class);
+                String username = bmobUser.getUsername();
+                String userPhone = bmobUser.getMobilePhoneNumber();
+                Advice_Info advice = new Advice_Info();
+                advice.setAdviceContent(content.getText().toString());
+                advice.setUserPhone(userPhone);
+                advice.setUserName(username);
+                advice.save(new SaveListener<String>() {
+                    @Override
+                    public void done(String s, BmobException e) {
+                        if (e == null) {
+                            Toast.makeText(Advice_Page.this, "感谢您的建议", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(Advice_Page.this, "图书共享失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                //Toast.makeText(Advice_Page.this, userPhone , Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
     }
 }

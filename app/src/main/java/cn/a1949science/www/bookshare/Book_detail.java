@@ -1,9 +1,12 @@
 package cn.a1949science.www.bookshare;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -11,6 +14,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,18 +30,13 @@ import cn.bmob.v3.listener.QueryListener;
 
 public class Book_detail extends AppCompatActivity {
 
+    Context mContext = Book_detail.this;
     ImageView before;
     ListView listview;
     ImageButton likeBtn;
-    String introduce,bookname,writername;
+    String introduce,bookname,writername,OwnerName;
     public String bookowner;
     int time,booknum,OwnerNum;
-    private String[] introduces = new String[]
-            {"    一个老是受班上同学欺负的瘦弱小男孩，因为拥有一种特殊能力而强大：他能偷别人的影子。"};
-    private String[] times=new String[]
-            {"7天"};
-    private String[] bookowners=new String[]
-            {" 高子中"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,13 +44,7 @@ public class Book_detail extends AppCompatActivity {
 
         findView();
         onClick();
-
         displayList();
-
-        //Toast.makeText(Book_detail.this, booknum, Toast.LENGTH_SHORT).show();
-
-
-
 
     }
     //查找地址
@@ -70,6 +63,16 @@ public class Book_detail extends AppCompatActivity {
                 finish();
             }
         });
+
+        /*LayoutInflater inflater = getLayoutInflater();
+        final View layout = inflater.inflate(R.layout.bookinfo, (ViewGroup) findViewById(R.id.book_info_item));
+        final View Owner = (View) layout.findViewById(R.id.owner);
+        Owner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(Book_detail.this, "查询书主。", Toast.LENGTH_SHORT).show();
+            }
+        });*/
     }
 
     //显示列表
@@ -88,6 +91,7 @@ public class Book_detail extends AppCompatActivity {
                     writername = book_info.getBookWriter();
                     time = book_info.getkeepTime();
                     OwnerNum = book_info.getOwnerNum();
+                    OwnerName = book_info.getOwnerName();
 
                     BmobQuery<_User> query1 = new BmobQuery<>();
                     //查找userNum为OwnerNum的用户
@@ -105,14 +109,14 @@ public class Book_detail extends AppCompatActivity {
                     BmobFile image = book_info.getBookPicture();
 
                     List<Map<String, Object>> listItems = new ArrayList<>();
-                    for(int i=0;i<times.length;i++) {
+                    for(int i=0;i<1;i++) {
                         Map<String, Object> listItem = new HashMap<>();
                         listItem.put("imageid", image);
                         listItem.put("introduce", introduce);
                         listItem.put("bookname", bookname);
                         listItem.put("writername", writername);
                         listItem.put("time", time);
-                        listItem.put("bookowner",OwnerNum);
+                        listItem.put("bookowner",OwnerName);
                         listItems.add(listItem);
                     }
                     //创建一个SimpleAdapter
@@ -122,6 +126,8 @@ public class Book_detail extends AppCompatActivity {
                             new int[] {R.id.image,R.id.introduce,R.id.bookName,R.id.writename,R.id.time,R.id.bookOwner});
                     //为ListView设置Adapter
                     listview.setAdapter(simpleAdapter);
+
+                    //listview.setAdapter(new BookAdapter(mContext,book_info));
                 } else {
                     Toast.makeText(Book_detail.this, "查询失败。", Toast.LENGTH_SHORT).show();
                 }

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/bookInfo"
-        android:layout_marginTop="150px" />
+        android:layout_marginTop="50dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"

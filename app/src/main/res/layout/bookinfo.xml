@@ -3,11 +3,12 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ebecf0">
+    android:background="#ebecf0"
+    android:id="@+id/book_info_item">
 
     <ImageView
-        android:layout_width="1080px"
-        android:layout_height="1080px"
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
         android:id="@+id/image"
         android:layout_gravity="center_horizontal"
         android:background="#ffffff" />
@@ -16,15 +17,14 @@
         android:lines="3"
         android:ellipsize="end"
         android:layout_width="match_parent"
-        android:layout_height="200px"
+        android:layout_height="70dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/introduce"
-        android:layout_gravity="right"
         android:textIsSelectable="false"
         android:background="#ffffff"
-        android:textSize="15dp"
-        android:layout_marginTop="10px"
-        android:gravity="center_vertical"
+        android:textSize="15sp"
+        android:layout_marginTop="3dp"
+        android:gravity="center"
         android:paddingLeft="20dp"
         android:paddingRight="20dp" />
 
@@ -32,7 +32,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="10px"
+        android:layout_marginTop="3dp"
         android:background="#ffffff"
         android:gravity="center_vertical"
         android:weightSum="1"
@@ -40,21 +40,21 @@
         android:paddingRight="10dp">
 
         <TextView
-            android:layout_width="150px"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="书名:"
             android:id="@+id/bookname1"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:gravity="center_horizontal" />
 
         <TextView
 
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/bookName"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:gravity="center_horizontal"
             android:layout_weight="1"
             android:layout_marginRight="35dp" />
@@ -65,27 +65,27 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="2px"
+        android:layout_marginTop="1dp"
         android:background="#ffffff"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
         android:paddingRight="10dp">
 
         <TextView
-            android:layout_width="150px"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="作者:"
-            android:id="@+id/writername1"
-            android:textSize="16dp"
+            android:id="@+id/writername"
+            android:textSize="16sp"
             android:gravity="center_horizontal" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/writename"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:gravity="center_horizontal"
             android:layout_weight="1"
             android:layout_marginRight="35dp" />
@@ -96,27 +96,27 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="10px"
+        android:layout_marginTop="3dp"
         android:background="#ffffff"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
         android:paddingRight="10dp">
 
         <TextView
-            android:layout_width="150px"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="时间:"
             android:id="@+id/time1"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:gravity="center_horizontal" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/time"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:gravity="center_horizontal"
             android:layout_weight="1"
             android:layout_marginRight="35dp" />
@@ -127,28 +127,29 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="2px"
+        android:layout_marginTop="1dp"
         android:background="#ffffff"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
-        android:paddingRight="10dp">
+        android:paddingRight="10dp"
+        android:id="@+id/owner">
 
         <TextView
-            android:layout_width="150px"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="书主:"
-            android:id="@+id/bookowner1"
-            android:textSize="15dp"
+            android:id="@+id/bookowner"
+            android:textSize="15sp"
             android:gravity="center_horizontal" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/bookOwner"
             android:gravity="center|center_horizontal"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:layout_weight="1" />
 
         <ImageView
@@ -161,16 +162,16 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="150px"
-        android:layout_marginTop="60px"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
         android:background="#ebecf0"
         android:gravity="center_vertical"
         android:weightSum="1">
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="150px"
-            android:layout_height="150px"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:background="#ffffff"
             android:gravity="center_vertical|center_horizontal">
 
@@ -185,8 +186,8 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="150px"
-            android:layout_height="150px"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:background="#ffffff"
             android:gravity="center_vertical|center_horizontal" >
 
@@ -201,19 +202,19 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:gravity="center_vertical|center_horizontal"
             android:background="#dc2727"
             android:layout_weight="1"
-            android:layout_marginLeft="2px">
+            android:layout_marginLeft="1dp">
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="我想借书"
                 android:id="@+id/borrowBtn"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:background="#00000000"
                 android:textColor="#ffffff" />
         </LinearLayout>

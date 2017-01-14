@@ -209,9 +209,11 @@ public class Home_Page extends AppCompatActivity {
                                                                 progressDialog.dismiss();
                                                                 //上传其他信息
                                                                 _User bmobUser = BmobUser.getCurrentUser(_User.class);
-                                                                Integer username = bmobUser.getUserNum();
+                                                                Integer usernum = bmobUser.getUserNum();
+                                                                String username = bmobUser.getUsername();
                                                                 Book_Info book = new Book_Info();
-                                                                book.setOwnerNum(username.toString());
+                                                                book.setOwnerNum(usernum.toString());
+                                                                book.setOwnerName(username);
                                                                 book.setBookName(bookName.getText().toString());
                                                                 book.setBookDescribe(describe.getText().toString());
                                                                 book.setBookWriter(bookWriter.getText().toString());
