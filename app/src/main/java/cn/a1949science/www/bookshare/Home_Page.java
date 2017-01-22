@@ -207,6 +207,7 @@ public class Home_Page extends AppCompatActivity {
                                                                 Integer usernum = bmobUser.getUserNum();
                                                                 String username = bmobUser.getUsername();
                                                                 Book_Info book = new Book_Info();
+                                                                book.setOwner(bmobUser);
                                                                 book.setOwnerNum(usernum.toString());
                                                                 book.setOwnerName(username);
                                                                 book.setBookName(bookName.getText().toString());
@@ -219,6 +220,7 @@ public class Home_Page extends AppCompatActivity {
                                                                     public void done(String s, BmobException e) {
                                                                         if (e == null) {
                                                                             Toast.makeText(mContext, "图书共享成功", Toast.LENGTH_SHORT).show();
+                                                                            displayList();
                                                                         } else {
                                                                             Toast.makeText(mContext, "图书共享失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                                                         }

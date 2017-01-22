@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import java.security.acl.Owner;
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import java.util.Map;
 import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -80,8 +82,24 @@ public class Book_detail extends AppCompatActivity {
         Bundle bundle = this.getIntent().getExtras();
         booknum = bundle.getInt("booknum");
         final String objectId = bundle.getString("objectId");
+        _User bmobUser = BmobUser.getCurrentUser(_User.class);
         //查找book
         final BmobQuery<Book_Info> query = new BmobQuery<>();
+
+        /*query.addWhereEqualTo("owner",bmobUser);
+        query.order("-updatedAt");
+        query.include("owner");
+        query.findObjects(new FindListener<Book_Info>() {
+            @Override
+            public void done(List<Book_Info> list, BmobException e) {
+                if (e == null) {
+                    Toast.makeText(Book_detail.this, "查询112233。", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(Book_detail.this, "查询失败。", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });*/
+
         query.getObject(objectId, new QueryListener<Book_Info>() {
             @Override
             public void done(Book_Info book_info, BmobException e) {
@@ -92,20 +110,9 @@ public class Book_detail extends AppCompatActivity {
                     time = book_info.getkeepTime();
                     OwnerNum = book_info.getOwnerNum();
                     OwnerName = book_info.getOwnerName();
-
-                    BmobQuery<_User> query1 = new BmobQuery<>();
-                    //查找userNum为OwnerNum的用户
-                    query1.addWhereEqualTo("userNum",OwnerNum);
-                    query1.findObjects(new FindListener<_User>() {
-                        @Override
-                        public void done(List<_User> list1, BmobException e) {
-                            if (e == null) {
-                                bookowner= list1.get(0).getUsername();
-                            } else {
-                                Toast.makeText(Book_detail.this, "查询书主失败。", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                    _User Owner = book_info.getOwner();
+                    //OwnerName = Owner.getUsername();
+                    //Toast.makeText(Book_detail.this, OwnerName, Toast.LENGTH_SHORT).show();
                     BmobFile image = book_info.getBookPicture();
 
                     List<Map<String, Object>> listItems = new ArrayList<>();

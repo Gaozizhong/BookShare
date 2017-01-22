@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="cn.a1949science.www.bookshare.Detail_Info"
+    tools:context="cn.a1949science.www.bookshare.Edit_Detail_Info"
     android:background="#ebecf0">
 
     <RelativeLayout
@@ -23,12 +23,12 @@
             android:layout_alignParentStart="true" />
 
         <TextView
-            android:text="编辑"
+            android:text="完成"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="21dp"
             android:layout_marginEnd="21dp"
-            android:id="@+id/edit"
+            android:id="@+id/editOk"
             android:textSize="20sp"
             android:textColor="@android:color/black"
             android:layout_centerVertical="true"
@@ -45,7 +45,7 @@
         android:id="@+id/editDorm"
         android:layout_marginTop="1dp"
         android:paddingLeft="15dp"
-        android:paddingRight="26dp">
+        android:paddingRight="10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -63,7 +63,14 @@
             android:id="@+id/dorm"
             android:textSize="14sp"
             android:layout_weight="1"
-            android:gravity="center" />
+            android:gravity="center"
+            android:paddingRight="16dp"/>
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/imageView13"
+            android:src="@drawable/after" />
 
     </LinearLayout>
 
@@ -76,7 +83,7 @@
         android:id="@+id/editPhone"
         android:layout_marginTop="1dp"
         android:paddingLeft="15dp"
-        android:paddingRight="42dp">
+        android:paddingRight="10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -94,7 +101,14 @@
             android:id="@+id/phoneNum"
             android:textSize="14sp"
             android:layout_weight="1"
-            android:gravity="center" />
+            android:gravity="center"
+            android:paddingRight="32dp"/>
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/imageView1"
+            android:src="@drawable/after" />
 
     </LinearLayout>
 
@@ -127,6 +141,12 @@
             android:layout_weight="1"
             android:gravity="center" />
 
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/imageView2"
+            android:src="@drawable/after" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -157,6 +177,12 @@
             android:textSize="14sp"
             android:layout_weight="1"
             android:gravity="center" />
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/imageView3"
+            android:src="@drawable/after" />
 
     </LinearLayout>
 
@@ -189,6 +215,12 @@
             android:layout_weight="1"
             android:gravity="center" />
 
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/imageView4"
+            android:src="@drawable/after" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -220,5 +252,12 @@
             android:layout_weight="1"
             android:gravity="center" />
 
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/imageView5"
+            android:src="@drawable/after" />
+
     </LinearLayout>
+
 </LinearLayout>

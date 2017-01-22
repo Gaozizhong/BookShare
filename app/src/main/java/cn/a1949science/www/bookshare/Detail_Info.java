@@ -2,6 +2,7 @@ package cn.a1949science.www.bookshare;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -24,8 +25,7 @@ public class Detail_Info extends AppCompatActivity {
 
     Context mContext = Detail_Info.this;
     ImageView before;
-    TextView dorm,phoneNum,Class,school,gender,name;
-    View editDorm,editPhone,editClass,editSchool,editGender,editname;
+    TextView dorm,phoneNum,Class,school,gender,name,edit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,12 +45,7 @@ public class Detail_Info extends AppCompatActivity {
         school = (TextView) findViewById(R.id.school);
         gender = (TextView) findViewById(R.id.gender);
         name = (TextView) findViewById(R.id.name);
-        editDorm = findViewById(R.id.editDorm);
-        editPhone = findViewById(R.id.editPhone);
-        editClass = findViewById(R.id.editClass);
-        editSchool = findViewById(R.id.editSchool);
-        editGender = findViewById(R.id.editGender);
-        editname = findViewById(R.id.editname);
+        edit = (TextView)findViewById(R.id.edit);
     }
 
     //点击事件
@@ -62,73 +57,12 @@ public class Detail_Info extends AppCompatActivity {
                 finish();
             }
         });
-        editDorm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-            }
-        });
-        editPhone.setOnClickListener(new View.OnClickListener() {
+        edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "123", Toast.LENGTH_SHORT).show();
-            }
-        });
-        editClass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                /*final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                final String[] classText = {"大一","大二","大三","大四","研一","研二","研三","博士"};
-                builder.setSingleChoiceItems(classText, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                });
-                builder.setPositiveButton("确认修改", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(mContext, classText[i], Toast.LENGTH_SHORT).show();
-                        //更新数据
-                        *//*_User newUser = new _User();
-                        newUser.setUserClass(editClassText);
-                        BmobUser bmobUser = BmobUser.getCurrentUser();
-                        newUser.update(bmobUser.getObjectId(), new UpdateListener() {
-                            @Override
-                            public void done(BmobException e) {
-                                if (e == null) {
-                                    Toast.makeText(mContext, "更新用户信息成功", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(mContext, "更新用户信息失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });*//*
-                    }
-                });
-                builder.setNegativeButton("取消修改", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                });
-                builder.show();*/
-            }
-        });
-        editSchool.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(mContext, "123", Toast.LENGTH_SHORT).show();
-            }
-        });
-        editGender.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(mContext, "123", Toast.LENGTH_SHORT).show();
-            }
-        });
-        editname.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(mContext, "123", Toast.LENGTH_SHORT).show();
+                Intent it = new Intent(mContext,Edit_Detail_Info.class);
+                startActivity(it);
             }
         });
     }

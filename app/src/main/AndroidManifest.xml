@@ -41,7 +41,8 @@
         <activity android:name=".Advice_Page" />
         <activity android:name=".Detail_Info" />
         <activity android:name=".My_Book_List" />
-        <activity android:name=".EditPassword"/>
+        <activity android:name=".EditPassword" />
+        <activity android:name=".Edit_Detail_Info"></activity>
     </application>
 
 </manifest>
