@@ -18,11 +18,12 @@
         android:layout_alignStart="@+id/linearLayout13">
 
         <EditText
-            android:layout_width="300dp"
+            android:layout_width="0dp"
             android:layout_height="55dp"
             android:ems="10"
+            android:maxLength="11"
             android:id="@+id/phoneNum"
-            android:hint="请输入手机号"
+            android:hint="@string/login_name"
             android:paddingLeft="16dp"
             android:selectAllOnFocus="true"
             android:inputType="phone"
@@ -42,14 +43,13 @@
         android:layout_marginBottom="50dp">
 
         <EditText
-            android:layout_width="185dp"
+            android:layout_width="0dp"
             android:layout_height="55dp"
             android:ems="10"
             android:id="@+id/password"
-            android:hint="请输入密码"
+            android:hint="@string/login_password"
             android:paddingLeft="16dp"
             android:selectAllOnFocus="true"
-            android:layout_centerHorizontal="true"
             android:layout_weight="1"
             android:inputType="textPassword" />
 
@@ -59,9 +59,9 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="300dp"
         android:layout_height="55dp"
-        android:text="登陆"
+        android:text="@string/login"
         android:id="@+id/login"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
@@ -69,11 +69,21 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="300dp"
         android:layout_height="55dp"
-        android:text="注册"
+        android:text="@string/register"
         android:id="@+id/register"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:layout_below="@+id/login"
         android:layout_alignLeft="@+id/login"
         android:layout_alignStart="@+id/login" />
+
+    <CheckBox
+        android:text="记住密码"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pass_input"
+        android:layout_marginBottom="15dp"
+        android:layout_above="@+id/login"
+        android:layout_alignRight="@+id/linearLayout13"
+        android:layout_alignEnd="@+id/linearLayout13" />
 
 </RelativeLayout>

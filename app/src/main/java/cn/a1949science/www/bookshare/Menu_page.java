@@ -1,12 +1,21 @@
 package cn.a1949science.www.bookshare;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import java.io.File;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
@@ -91,11 +100,27 @@ public class Menu_page extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BmobUser.logOut();
-                BmobUser currentUser = BmobUser.getCurrentUser();
-                Intent intent = new Intent(Menu_page.this, Login_Page.class);
-                startActivity(intent);
-                finish();
+                AlertDialog dlg = new AlertDialog.Builder(mContext)
+                        .setTitle("确认退出？")
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                        .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                BmobUser.logOut();
+                                BmobUser currentUser = BmobUser.getCurrentUser();
+                                Intent intent = new Intent(Menu_page.this, Login_Page.class);
+                                //清空源来栈中的Activity，新建栈打开相应的Activity
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            }
+                        })
+                        .create();
+                dlg.show();
             }
         });
 

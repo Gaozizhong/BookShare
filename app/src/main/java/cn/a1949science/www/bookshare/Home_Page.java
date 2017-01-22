@@ -29,6 +29,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import cn.a1949science.www.bookshare.bean.Book_Info;
@@ -56,10 +57,14 @@ public class Home_Page extends AppCompatActivity {
     ListView listview;
     boolean clicked  = false;
     private Uri fileUri;
-    private static final int PHOTO_REQUEST_CAREMA = 1;// 拍照
-    private static final int PHOTO_REQUEST_GALLERY = 2;// 从相册选取照片
+    // 拍照
+    private static final int PHOTO_REQUEST_CAREMA = 1;
+    // 从相册选取照片
+    private static final int PHOTO_REQUEST_GALLERY = 2;
     String picturePath="";
-    private File imageFile = null;//照片文件
+    //定义一个保存图片的File变量
+    private File imageFile = null;
+    private long exitTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +77,7 @@ public class Home_Page extends AppCompatActivity {
         displayList();
 
     }
+
     //查找地址
     private void findView() {
         next_layout = (FrameLayout) findViewById(R.id.home__page);
@@ -99,16 +105,16 @@ public class Home_Page extends AppCompatActivity {
                         } else {
                             //进入相机前判断下sdcard是否可用，可用进行存储
                             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                                //激活相机
-                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                 //获取系统的公用图像文件路径
                                 picturePath = Environment.getExternalStoragePublicDirectory
                                         (Environment.DIRECTORY_PICTURES).toString();
                                 //利用当前时间组合成一个不会重复的文件名
                                 String fname = "p"+ System.currentTimeMillis() +".jpg";
                                 //按前面的路径和文件名创建Uri对象
-                                File out = new File(picturePath,fname);
-                                fileUri = Uri.fromFile(out);
+                                imageFile = new File(picturePath,fname);
+                                fileUri = Uri.fromFile(imageFile);
+                                //激活相机
+                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                 //将uri加到拍照Intent的额外数据中
                                 intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
                                 //保存照片的质量
@@ -144,17 +150,6 @@ public class Home_Page extends AppCompatActivity {
         } else if (requestCode == PHOTO_REQUEST_CAREMA && data != null) {
 
             Toast.makeText(mContext, picturePath, Toast.LENGTH_SHORT).show();
-            Uri tookImage = data.getData();
-            //Toast.makeText(mContext, tookImage.toString(), Toast.LENGTH_SHORT).show();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-            Cursor cursor = getContentResolver().query(tookImage, filePathColumn, null, null, null);
-            assert cursor != null;
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            picturePath = cursor.getString(columnIndex);
-            Toast.makeText(mContext, picturePath, Toast.LENGTH_SHORT).show();
-            cursor.close();
         }
     }
 
@@ -191,7 +186,7 @@ public class Home_Page extends AppCompatActivity {
                                 } else {
                                     final BmobFile bmobFile = new BmobFile(new File(picturePath));
                                     new AlertDialog.Builder(mContext)
-                                            .setMessage("上传此图片？"+picturePath)
+                                            .setMessage("上传此图片？")
                                             .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -265,7 +260,7 @@ public class Home_Page extends AppCompatActivity {
                 //弹出信息框
                 LayoutInflater inflater = getLayoutInflater();
                 _User bmobUser = BmobUser.getCurrentUser(_User.class);
-                Toast.makeText(mContext, bmobUser.getNeedReturn().toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mContext, bmobUser.getNeedReturn().toString(), Toast.LENGTH_SHORT).show();
                 if (bmobUser.getNeedReturn()){
                     View layout = inflater.inflate(R.layout.raturning_yes, (ViewGroup) findViewById(R.id.returning_Yes_Dialog));
 
@@ -383,5 +378,18 @@ public class Home_Page extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        //点击两次返回键退出程序
+        if(System.currentTimeMillis() - exitTime > 2000) {
+            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            exitTime = System.currentTimeMillis();
+        } else {
+            finish();
+            System.exit(0);
+            android.os.Process.killProcess(android.os.Process.myPid());
+        }
     }
 }

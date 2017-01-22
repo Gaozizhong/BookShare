@@ -3,11 +3,13 @@ package cn.a1949science.www.bookshare;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -23,6 +25,8 @@ public class Login_Page extends AppCompatActivity {
     Context mContext = Login_Page.this;
     Button login,register;
     EditText phoneNum,password;
+    CheckBox pass_input;
+    SharedPreferences sp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +44,13 @@ public class Login_Page extends AppCompatActivity {
         password = (EditText) findViewById(R.id.password);
         login  = (Button) findViewById(R.id.login);
         register = (Button) findViewById(R.id.register);
+        pass_input = (CheckBox) findViewById(R.id.pass_input);
+        sp = this.getSharedPreferences("userInfo", MODE_PRIVATE);
+        if (sp.getBoolean("pass_input", false)) {
+            phoneNum.setText(sp.getString("phoneNum",null));
+            password.setText(sp.getString("password",null));
+            pass_input.setChecked(true);
+        }
     }
 
     //点击事件
@@ -56,11 +67,28 @@ public class Login_Page extends AppCompatActivity {
                     return;
                 }
 
+                //记住密码
+                boolean CheckBoxLogin = pass_input.isChecked();
+                //按钮被选中，下次进入时显示账号和密码
+                if (CheckBoxLogin) {
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putString("phoneNum", phone);
+                    editor.putString("password", passWord);
+                    editor.putBoolean("pass_input", true);
+                    editor.commit();
+                } else {
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putString("phoneNum", null);
+                    editor.putString("password", null);
+                    editor.putBoolean("pass_input", false);
+                    editor.commit();
+                }
+
+                login.setClickable(false);
+
                 _User user = new _User();
                 user.setUsername(phone);
                 user.setPassword(passWord);
-
-
                 BmobUser.loginByAccount(phone,passWord,new LogInListener<_User>() {
                     @Override
                     public void done(_User user, BmobException e) {
@@ -76,6 +104,7 @@ public class Login_Page extends AppCompatActivity {
                             finish();
                         }else {
                             Toast.makeText(mContext, "登录失败", Toast.LENGTH_SHORT).show();
+                            login.setClickable(true);
                         }
                     }
 
