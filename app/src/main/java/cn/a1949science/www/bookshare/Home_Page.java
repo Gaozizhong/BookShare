@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Camera;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,7 +30,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -61,10 +65,13 @@ public class Home_Page extends AppCompatActivity {
     private static final int PHOTO_REQUEST_CAREMA = 1;
     // 从相册选取照片
     private static final int PHOTO_REQUEST_GALLERY = 2;
+    // 剪切照片
+    private static final int PHOTO_REQUEST_CUT = 3;
     String picturePath="";
     //定义一个保存图片的File变量
     private File imageFile = null;
     private long exitTime = 0;
+    private ImageView headIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +110,8 @@ public class Home_Page extends AppCompatActivity {
                             intent1.setType("image/*");
                             startActivityForResult(intent1, PHOTO_REQUEST_GALLERY);
                         } else {
+                            //激活相机
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                             //进入相机前判断下sdcard是否可用，可用进行存储
                             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                                 //获取系统的公用图像文件路径
@@ -113,8 +122,6 @@ public class Home_Page extends AppCompatActivity {
                                 //按前面的路径和文件名创建Uri对象
                                 imageFile = new File(picturePath,fname);
                                 fileUri = Uri.fromFile(imageFile);
-                                //激活相机
-                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                 //将uri加到拍照Intent的额外数据中
                                 intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
                                 //保存照片的质量
@@ -144,13 +151,60 @@ public class Home_Page extends AppCompatActivity {
 
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             picturePath = cursor.getString(columnIndex);
-            //Toast.makeText(mContext, picturePath, Toast.LENGTH_SHORT).show();
             cursor.close();
 
         } else if (requestCode == PHOTO_REQUEST_CAREMA && data != null) {
-
-            Toast.makeText(mContext, picturePath, Toast.LENGTH_SHORT).show();
+            if (Environment.getExternalStorageState().equals(
+                    Environment.MEDIA_MOUNTED)) {
+                crop(Uri.fromFile(imageFile));
+            } else {
+                Toast.makeText(mContext, "未找到存储卡，无法存储照片！", Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == PHOTO_REQUEST_CUT&& data != null) {
+            final Bitmap bitmap = data.getParcelableExtra("data");
+            headIcon.setImageBitmap(bitmap);
+            // 保存图片到internal storage
+            FileOutputStream outputStream;
+            try {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                out.flush();
+                // out.close();
+                // final byte[] buffer = out.toByteArray();
+                // outputStream.write(buffer);
+                outputStream = mContext.openFileOutput("_head_icon.jpg",
+                        Context.MODE_PRIVATE);
+                out.writeTo(outputStream);
+                out.close();
+                outputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+        try {
+            if (imageFile != null && imageFile.exists())
+                imageFile.delete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void crop(Uri uri) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        intent.putExtra("crop", true);
+        //裁剪框比例
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        //裁剪后输出图片的尺寸大小
+        intent.putExtra("outputX", 250);
+        intent.putExtra("outputY", 250);
+        //图片格式
+        intent.putExtra("outputFormat", "JPEG");
+        //取消人脸识别
+        intent.putExtra("noFaceDetection", true);
+        intent.putExtra("return-data", true);
+        startActivityForResult(intent, PHOTO_REQUEST_CUT);
     }
 
     //点击事件
@@ -338,6 +392,7 @@ public class Home_Page extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, Menu_page.class);
+                //overridePendingTransition(R.anim.alphain, R.anim.alphaout);
                 startActivity(intent);
             }
         });
@@ -349,6 +404,13 @@ public class Home_Page extends AppCompatActivity {
         BmobQuery<Book_Info> query = new BmobQuery<>();
         //查找出有ownerNum的信息
         query.addWhereExists("ownerNum");
+        query.include("owner");
+        boolean isCache = query.hasCachedResult(Book_Info.class);
+        if(isCache){
+            query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);    // 如果有缓存的话，则设置策略为CACHE_ELSE_NETWORK
+        }else{
+            query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);    // 如果没有缓存的话，则设置策略为NETWORK_ELSE_CACHE
+        }
         query.findObjects(new FindListener<Book_Info>() {
             @Override
             public void done(final List<Book_Info> list, BmobException e) {

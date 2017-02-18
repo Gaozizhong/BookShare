@@ -85,21 +85,8 @@ public class Book_detail extends AppCompatActivity {
         _User bmobUser = BmobUser.getCurrentUser(_User.class);
         //查找book
         final BmobQuery<Book_Info> query = new BmobQuery<>();
-
-        /*query.addWhereEqualTo("owner",bmobUser);
-        query.order("-updatedAt");
+        // 希望在查询书籍信息的同时也把发布人的信息查询出来
         query.include("owner");
-        query.findObjects(new FindListener<Book_Info>() {
-            @Override
-            public void done(List<Book_Info> list, BmobException e) {
-                if (e == null) {
-                    Toast.makeText(Book_detail.this, "查询112233。", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(Book_detail.this, "查询失败。", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
-
         query.getObject(objectId, new QueryListener<Book_Info>() {
             @Override
             public void done(Book_Info book_info, BmobException e) {
@@ -111,9 +98,11 @@ public class Book_detail extends AppCompatActivity {
                     OwnerNum = book_info.getOwnerNum();
                     OwnerName = book_info.getOwnerName();
                     _User Owner = book_info.getOwner();
-                    //OwnerName = Owner.getUsername();
-                    //Toast.makeText(Book_detail.this, OwnerName, Toast.LENGTH_SHORT).show();
+                    //String OwnerName1 = Owner.getUsername();
+                    Toast.makeText(Book_detail.this, OwnerName, Toast.LENGTH_SHORT).show();
                     BmobFile image = book_info.getBookPicture();
+                    String img_url = image.getUrl();
+                    //Toast.makeText(Book_detail.this, img_url, Toast.LENGTH_SHORT).show();
 
                     List<Map<String, Object>> listItems = new ArrayList<>();
                     for(int i=0;i<1;i++) {

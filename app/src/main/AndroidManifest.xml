@@ -42,7 +42,9 @@
         <activity android:name=".Detail_Info" />
         <activity android:name=".My_Book_List" />
         <activity android:name=".EditPassword" />
-        <activity android:name=".Edit_Detail_Info"></activity>
+        <activity android:name=".Edit_Detail_Info" />
+        <activity android:name=".MyRead" />
+        <activity android:name=".MyLike"></activity>
     </application>
 
 </manifest>

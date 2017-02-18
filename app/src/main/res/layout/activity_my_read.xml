@@ -31,38 +31,38 @@
         android:layout_below="@+id/relativeLayout4"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="1dp">
+        android:layout_marginTop="2px">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="分享"
+            android:text="已看"
             android:id="@+id/textView15"
             android:layout_marginLeft="15dp"
             android:layout_marginStart="15dp"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:textSize="15sp" />
+            android:textSize="15dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="11本"
-            android:id="@+id/count"
+            android:id="@+id/textView17"
             android:layout_marginRight="15dp"
             android:layout_marginEnd="15dp"
             android:layout_alignTop="@+id/textView15"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:textSize="15sp" />
+            android:textSize="15dp" />
     </RelativeLayout>
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="2px"
         android:id="@+id/imageView20"
         android:background="#ebecf0"
         android:layout_below="@+id/relativeLayout5"

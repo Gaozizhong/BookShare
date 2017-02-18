@@ -76,7 +76,7 @@ public class Menu_page extends AppCompatActivity {
         read.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(mContext,My_Book_List.class);
+                Intent it = new Intent(mContext,MyRead.class);
                 startActivity(it);
             }
         });
@@ -84,7 +84,7 @@ public class Menu_page extends AppCompatActivity {
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(mContext,My_Book_List.class);
+                Intent it = new Intent(mContext,MyLike.class);
                 startActivity(it);
             }
         });

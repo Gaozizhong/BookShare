@@ -2,6 +2,7 @@ package cn.a1949science.www.bookshare.bean;
 
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
 
 /**
  * Created by 高子忠 on 2016/12/4.
@@ -29,6 +30,10 @@ public class _User extends BmobUser {
     private Integer studentID;
     //借书状态
     private Boolean needReturn;
+    //用户昵称
+    private String nickname;
+    //用户头像
+    private BmobFile favicon;
 
     public Integer getUserNum(){return userNum;}
     public void setUserNum(String userNum){this.userNum =  Integer.parseInt(userNum);}
@@ -62,4 +67,15 @@ public class _User extends BmobUser {
 
     public Boolean getNeedReturn() {return needReturn;}
     public void setNeedReturn(Boolean needReturn){this.needReturn = needReturn;}
+
+    public String getNickname() {
+        return nickname;
+    }
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public BmobFile getFavicon(){return favicon;}
+    public void setFavicon(BmobFile favicon){this.favicon =  favicon;}
+
 }
