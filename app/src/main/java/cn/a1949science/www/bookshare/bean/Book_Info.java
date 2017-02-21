@@ -9,7 +9,6 @@ public class Book_Info extends BmobObject {
     private Boolean BeShared;//是否借出
     private String ownerName;//书主姓名
     private _User owner;//书主
-    private Integer ownerNum;//书主序号
     private BmobFile BookPicture;//图书照片
     private String BookDescribe;//图书介绍
     private String BookName;//书名
@@ -35,9 +34,6 @@ public class Book_Info extends BmobObject {
     public void setOwner(_User owner) {
         this.owner = owner;
     }
-
-    public Integer getOwnerNum(){return ownerNum;}
-    public void setOwnerNum(String ownerNum){this.ownerNum =  Integer.parseInt(ownerNum);}
 
     public BmobFile getBookPicture(){return BookPicture;}
     public void setBookPicture(BmobFile BookPicture){this.BookPicture =  BookPicture;}

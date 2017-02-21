@@ -45,6 +45,7 @@ import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 
 import static cn.a1949science.www.bookshare.R.layout.activity_home__page;
@@ -258,16 +259,15 @@ public class Home_Page extends AppCompatActivity {
                                                                 progressDialog.dismiss();
                                                                 //上传其他信息
                                                                 _User bmobUser = BmobUser.getCurrentUser(_User.class);
-                                                                Integer usernum = bmobUser.getUserNum();
                                                                 String username = bmobUser.getUsername();
                                                                 Book_Info book = new Book_Info();
                                                                 book.setOwner(bmobUser);
-                                                                book.setOwnerNum(usernum.toString());
                                                                 book.setOwnerName(username);
                                                                 book.setBookName(bookName.getText().toString());
                                                                 book.setBookDescribe(describe.getText().toString());
                                                                 book.setBookWriter(bookWriter.getText().toString());
                                                                 book.setkeepTime(shareTime.getText().toString());
+                                                                book.setBeShared(false);
                                                                 book.setBookPicture(bmobFile);
                                                                 book.save(new SaveListener<String>() {
                                                                     @Override
@@ -316,7 +316,6 @@ public class Home_Page extends AppCompatActivity {
                 //弹出信息框
                 LayoutInflater inflater = getLayoutInflater();
                 _User bmobUser = BmobUser.getCurrentUser(_User.class);
-                //Toast.makeText(mContext, bmobUser.getNeedReturn().toString(), Toast.LENGTH_SHORT).show();
                 if (bmobUser.getNeedReturn()){
                     View layout = inflater.inflate(R.layout.raturning_yes, (ViewGroup) findViewById(R.id.returning_Yes_Dialog));
 
@@ -324,7 +323,33 @@ public class Home_Page extends AppCompatActivity {
                             .setPositiveButton("确认还书", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-
+                                    //更新此书的状态
+                                   /* Book_Info newBook = new Book_Info();
+                                    newBook.setBeShared(false);
+                                    newBook.update(objectId, new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                            if (e == null) {
+                                                Toast.makeText(mContext, "更新信息成功", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(mContext, "更新信息失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });*/
+                                    //更新用户借书状态
+                                    _User newUser = new _User();
+                                    newUser.setNeedReturn(false);
+                                    BmobUser bmobUser = BmobUser.getCurrentUser();
+                                    newUser.update(bmobUser.getObjectId(), new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                            if (e == null) {
+                                                Toast.makeText(mContext, "更新用户信息成功", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(mContext, "更新用户信息失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
                                 }
                             })
                             .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -403,14 +428,13 @@ public class Home_Page extends AppCompatActivity {
         //查找book
         BmobQuery<Book_Info> query = new BmobQuery<>();
         //查找出有ownerNum的信息
-        query.addWhereExists("ownerNum");
-        query.include("owner");
-        boolean isCache = query.hasCachedResult(Book_Info.class);
+        query.addWhereEqualTo("BeShared", false);
+        /*boolean isCache = query.hasCachedResult(Book_Info.class);
         if(isCache){
             query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);    // 如果有缓存的话，则设置策略为CACHE_ELSE_NETWORK
         }else{
             query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);    // 如果没有缓存的话，则设置策略为NETWORK_ELSE_CACHE
-        }
+        }*/
         query.findObjects(new FindListener<Book_Info>() {
             @Override
             public void done(final List<Book_Info> list, BmobException e) {

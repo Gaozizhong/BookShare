@@ -92,13 +92,13 @@ public class MyAdapter extends BaseAdapter {
         }
         return view;
     }
-    class ViewHolder{
+    private class ViewHolder{
         ImageView image;
         TextView book;
         TextView writer;
     }
 
-    public Bitmap getPicture(String path) {
+    private Bitmap getPicture(String path) {
         Bitmap bm = null;
         try {
             URL url = new URL(path);
@@ -106,8 +106,6 @@ public class MyAdapter extends BaseAdapter {
             connection.connect();
             InputStream inputStream = connection.getInputStream();
             bm = BitmapFactory.decodeStream(inputStream);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
