@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -45,10 +47,11 @@ public class Book_detail extends AppCompatActivity {
     ImageView before,image;
     TextView introduce,bookName,writename,time,bookOwner;
     ImageButton likeBtn,readBtn;
-    String objectId,introduce1,bookname1,writername1,OwnerName1,time1;
-    int booknum1,OwnerNum1;
+    String objectId,introduce1,bookname1,writername1,OwnerName1,time1,phone;
+    int booknum1;
     boolean ifLike=false,ifRead=false;
     Button borrowBtn;
+    LinearLayout owner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,10 +101,11 @@ public class Book_detail extends AppCompatActivity {
         likeBtn = (ImageButton)findViewById(R.id.likeBtn);
         readBtn = (ImageButton) findViewById(R.id.readBtn);
         borrowBtn = (Button) findViewById(R.id.borrowBtn);
+        owner = (LinearLayout) findViewById(R.id.owner);
     }
 
     //点击事件
-    protected void onClick(){
+    private void onClick(){
         assert before != null;
         before.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,23 +192,7 @@ public class Book_detail extends AppCompatActivity {
                                     Integer userNum = bmobUser1.getUserNum();
                                     sharedInfo.setBookNum(booknum1);
                                     sharedInfo.setUserNum(userNum);
-
-                                    //查找书主序号
-                                    BmobQuery<_User> query = new BmobQuery<>();
-                                    //查找出有ownerNum的信息
-                                    query.addWhereEqualTo("username", bookOwner);
-                                    query.findObjects(new FindListener<_User>() {
-                                        @Override
-                                        public void done(final List<_User> list, BmobException e) {
-                                            if (e == null) {
-                                                OwnerNum1=list.get(0).getUserNum();
-                                                //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });
-                                    sharedInfo.setOwnerNum(OwnerNum1);
+                                    sharedInfo.setOwnerName(OwnerName1);
                                     sharedInfo.setIfAgree(false);
                                     sharedInfo.setIfLoan(false);
                                     sharedInfo.setIfFinish(false);
@@ -229,6 +217,47 @@ public class Book_detail extends AppCompatActivity {
                             .create();
                     dlg.show();
                 }
+
+
+            }
+        });
+
+        owner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //查找owner
+                BmobQuery<_User> query = new BmobQuery<>();
+                query.addWhereEqualTo("username", OwnerName1);
+                //列表中不显示自己分享的书
+                query.findObjects(new FindListener<_User>() {
+                    @Override
+                    public void done(final List<_User> list, BmobException e) {
+                        if (e == null) {
+                            phone = list.get(0).getMobilePhoneNumber();
+
+                            AlertDialog dlg = new AlertDialog.Builder(mContext)
+                                    .setTitle("确认拨打电话？")
+                                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        }
+                                    })
+                                    .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            Intent it = new Intent("android.intent.action.CALL",Uri.parse("tel:" + phone));
+                                            startActivity(it);
+                                        }
+                                    })
+                                    .create();
+                            dlg.show();
+                            //Toast.makeText(mContext, phone, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
 
 
             }

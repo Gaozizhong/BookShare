@@ -16,7 +16,7 @@ public class Book_Info extends BmobObject {
     private Integer keepTime;//可借时间
 
     public Integer getBookNum(){return BookNum;}
-    public void setBookNum(String BookNum){this.BookNum =  Integer.parseInt(BookNum);}
+    public void setBookNum(Integer BookNum){this.BookNum =  BookNum;}
 
     public Boolean getBeShared() {return BeShared;}
     public void setBeShared(Boolean BeShared){this.BeShared = BeShared;}

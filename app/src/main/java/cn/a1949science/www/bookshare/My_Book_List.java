@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.a1949science.www.bookshare.bean.Book_Info;
+import cn.a1949science.www.bookshare.bean.Shared_Info;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -29,6 +30,7 @@ public class My_Book_List extends AppCompatActivity {
     ImageView before;
     ListView listview;
     TextView count;
+    int[] bookNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,12 +76,32 @@ public class My_Book_List extends AppCompatActivity {
             @Override
             public void done(final List<Book_Info> list, BmobException e) {
                 if (e == null) {
-                    final int[] bookNum = new int[list.size()];
+                    bookNum = new int[list.size()];
                     for (int i=0;i<list.size();i++) {
                         bookNum[i] = list.get(i).getBookNum();
                     }
                     listview.setAdapter(new MyAdapter(mContext,list));
 
+                    //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        //查找我正在被人借的book
+        String name = bmobUser.getUsername();
+        BmobQuery<Shared_Info> query1 = new BmobQuery<Shared_Info>();
+        //查找出本用户发布的所有书籍
+        query1.addWhereEqualTo("ownerName", name);
+        query1.findObjects(new FindListener<Shared_Info>() {
+            @Override
+            public void done(final List<Shared_Info> list, BmobException e) {
+                if (e == null) {
+                    bookNum = new int[list.size()];
+                    for (int i=0;i<list.size();i++) {
+                        bookNum[i] = list.get(i).getBookNum();
+                    }
                     //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();

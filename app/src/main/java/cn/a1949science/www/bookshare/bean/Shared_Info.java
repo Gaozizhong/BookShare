@@ -1,5 +1,7 @@
 package cn.a1949science.www.bookshare.bean;
 
+import java.util.Date;
+
 import cn.bmob.v3.BmobObject;
 
 /**
@@ -11,12 +13,11 @@ public class Shared_Info extends BmobObject {
     private Integer ShareNum;
     //借书人序号
     private Integer UserNum;
-    //书主序号
-    private Integer OwnerNum;
+    //书主姓名
+    private String ownerName;
     //图书序号
     private Integer BookNum;
-    //用createdAT作为分享时间，用updatedAT作为归还时间
-
+    //用createdAT作为分享时间，用z最后的updatedAT作为归还时间
     //书主是否同意
     private Boolean ifAgree;
     //书主是否同意
@@ -25,6 +26,8 @@ public class Shared_Info extends BmobObject {
     private Boolean ifFinish;
     //图书是否归还
     private Boolean ifReturn;
+    //借书完成时间
+    private Date finishAt;
 
     public Integer getShareNum(){return ShareNum;}
     public void setShareNum(Integer ShareNum){this.ShareNum =  ShareNum;}
@@ -32,8 +35,8 @@ public class Shared_Info extends BmobObject {
     public Integer getUserNum(){return UserNum;}
     public void setUserNum(Integer UserNum){this.UserNum =  UserNum;}
 
-    public Integer getOwnerNum(){return OwnerNum;}
-    public void setOwnerNum(Integer OwnerNum){this.OwnerNum =  OwnerNum;}
+    public String getOwnerName(){return ownerName;}
+    public void setOwnerName(String ownerName){this.ownerName =  ownerName;}
 
     public Integer getBookNum(){return BookNum;}
     public void setBookNum(Integer BookNum){this.BookNum = BookNum;}
@@ -49,5 +52,8 @@ public class Shared_Info extends BmobObject {
 
     public Boolean getIfReturn(){return ifReturn;}
     public void setIfReturn(Boolean ifReturn){this.ifReturn =  ifReturn;}
+
+    public Date getFinishAt(){return finishAt;}
+    public void setFinishAt(Date finishAt){this.finishAt =  finishAt;}
 
 }

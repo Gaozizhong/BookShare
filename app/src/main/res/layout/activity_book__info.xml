@@ -155,7 +155,8 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="15dp"
                 android:paddingRight="10dp"
-                android:id="@+id/owner">
+                android:id="@+id/owner"
+                android:clickable="false">
 
                 <TextView
                     android:layout_width="40dp"

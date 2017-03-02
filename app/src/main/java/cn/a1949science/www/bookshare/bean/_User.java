@@ -36,7 +36,7 @@ public class _User extends BmobUser {
     private BmobFile favicon;
 
     public Integer getUserNum(){return userNum;}
-    public void setUserNum(String userNum){this.userNum =  Integer.parseInt(userNum);}
+    public void setUserNum(Integer userNum){this.userNum =  userNum;}
 
     public Boolean getUsersex() {return usersex;}
     public void setUsersex(Boolean usersex){this.usersex = usersex;}

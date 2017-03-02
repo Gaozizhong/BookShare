@@ -52,7 +52,7 @@ public class MyRead extends AppCompatActivity {
         //查找book
         BmobQuery<Book_Info> query = new BmobQuery<>();
         //查找出有ownerNum的信息
-        query.addWhereExists("ownerNum");
+        query.addWhereExists("ownerName");
         query.findObjects(new FindListener<Book_Info>() {
             @Override
             public void done(final List<Book_Info> list, BmobException e) {

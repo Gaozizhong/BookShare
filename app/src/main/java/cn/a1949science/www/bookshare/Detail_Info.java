@@ -66,6 +66,7 @@ public class Detail_Info extends AppCompatActivity {
             }
         });
     }
+
     private void showDetailInfo() {
         BmobUser bmobUser = BmobUser.getCurrentUser();
         bmobUser.getObjectId();

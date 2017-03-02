@@ -3,6 +3,7 @@
     package="cn.a1949science.www.bookshare">
 
     <!-- 允许联网 -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 获取GSM（2g）、WCDMA（联通3g）等网络状态的信息 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -18,6 +19,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- 加入外部存储设备的权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 允许打电话 -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:allowBackup="true"
@@ -44,7 +47,8 @@
         <activity android:name=".EditPassword" />
         <activity android:name=".Edit_Detail_Info" />
         <activity android:name=".MyRead" />
-        <activity android:name=".MyLike"></activity>
+        <activity android:name=".MyLike" />
+        <activity android:name=".Sharing"></activity>
     </application>
 
 </manifest>

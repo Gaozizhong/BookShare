@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_sharing"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ebecf0"
-    android:id="@+id/book_info_item">
+    tools:context="cn.a1949science.www.bookshare.Sharing"
+    android:background="#ebecf0">
 
     <ImageView
         android:layout_width="match_parent"
@@ -132,7 +134,8 @@
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
         android:paddingRight="10dp"
-        android:id="@+id/owner">
+        android:id="@+id/owner"
+        android:clickable="false">
 
         <TextView
             android:layout_width="40dp"
@@ -218,7 +221,6 @@
                 android:background="#00000000"
                 android:textColor="#ffffff" />
         </LinearLayout>
-
     </LinearLayout>
 
 </LinearLayout>
