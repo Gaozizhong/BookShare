@@ -24,6 +24,8 @@ public class Shared_Info extends BmobObject {
     private Boolean ifLoan;
     //书主是否同意
     private Boolean ifFinish;
+    //是否确认还书
+    private Boolean ifAffirm;
     //图书是否归还
     private Boolean ifReturn;
     //借书完成时间
@@ -49,6 +51,9 @@ public class Shared_Info extends BmobObject {
 
     public Boolean getIfFinish(){return ifFinish;}
     public void setIfFinish(Boolean ifFinish){this.ifFinish =  ifFinish;}
+
+    public Boolean getIfAffirm(){return ifAffirm;}
+    public void setIfAffirm(Boolean ifAffirm){this.ifAffirm =  ifAffirm;}
 
     public Boolean getIfReturn(){return ifReturn;}
     public void setIfReturn(Boolean ifReturn){this.ifReturn =  ifReturn;}

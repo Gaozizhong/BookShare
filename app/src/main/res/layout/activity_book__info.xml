@@ -79,8 +79,7 @@
                     android:id="@+id/bookName"
                     android:textSize="14sp"
                     android:gravity="center_horizontal"
-                    android:layout_weight="1"
-                    android:layout_marginRight="35dp" />
+                    android:layout_weight="1" />
 
             </LinearLayout>
 
@@ -110,8 +109,7 @@
                     android:id="@+id/writename"
                     android:textSize="14sp"
                     android:gravity="center_horizontal"
-                    android:layout_weight="1"
-                    android:layout_marginRight="35dp" />
+                    android:layout_weight="1" />
 
             </LinearLayout>
 
@@ -141,8 +139,7 @@
                     android:id="@+id/time"
                     android:textSize="14sp"
                     android:gravity="center_horizontal"
-                    android:layout_weight="1"
-                    android:layout_marginRight="35dp" />
+                    android:layout_weight="1" />
 
             </LinearLayout>
 
@@ -175,12 +172,6 @@
                     android:gravity="center|center_horizontal"
                     android:textSize="14sp"
                     android:layout_weight="1" />
-
-                <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:id="@+id/imageView3"
-                    android:src="@drawable/after" />
             </LinearLayout>
 
             <LinearLayout

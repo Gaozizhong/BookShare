@@ -82,6 +82,13 @@ public class My_Book_List extends AppCompatActivity {
                     }
                     listview.setAdapter(new MyAdapter(mContext,list));
 
+                    listview.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View view) {
+                            Toast.makeText(mContext, "121212212", Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    });
                     //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();

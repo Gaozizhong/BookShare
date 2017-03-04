@@ -57,7 +57,7 @@ import static cn.a1949science.www.bookshare.R.layout.activity_home__page;
 public class Home_Page extends AppCompatActivity {
     Context mContext = Home_Page.this;
     FrameLayout next_layout;
-    Button borrowBtn,loanBtn,shareBtn,returnBtn;
+    Button borrowBtn,loanBtn,shareBtn,returnBtn,receiveBtn;
     Animation animation = null;
     ImageButton shortCut;
     ImageView searchImg;
@@ -76,7 +76,7 @@ public class Home_Page extends AppCompatActivity {
     private File imageFile = null;
     private long exitTime = 0;
     private ImageView headIcon;
-    Integer borrowBookNum,loanBookNum,textNum1,textNum2;
+    Integer borrowBookNum,loanBookNum,textNum1,textNum2,textNum3;
     String objectId;
 
     @Override
@@ -102,6 +102,7 @@ public class Home_Page extends AppCompatActivity {
         loanBtn = (Button) findViewById(R.id.loanBtn);
         shareBtn = (Button) findViewById(R.id.shareBtn);
         returnBtn = (Button) findViewById(R.id.returnBtn);
+        receiveBtn = (Button) findViewById(R.id.receiveBtn);
     }
 
     //选择图书图片
@@ -330,30 +331,35 @@ public class Home_Page extends AppCompatActivity {
                             .setPositiveButton("确认还书", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    //更新此书的状态
-                                   /* Book_Info newBook = new Book_Info();
-                                    newBook.setBeShared(false);
-                                    newBook.update(objectId, new UpdateListener() {
+                                    _User bmobUser = BmobUser.getCurrentUser(_User.class);
+                                    //查询是否有借书人为自己的借书信息
+                                    BmobQuery<Shared_Info> query = new BmobQuery<>();
+                                    query.addWhereEqualTo("UserNum", bmobUser.getUserNum());
+                                    query.addWhereEqualTo("ifReturn", false);
+                                    query.findObjects(new FindListener<Shared_Info>() {
                                         @Override
-                                        public void done(BmobException e) {
-                                            if (e == null) {
-                                                Toast.makeText(mContext, "更新信息成功", Toast.LENGTH_SHORT).show();
+                                        public void done(final List<Shared_Info> list, BmobException e) {
+                                            if (e == null && list.size() != 0) {
+                                                borrowBookNum = list.get(0).getBookNum();
+                                                if (!list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
+                                                    textNum1 = 3;
+                                                } else if (list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
+                                                    textNum1 = 7;
+                                                }
+                                                objectId = list.get(0).getObjectId();
+
+                                                Bundle data = new Bundle();
+                                                //利用Intent传递数据
+                                                data.putInt("booknum",borrowBookNum);
+                                                data.putInt("textNum",textNum1);
+                                                data.putString("objectId",objectId);
+                                                Intent intent = new Intent(mContext, Sharing.class);
+                                                intent.putExtras(data);
+                                                startActivity(intent);
+                                                //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
                                             } else {
-                                                Toast.makeText(mContext, "更新信息失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });*/
-                                    //更新用户借书状态
-                                    _User newUser = new _User();
-                                    newUser.setNeedReturn(false);
-                                    BmobUser bmobUser = BmobUser.getCurrentUser();
-                                    newUser.update(bmobUser.getObjectId(), new UpdateListener() {
-                                        @Override
-                                        public void done(BmobException e) {
-                                            if (e == null) {
-                                                Toast.makeText(mContext, "还书成功", Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                Toast.makeText(mContext, "还书失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                //Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
+                                                borrowBtn.setClickable(false);
                                             }
                                         }
                                     });
@@ -419,36 +425,61 @@ public class Home_Page extends AppCompatActivity {
             }
         });
 
+        receiveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle data = new Bundle();
+                //利用Intent传递数据
+                data.putInt("booknum",loanBookNum);
+                data.putInt("textNum",textNum3);
+                data.putString("objectId",objectId);
+                Intent intent = new Intent(mContext, Sharing.class);
+                intent.putExtras(data);
+                startActivity(intent);
+            }
+        });
+
         assert shortCut != null;
         shortCut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 shareBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
                 returnBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
+                loanBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
+                borrowBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
+                receiveBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
 
                 _User bmobUser = BmobUser.getCurrentUser(_User.class);
                 //查询是否有书主为自己的借书信息
                 BmobQuery<Shared_Info> query = new BmobQuery<>();
                 query.addWhereEqualTo("ownerName", bmobUser.getUsername());
-                query.addWhereEqualTo("ifLoan", false);
+                query.addWhereEqualTo("ifReturn", false);
                 query.findObjects(new FindListener<Shared_Info>() {
                     @Override
                     public void done(final List<Shared_Info> list, BmobException e) {
                         if (e == null && list.size()!=0) {
-                            loanBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
                             loanBookNum = list.get(0).getBookNum();
-                            if (!list.get(0).getIfAgree() && !list.get(0).getIfLoan() && !list.get(0).getIfFinish()) {
+                            if (!list.get(0).getIfAgree() && !list.get(0).getIfLoan() && !list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
                                 //书主处理借书请求
                                 textNum2 = 2;
-                            } else if (list.get(0).getIfAgree() && !list.get(0).getIfLoan() && !list.get(0).getIfFinish()) {
-                                //书主确认书以借出
-                                textNum2 = 3;
+                                receiveBtn.setClickable(false);
+                            } else if (list.get(0).getIfAgree() && !list.get(0).getIfLoan() && !list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
+                                //书主确认书已借出
+                                textNum2 = 4;
+                            } else if (list.get(0).getIfAgree() && list.get(0).getIfLoan() && !list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
+                                loanBtn.setClickable(false);
+                            } else if (list.get(0).getIfAgree() && list.get(0).getIfLoan() && list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
+                                loanBtn.setClickable(false);
+                                textNum3 = 6;
+                            } else if (list.get(0).getIfAgree() && list.get(0).getIfLoan() && list.get(0).getIfFinish() && list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
+                                loanBtn.setClickable(false);
+                                receiveBtn.setClickable(false);
                             }
                             objectId = list.get(0).getObjectId();
                             //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
                         } else {
                             //Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
-                            loanBtn.setVisibility(View.GONE);
+                            loanBtn.setClickable(false);
                         }
                     }
                 });
@@ -461,19 +492,22 @@ public class Home_Page extends AppCompatActivity {
                     @Override
                     public void done(final List<Shared_Info> list, BmobException e) {
                         if (e == null && list.size()!=0) {
-                            borrowBtn.setVisibility(clicked ? View.VISIBLE : View.GONE);
                             borrowBookNum = list.get(0).getBookNum();
-                            if (!list.get(0).getIfAgree() && !list.get(0).getIfLoan() && !list.get(0).getIfFinish()) {
+                            if (!list.get(0).getIfAgree() && !list.get(0).getIfLoan() && !list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
                                 //借书人刚发送借书请求
                                 textNum1 = 1;
-                            } else if (list.get(0).getIfAgree() && list.get(0).getIfLoan() && !list.get(0).getIfFinish()) {
+                            } else if (list.get(0).getIfAgree() && !list.get(0).getIfLoan() && !list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
                                 //书主同意了借书人的请求
-                                textNum1 = 4;
+                                textNum1 = 3;
+                            } else if (list.get(0).getIfAgree() && list.get(0).getIfLoan() && !list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
+                                //书主已借出书
+                                textNum1 = 5;
                             }
                             objectId = list.get(0).getObjectId();
                             //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
+                            borrowBtn.setClickable(false);
                         }
                     }
                 });
