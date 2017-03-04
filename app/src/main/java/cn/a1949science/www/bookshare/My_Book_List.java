@@ -1,6 +1,8 @@
 package cn.a1949science.www.bookshare;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,6 +26,9 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.UpdateListener;
+
+import static android.R.color.black;
 
 public class My_Book_List extends AppCompatActivity {
     Context mContext = My_Book_List.this;
@@ -31,6 +36,7 @@ public class My_Book_List extends AppCompatActivity {
     ListView listview;
     TextView count;
     int[] bookNum;
+    String countText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +46,13 @@ public class My_Book_List extends AppCompatActivity {
         findView();
         onClick();
         displayList();
-
     }
 
     //查找地址
     private void findView(){
         before = (ImageView) findViewById(R.id.before);
         listview = (ListView) findViewById(R.id.myBookList);
-        count = (TextView) findViewById(R.id.content);
+        count = (TextView) findViewById(R.id.count);
     }
 
     //点击事件
@@ -80,41 +85,51 @@ public class My_Book_List extends AppCompatActivity {
                     for (int i=0;i<list.size();i++) {
                         bookNum[i] = list.get(i).getBookNum();
                     }
+                    countText = list.size() + "本";
+                    count.setText(countText);
                     listview.setAdapter(new MyAdapter(mContext,list));
 
-                    listview.setOnLongClickListener(new View.OnLongClickListener() {
+                    listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                         @Override
-                        public boolean onLongClick(View view) {
-                            Toast.makeText(mContext, "121212212", Toast.LENGTH_SHORT).show();
-                            return false;
+                        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            final String object = list.get(i).getObjectId();
+                            AlertDialog dlg = new AlertDialog.Builder(mContext)
+                                    .setTitle("删除此书？")
+                                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        }
+                                    })
+                                    .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            //删除此书的BookInfo
+                                            Book_Info book = new Book_Info();
+                                            book.setObjectId(object);
+                                            book.delete(new UpdateListener() {
+                                                @Override
+                                                public void done(BmobException e) {
+                                                    if (e == null) {
+                                                        Toast.makeText(mContext, "删除成功", Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        Toast.makeText(mContext, "删除失败", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    })
+                                    .create();
+                            dlg.show();
+                            return true;
                         }
                     });
+
                     //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-        //查找我正在被人借的book
-        String name = bmobUser.getUsername();
-        BmobQuery<Shared_Info> query1 = new BmobQuery<Shared_Info>();
-        //查找出本用户发布的所有书籍
-        query1.addWhereEqualTo("ownerName", name);
-        query1.findObjects(new FindListener<Shared_Info>() {
-            @Override
-            public void done(final List<Shared_Info> list, BmobException e) {
-                if (e == null) {
-                    bookNum = new int[list.size()];
-                    for (int i=0;i<list.size();i++) {
-                        bookNum[i] = list.get(i).getBookNum();
-                    }
-                    //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
     }
 }

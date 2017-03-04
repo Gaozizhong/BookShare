@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 
 import cn.a1949science.www.bookshare.bean.Book_Info;
+import cn.a1949science.www.bookshare.bean.Like_Book;
+import cn.a1949science.www.bookshare.bean.Read_Book;
 import cn.a1949science.www.bookshare.bean.Shared_Info;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.v3.BmobQuery;
@@ -44,10 +46,10 @@ import static android.R.color.black;
 public class Book_detail extends AppCompatActivity {
 
     Context mContext = Book_detail.this;
-    ImageView before,image,phoneBtn;
+    ImageView before,image;
     TextView introduce,bookName,writename,time,bookOwner;
     ImageButton likeBtn,readBtn;
-    String objectId,introduce1,bookname1,writername1,OwnerName1,time1,phone;
+    String objectId1,objectId,introduce1,bookname1,writername1,OwnerName1,time1,phone;
     int booknum1;
     boolean ifLike=false,ifRead=false;
     Button borrowBtn;
@@ -86,6 +88,41 @@ public class Book_detail extends AppCompatActivity {
                 }
             }
         });
+        //判断是否喜欢
+        BmobQuery<Like_Book> likeQuery = new BmobQuery<>();
+        _User bmobUser = BmobUser.getCurrentUser(_User.class);
+        likeQuery.addWhereEqualTo("userNum", bmobUser.getUserNum());
+        likeQuery.addWhereEqualTo("BookNum", booknum1);
+        likeQuery.findObjects(new FindListener<Like_Book>() {
+            @Override
+            public void done(List<Like_Book> list, BmobException e) {
+                if (e == null) {
+                    if (list.size() != 0) {
+                        ifLike = true;
+                        likeBtn.setImageResource(R.mipmap.my_favourite);
+                    }
+                } else {
+                    Toast.makeText(mContext, "查询失败"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        //判断是否读过
+        BmobQuery<Read_Book> readQuery = new BmobQuery<>();
+        readQuery.addWhereEqualTo("userNum", bmobUser.getUserNum());
+        readQuery.addWhereEqualTo("BookNum", booknum1);
+        readQuery.findObjects(new FindListener<Read_Book>() {
+            @Override
+            public void done(List<Read_Book> list, BmobException e) {
+                if (e == null) {
+                    if (list.size() != 0) {
+                        ifRead = true;
+                        readBtn.setImageResource(R.mipmap.seen);
+                    }
+                } else {
+                    Toast.makeText(mContext, "查询失败"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     //查找地址
@@ -115,12 +152,29 @@ public class Book_detail extends AppCompatActivity {
         likeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ifLike == false) {
+                _User bmobUser = BmobUser.getCurrentUser(_User.class);
+                if (!ifLike) {
                     likeBtn.setImageResource(R.mipmap.my_favourite);
+                    //添加喜欢
+                    Like_Book like_book = new Like_Book();
+                    like_book.setBookNum(booknum1);
+                    like_book.setUserNum(bmobUser.getUserNum());
+                    like_book.save(new SaveListener<String>() {
+                        @Override
+                        public void done(String s, BmobException e) {
+                            if (e == null) {
+                                likeBtn.setClickable(false);
+                                Toast.makeText(mContext, "成功", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(mContext, "失败", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                     ifLike = true;
                 } else {
-                    likeBtn.setImageResource(R.mipmap.favourite);
-                    ifLike = false;
+                    /*likeBtn.setImageResource(R.mipmap.favourite);
+                    ifLike = false;*/
+                    Toast.makeText(mContext, "请到菜单中编辑所有喜爱书籍", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -128,12 +182,30 @@ public class Book_detail extends AppCompatActivity {
         readBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ifRead == false) {
+                if (!ifRead) {
                     readBtn.setImageResource(R.mipmap.seen);
+                    //添加喜欢
+                    _User bmobUser = BmobUser.getCurrentUser(_User.class);
+                    Read_Book read_book = new Read_Book();
+                    read_book.setBookNum(booknum1);
+                    read_book.setUserNum(bmobUser.getUserNum());
+                    read_book.save(new SaveListener<String>() {
+                        @Override
+                        public void done(String s, BmobException e) {
+                            if (e == null) {
+                                readBtn.setClickable(false);
+                                Toast.makeText(mContext, "成功", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(mContext, "失败", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
                     ifRead = true;
                 } else {
-                    readBtn.setImageResource(R.mipmap.not_seen);
-                    ifRead = false;
+                    /*readBtn.setImageResource(R.mipmap.not_seen);
+                    ifRead = false;*/
+                    Toast.makeText(mContext, "请到菜单中编辑所有看过书籍", Toast.LENGTH_SHORT).show();
                 }
             }
         });

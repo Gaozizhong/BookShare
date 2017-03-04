@@ -30,6 +30,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -57,6 +58,7 @@ import static cn.a1949science.www.bookshare.R.layout.activity_home__page;
 public class Home_Page extends AppCompatActivity {
     Context mContext = Home_Page.this;
     FrameLayout next_layout;
+    RelativeLayout Background;
     Button borrowBtn,loanBtn,shareBtn,returnBtn,receiveBtn;
     Animation animation = null;
     ImageButton shortCut;
@@ -76,7 +78,7 @@ public class Home_Page extends AppCompatActivity {
     private File imageFile = null;
     private long exitTime = 0;
     private ImageView headIcon;
-    Integer borrowBookNum,loanBookNum,textNum1,textNum2,textNum3;
+    Integer borrowBookNum,loanBookNum,textNum1,textNum2,textNum3,userNum;
     String objectId;
 
     @Override
@@ -93,6 +95,7 @@ public class Home_Page extends AppCompatActivity {
 
     //查找地址
     private void findView() {
+        Background = (RelativeLayout) findViewById(R.id.Background);
         next_layout = (FrameLayout) findViewById(R.id.home__page);
         shortCut = (ImageButton) findViewById(R.id.shortcut);
         searchImg = (ImageView) findViewById(R.id.searchImg);
@@ -404,6 +407,7 @@ public class Home_Page extends AppCompatActivity {
                 data.putInt("booknum",loanBookNum);
                 data.putInt("textNum",textNum2);
                 data.putString("objectId",objectId);
+                data.putInt("userNum",userNum);
                 Intent intent = new Intent(mContext, Sharing.class);
                 intent.putExtras(data);
                 startActivity(intent);
@@ -476,6 +480,7 @@ public class Home_Page extends AppCompatActivity {
                                 receiveBtn.setClickable(false);
                             }
                             objectId = list.get(0).getObjectId();
+                            userNum = list.get(0).getUserNum();
                             //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
                         } else {
                             //Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
@@ -521,8 +526,8 @@ public class Home_Page extends AppCompatActivity {
                 shortCut.startAnimation(animation);
                 clicked = !clicked;
 
-                next_layout.setClickable(!clicked);
-                next_layout.setBackgroundColor(clicked ? Color.parseColor("#ddffffff") : Color.parseColor("#ebecf0"));
+                Background.setClickable(!clicked);
+                Background.setBackgroundColor(clicked ? Color.parseColor("#ddffffff") : Color.parseColor("#ebecf0"));
 
             }
         });

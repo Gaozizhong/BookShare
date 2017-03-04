@@ -16,10 +16,10 @@ public class Read_Book extends BmobObject {
 
 
     public Integer getUserNum(){return userNum;}
-    public void setUserNum(String userNum){this.userNum =  Integer.parseInt(userNum);}
+    public void setUserNum(Integer userNum){this.userNum =  userNum;}
 
     public Integer getBookNum(){return BookNum;}
-    public void setBookNum(String BookNum){this.BookNum =  Integer.parseInt(BookNum);}
+    public void setBookNum(Integer BookNum){this.BookNum =  BookNum;}
 
     public Boolean getIsShare() {return IsShare;}
     public void setIsShare(Boolean IsShare){this.IsShare = IsShare;}

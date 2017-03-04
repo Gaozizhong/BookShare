@@ -37,7 +37,7 @@ public class Sharing extends AppCompatActivity {
     TextView introduce,bookName,writename,time,bookOwner;
     ImageButton likeBtn,readBtn;
     String objectId,objectId1,introduce1,bookname1,writername1,OwnerName1,time1,phone;
-    int booknum1,textNum;
+    int booknum1,textNum,userNum;
     boolean ifLike=false,ifRead=false;
     Button borrowBtn;
     @Override
@@ -55,11 +55,41 @@ public class Sharing extends AppCompatActivity {
         booknum1 = bundle.getInt("booknum");
         textNum = bundle.getInt("textNum");
         objectId = bundle.getString("objectId");
+        userNum = bundle.getInt("userNum");
         if (textNum == 1) {
             borrowBtn.setText("等待书主响应");
             borrowBtn.setClickable(false);
             borrowBtn.setBackgroundColor(getResources().getColor(black));
         } else if (textNum == 2) {
+            //借书人信息查询
+            BmobQuery<_User> query = new BmobQuery<>();
+            query.addWhereEqualTo("userNum", userNum);
+            query.findObjects(new FindListener<_User>() {
+                @Override
+                public void done(List<_User> list, BmobException e) {
+                    if (e == null) {
+                        AlertDialog dlg = new AlertDialog.Builder(mContext)
+                                .setTitle("借书人信息")
+                                .setMessage("借书人："+list.get(0).getUsername()+"\n"+"借书人电话："+list.get(0).getMobilePhoneNumber()+"\n"+
+                                        "借书人地址："+list.get(0).getUserSchool()+list.get(0).getUserDorm())
+                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                })
+                                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    }
+                                })
+                                .create();
+                        dlg.show();
+                    } else {
+                        Toast.makeText(mContext, "借书人信息查询失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
             borrowBtn.setText("可以借出");
             borrowBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
