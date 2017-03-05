@@ -31,12 +31,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import cn.a1949science.www.bookshare.bean.Book_Info;
@@ -45,6 +48,7 @@ import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -79,7 +83,7 @@ public class Home_Page extends AppCompatActivity {
     private long exitTime = 0;
     private ImageView headIcon;
     Integer borrowBookNum,loanBookNum,textNum1,textNum2,textNum3,userNum;
-    String objectId;
+    String objectId,time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -329,7 +333,8 @@ public class Home_Page extends AppCompatActivity {
                 _User bmobUser = BmobUser.getCurrentUser(_User.class);
                 if (bmobUser.getNeedReturn()){
                     View layout = inflater.inflate(R.layout.raturning_yes, (ViewGroup) findViewById(R.id.returning_Yes_Dialog));
-
+                    TextView returnTime = (TextView) layout.findViewById(R.id.returnTime);
+                    returnTime.setText("截止时间："+ time);
                     new AlertDialog.Builder(mContext)
                             .setPositiveButton("确认还书", new DialogInterface.OnClickListener() {
                                 @Override
@@ -453,6 +458,8 @@ public class Home_Page extends AppCompatActivity {
                 borrowBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
                 receiveBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
 
+                displayList();
+
                 _User bmobUser = BmobUser.getCurrentUser(_User.class);
                 //查询是否有书主为自己的借书信息
                 BmobQuery<Shared_Info> query = new BmobQuery<>();
@@ -472,6 +479,7 @@ public class Home_Page extends AppCompatActivity {
                                 textNum2 = 4;
                             } else if (list.get(0).getIfAgree() && list.get(0).getIfLoan() && !list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
                                 loanBtn.setClickable(false);
+                                receiveBtn.setClickable(false);
                             } else if (list.get(0).getIfAgree() && list.get(0).getIfLoan() && list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
                                 loanBtn.setClickable(false);
                                 textNum3 = 6;
@@ -492,7 +500,7 @@ public class Home_Page extends AppCompatActivity {
                 //查询是否有借书人为自己的借书信息
                 BmobQuery<Shared_Info> query1 = new BmobQuery<>();
                 query1.addWhereEqualTo("UserNum", bmobUser.getUserNum());
-                query1.addWhereEqualTo("ifFinish", false);
+                query1.addWhereEqualTo("ifReturn", false);
                 query1.findObjects(new FindListener<Shared_Info>() {
                     @Override
                     public void done(final List<Shared_Info> list, BmobException e) {
@@ -507,6 +515,9 @@ public class Home_Page extends AppCompatActivity {
                             } else if (list.get(0).getIfAgree() && list.get(0).getIfLoan() && !list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
                                 //书主已借出书
                                 textNum1 = 5;
+                            }else if (list.get(0).getIfAgree() && list.get(0).getIfLoan() && list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
+                                //借书过程完成
+                                time = list.get(0).getFinishAt().getDate();
                             }
                             objectId = list.get(0).getObjectId();
                             //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();

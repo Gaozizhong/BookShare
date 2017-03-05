@@ -24,6 +24,7 @@ import cn.a1949science.www.bookshare.bean.Shared_Info;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
@@ -93,6 +94,7 @@ public class My_Book_List extends AppCompatActivity {
                         @Override
                         public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                             final String object = list.get(i).getObjectId();
+                            final String url = list.get(i).getBookPicture().getUrl();
                             AlertDialog dlg = new AlertDialog.Builder(mContext)
                                     .setTitle("删除此书？")
                                     .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -108,6 +110,19 @@ public class My_Book_List extends AppCompatActivity {
                                             Book_Info book = new Book_Info();
                                             book.setObjectId(object);
                                             book.delete(new UpdateListener() {
+                                                @Override
+                                                public void done(BmobException e) {
+                                                    if (e == null) {
+                                                        Toast.makeText(mContext, "删除成功", Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        Toast.makeText(mContext, "删除失败", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
+                                            //删除此书的图片
+                                            BmobFile file = new BmobFile();
+                                            file.setUrl(url);
+                                            file.delete(new UpdateListener() {
                                                 @Override
                                                 public void done(BmobException e) {
                                                     if (e == null) {

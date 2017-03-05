@@ -74,7 +74,7 @@ public class MyLike extends AppCompatActivity {
                 if (e == null) {
                     countText = list.size() + "本";
                     count.setText(countText);
-                    final int[] bookNum = new int[list.size()];
+                    final Integer[] bookNum = new Integer[list.size()];
                     for (int i=0;i<list.size();i++) {
                         bookNum[i] = list.get(i).getBookNum();
                     }
@@ -85,7 +85,6 @@ public class MyLike extends AppCompatActivity {
                         @Override
                         public void done(List<Book_Info> list2, BmobException e) {
                             if (e == null) {
-                                Toast.makeText(mContext, list2.toString(), Toast.LENGTH_SHORT).show();
                                 listview.setAdapter(new MyAdapter(mContext, list2));
                                 //长按删除此条信息
                                 listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -110,6 +109,7 @@ public class MyLike extends AppCompatActivity {
                                                             @Override
                                                             public void done(BmobException e) {
                                                                 if (e == null) {
+                                                                    displayList();
                                                                     Toast.makeText(mContext, "删除成功", Toast.LENGTH_SHORT).show();
                                                                 } else {
                                                                     Toast.makeText(mContext, "删除失败", Toast.LENGTH_SHORT).show();

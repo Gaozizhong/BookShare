@@ -3,6 +3,7 @@ package cn.a1949science.www.bookshare.bean;
 import java.util.Date;
 
 import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.datatype.BmobDate;
 
 /**
  * Created by 高子忠 on 2016/12/4.
@@ -29,7 +30,7 @@ public class Shared_Info extends BmobObject {
     //图书是否归还
     private Boolean ifReturn;
     //借书完成时间
-    private Date finishAt;
+    private BmobDate finishAt;
 
     public Integer getShareNum(){return ShareNum;}
     public void setShareNum(Integer ShareNum){this.ShareNum =  ShareNum;}
@@ -58,7 +59,7 @@ public class Shared_Info extends BmobObject {
     public Boolean getIfReturn(){return ifReturn;}
     public void setIfReturn(Boolean ifReturn){this.ifReturn =  ifReturn;}
 
-    public Date getFinishAt(){return finishAt;}
-    public void setFinishAt(Date finishAt){this.finishAt =  finishAt;}
+    public BmobDate getFinishAt(){return finishAt;}
+    public void setFinishAt(BmobDate finishAt){this.finishAt =  finishAt;}
 
 }

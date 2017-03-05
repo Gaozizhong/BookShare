@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import cn.a1949science.www.bookshare.bean.Book_Info;
@@ -22,6 +24,7 @@ import cn.a1949science.www.bookshare.bean.Shared_Info;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
@@ -227,6 +230,10 @@ public class Sharing extends AppCompatActivity {
                                     //完成借书过程
                                     Shared_Info sharedInfo = new Shared_Info();
                                     sharedInfo.setIfFinish(true);
+                                    Date date = new Date(new Date().getTime() +Integer.parseInt(time1) * 24 * 60 * 60 * 1000);
+                                    BmobDate now = new BmobDate(date);
+                                    BmobDate now1 = BmobDate.createBmobDate("yyyy-MM-dd HH:mm:ss", now.getDate());
+                                    sharedInfo.setFinishAt(now1);
                                     sharedInfo.update(objectId, new UpdateListener() {
                                         @Override
                                         public void done(BmobException e) {
