@@ -1,4 +1,4 @@
-package cn.a1949science.www.bookshare;
+package cn.a1949science.www.bookshare.ui;
 
 import android.content.Intent;
 import android.os.Build;
@@ -9,10 +9,11 @@ import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
-import cn.bmob.sms.BmobSMS;
+import cn.a1949science.www.bookshare.R;
+import cn.a1949science.www.bookshare.ui.Home_Page;
+import cn.a1949science.www.bookshare.ui.Login_Page;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
-import okhttp3.internal.Internal;
 
 public class AppStart extends AppCompatActivity {
 

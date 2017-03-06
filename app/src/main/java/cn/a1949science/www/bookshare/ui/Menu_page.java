@@ -1,22 +1,16 @@
-package cn.a1949science.www.bookshare;
+package cn.a1949science.www.bookshare.ui;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import java.io.File;
-
+import cn.a1949science.www.bookshare.R;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
 

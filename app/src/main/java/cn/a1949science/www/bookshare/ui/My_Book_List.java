@@ -1,26 +1,22 @@
-package cn.a1949science.www.bookshare;
+package cn.a1949science.www.bookshare.ui;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import cn.a1949science.www.bookshare.MyAdapter;
+import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean.Book_Info;
-import cn.a1949science.www.bookshare.bean.Shared_Info;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -28,8 +24,6 @@ import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
-
-import static android.R.color.black;
 
 public class My_Book_List extends AppCompatActivity {
     Context mContext = My_Book_List.this;
@@ -113,6 +107,7 @@ public class My_Book_List extends AppCompatActivity {
                                                 @Override
                                                 public void done(BmobException e) {
                                                     if (e == null) {
+                                                        displayList();
                                                         Toast.makeText(mContext, "删除成功", Toast.LENGTH_SHORT).show();
                                                     } else {
                                                         Toast.makeText(mContext, "删除失败", Toast.LENGTH_SHORT).show();

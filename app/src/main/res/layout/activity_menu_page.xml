@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cn.a1949science.www.bookshare.Menu_page"
+    tools:context="cn.a1949science.www.bookshare.ui.Menu_page"
     android:background="#ebecf0"
     android:orientation="vertical">
 

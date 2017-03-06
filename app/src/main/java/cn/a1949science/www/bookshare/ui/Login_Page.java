@@ -1,4 +1,4 @@
-package cn.a1949science.www.bookshare;
+package cn.a1949science.www.bookshare.ui;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -13,13 +13,13 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.sms.BmobSMS;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.LogInListener;
-import cn.bmob.v3.listener.SaveListener;
 
 public class Login_Page extends AppCompatActivity {
     Context mContext = Login_Page.this;

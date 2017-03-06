@@ -28,27 +28,28 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AppStart">
+        <activity android:name=".ui.AppStart">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Login_Page" />
-        <activity android:name=".RegisterPage" />
-        <activity android:name=".Home_Page" />
-        <activity android:name=".Book_detail" />
-        <activity android:name=".Menu_page" />
-        <activity android:name=".User_Info" />
-        <activity android:name=".Advice_Page" />
-        <activity android:name=".Detail_Info" />
-        <activity android:name=".My_Book_List" />
-        <activity android:name=".EditPassword" />
-        <activity android:name=".Edit_Detail_Info" />
-        <activity android:name=".MyRead" />
-        <activity android:name=".MyLike" />
-        <activity android:name=".Sharing"></activity>
+        <activity android:name=".ui.Login_Page" />
+        <activity android:name=".ui.RegisterPage" />
+        <activity android:name=".ui.Home_Page" />
+        <activity android:name=".ui.Book_detail" />
+        <activity android:name=".ui.Menu_page" />
+        <activity android:name=".ui.User_Info" />
+        <activity android:name=".ui.Advice_Page" />
+        <activity android:name=".ui.Detail_Info" />
+        <activity android:name=".ui.My_Book_List" />
+        <activity android:name=".ui.EditPassword" />
+        <activity android:name=".ui.Edit_Detail_Info" />
+        <activity android:name=".ui.MyRead" />
+        <activity android:name=".ui.MyLike" />
+        <activity android:name=".ui.Sharing" />
+        <activity android:name=".ui.EditNickname"></activity>
     </application>
 
 </manifest>

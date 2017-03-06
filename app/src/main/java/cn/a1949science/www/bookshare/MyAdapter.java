@@ -116,9 +116,9 @@ public class MyAdapter extends BaseAdapter {
             connection.connect();
             InputStream inputStream = connection.getInputStream();
             //根据流数据创建 一个Bitmap位图对象
-            //bm = BitmapFactory.decodeStream(inputStream);
+            bm = BitmapFactory.decodeStream(inputStream);
 
-            // 第一次解析将inJustDecodeBounds设置为true，来获取图片大小
+            /*// 第一次解析将inJustDecodeBounds设置为true，来获取图片大小
             final BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             //在加载图片之前就获取到图片的长宽值和MIME类型
@@ -127,7 +127,7 @@ public class MyAdapter extends BaseAdapter {
             options.inSampleSize = calculateInSampleSize(options, (int) (120 * scale + 0.5f), (int) (120 * scale + 0.5f));
             // 使用获取到的inSampleSize值再次解析图片
             options.inJustDecodeBounds = false;
-            bm = BitmapFactory.decodeStream(inputStream);
+            bm = BitmapFactory.decodeStream(inputStream);*/
 
         } catch (Exception  e) {
             e.printStackTrace();

@@ -1,4 +1,4 @@
-package cn.a1949science.www.bookshare;
+package cn.a1949science.www.bookshare.ui;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,19 +7,18 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.sms.BmobSMS;
 import cn.bmob.sms.exception.BmobException;
 import cn.bmob.sms.listener.RequestSMSCodeListener;
 import cn.bmob.sms.listener.VerifySMSCodeListener;
 import cn.bmob.v3.Bmob;
-import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.listener.SaveListener;
 
 public class RegisterPage extends AppCompatActivity {

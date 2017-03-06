@@ -1,9 +1,8 @@
-package cn.a1949science.www.bookshare;
+package cn.a1949science.www.bookshare.ui;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,11 +12,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import cn.a1949science.www.bookshare.MyAdapter;
+import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean.Like_Book;
 import cn.a1949science.www.bookshare.bean._User;

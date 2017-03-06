@@ -1,4 +1,4 @@
-package cn.a1949science.www.bookshare;
+package cn.a1949science.www.bookshare.ui;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;

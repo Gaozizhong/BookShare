@@ -1,4 +1,4 @@
-package cn.a1949science.www.bookshare;
+package cn.a1949science.www.bookshare.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean.Advice_Info;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.v3.BmobUser;

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="cn.a1949science.www.bookshare.User_Info"
+    tools:context="cn.a1949science.www.bookshare.ui.User_Info"
     android:background="#ebecf0">
 
     <RelativeLayout
@@ -30,7 +30,7 @@
         android:background="#ffffff"
         android:gravity="center_vertical"
         android:weightSum="1"
-        android:onClick="goToUserInfo"
+        android:onClick="goToFavicon"
         android:layout_marginTop="20dp"
         android:id="@+id/linearLayout"
         android:paddingLeft="15dp"
@@ -59,9 +59,10 @@
         android:background="#ffffff"
         android:gravity="center_vertical|center_horizontal"
         android:layout_marginTop="1dp"
-        android:id="@+id/linearLayout2"
+        android:id="@+id/naikname"
         android:paddingLeft="15dp"
-        android:paddingRight="10dp">
+        android:paddingRight="10dp"
+        android:onClick="goToEdit">
 
         <TextView
             android:layout_width="wrap_content"
@@ -77,8 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="暖倾心"
-            android:id="@+id/textView"
+            android:id="@+id/nickname"
             android:textSize="14dp"
             android:layout_weight="1"
             android:gravity="center_vertical|right" />

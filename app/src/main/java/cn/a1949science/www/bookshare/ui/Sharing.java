@@ -1,4 +1,4 @@
-package cn.a1949science.www.bookshare;
+package cn.a1949science.www.bookshare.ui;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -11,14 +11,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import cn.a1949science.www.bookshare.LoadPicture;
+import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean.Shared_Info;
 import cn.a1949science.www.bookshare.bean._User;
@@ -27,8 +27,6 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.QueryListener;
-import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 import static android.R.color.black;
@@ -372,6 +370,7 @@ public class Sharing extends AppCompatActivity {
                     time.setText(time1);
                     bookOwner.setText(OwnerName1);
                     objectId1 = list.get(0).getObjectId();
+                    new LoadPicture().getPicture(list.get(0).getBookPicture().getFileUrl(),image);
                 } else {
                     Toast.makeText(mContext, "查询失败。"+ e.getMessage(), Toast.LENGTH_SHORT).show();
                 }

@@ -1,25 +1,20 @@
-package cn.a1949science.www.bookshare;
+package cn.a1949science.www.bookshare.ui;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
-
+import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
-import cn.bmob.v3.listener.UpdateListener;
 
 public class Detail_Info extends AppCompatActivity {
 
