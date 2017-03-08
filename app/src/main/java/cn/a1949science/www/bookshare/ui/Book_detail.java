@@ -12,9 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
-import cn.a1949science.www.bookshare.LoadPicture;
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean.Like_Book;
@@ -71,7 +72,9 @@ public class Book_detail extends AppCompatActivity {
                     writename.setText(writername1);
                     time.setText(time1);
                     bookOwner.setText(OwnerName1);
-                    new LoadPicture().getPicture(book_info.getBookPicture().getFileUrl(),image);
+                    Glide.with(mContext)
+                            .load(book_info.getBookPicture().getFileUrl())
+                            .into(image);
                 } else {
                     Toast.makeText(Book_detail.this, "查询失败。"+ e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -215,9 +218,6 @@ public class Book_detail extends AppCompatActivity {
                             .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    borrowBtn.setText("等待书主响应");
-                                    borrowBtn.setClickable(false);
-                                    borrowBtn.setBackgroundColor(getResources().getColor(black));
                                     //更新此书的状态
                                     Book_Info newBook = new Book_Info();
                                     newBook.setBeShared(true);
@@ -240,6 +240,9 @@ public class Book_detail extends AppCompatActivity {
                                         public void done(BmobException e) {
                                             if (e == null) {
                                                 //Toast.makeText(mContext, "更新用户信息成功", Toast.LENGTH_SHORT).show();
+                                                borrowBtn.setText("等待书主响应");
+                                                borrowBtn.setClickable(false);
+                                                borrowBtn.setBackgroundColor(getResources().getColor(black));
                                             } else {
                                                 Toast.makeText(mContext, "更新用户信息失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                             }

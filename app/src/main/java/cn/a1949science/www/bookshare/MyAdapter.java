@@ -10,6 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -71,7 +73,6 @@ public class MyAdapter extends BaseAdapter {
                 @Override
                 public void run() {
                     //根据表中图片的url地址来得到图片（Bitmap类型）
-                    final Bitmap bitmap = getPicture(list.get(i).getBookPicture().getFileUrl());
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException e) {
@@ -81,7 +82,9 @@ public class MyAdapter extends BaseAdapter {
                         @Override
                         public void run() {
                             //将图片放到视图中
-                            viewHolder.image.setImageBitmap(bitmap);
+                            Glide.with(context)
+                                    .load(list.get(i).getBookPicture().getFileUrl())
+                                    .into(viewHolder.image);
                         }
                     });
                 }
@@ -97,58 +100,6 @@ public class MyAdapter extends BaseAdapter {
         ImageView image;
         TextView book;
         TextView writer;
-    }
-
-    private Bitmap getPicture(String path) {
-        Bitmap bm = null;
-        try {
-            //创建URL对象
-            URL url = new URL(path);
-            //创建链接
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            //设置链接超时
-            connection.setConnectTimeout(10000);
-
-            connection.setReadTimeout(5000);
-            //设置请求方法为get
-            connection.setRequestMethod("GET");
-            //开始连接
-            connection.connect();
-            InputStream inputStream = connection.getInputStream();
-            //根据流数据创建 一个Bitmap位图对象
-            bm = BitmapFactory.decodeStream(inputStream);
-
-            /*// 第一次解析将inJustDecodeBounds设置为true，来获取图片大小
-            final BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            //在加载图片之前就获取到图片的长宽值和MIME类型
-            BitmapFactory.decodeStream(inputStream);
-            final float scale = context.getResources().getDisplayMetrics().density;
-            options.inSampleSize = calculateInSampleSize(options, (int) (120 * scale + 0.5f), (int) (120 * scale + 0.5f));
-            // 使用获取到的inSampleSize值再次解析图片
-            options.inJustDecodeBounds = false;
-            bm = BitmapFactory.decodeStream(inputStream);*/
-
-        } catch (Exception  e) {
-            e.printStackTrace();
-        }
-        return bm;
-    }
-
-    private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // 源图片的高度和宽度
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-        if (height > reqHeight || width > reqWidth) {
-            // 计算出实际宽高和目标宽高的比率
-            final int heightRatio = Math.round((float) height / (float) reqHeight);
-            final int widthRatio = Math.round((float) width / (float) reqWidth);
-            // 选择宽和高中最小的比率作为inSampleSize的值，这样可以保证最终图片的宽和高
-            // 一定都会大于等于目标的宽和高。
-            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
-        }
-        return inSampleSize;
     }
 
 }

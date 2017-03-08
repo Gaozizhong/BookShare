@@ -2,6 +2,7 @@ package cn.a1949science.www.bookshare.ui;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -132,8 +133,6 @@ public class Home_Page extends AppCompatActivity {
                                 fileUri = Uri.fromFile(imageFile);
                                 //将uri加到拍照Intent的额外数据中
                                 intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-                                //保存照片的质量
-                                intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
                                 //启动相机拍照
                                 startActivityForResult(intent, PHOTO_REQUEST_CAREMA);
                             } else {
@@ -161,14 +160,18 @@ public class Home_Page extends AppCompatActivity {
             picturePath = cursor.getString(columnIndex);
             cursor.close();
 
-        } else if (requestCode == PHOTO_REQUEST_CAREMA && data != null) {
+        } /*else if (data == null) {
+            Toast.makeText(mContext, "data == null", Toast.LENGTH_SHORT).show();
+        }*/ else if (requestCode == PHOTO_REQUEST_CAREMA ) {
             if (Environment.getExternalStorageState().equals(
                     Environment.MEDIA_MOUNTED)) {
-                crop(Uri.fromFile(imageFile));
+                //crop(Uri.fromFile(imageFile));
+                picturePath = imageFile.getAbsolutePath();
+                Toast.makeText(mContext, picturePath, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(mContext, "未找到存储卡，无法存储照片！", Toast.LENGTH_SHORT).show();
             }
-        } else if (requestCode == PHOTO_REQUEST_CUT&& data != null) {
+        } else if (requestCode == PHOTO_REQUEST_CUT && data != null) {
             final Bitmap bitmap = data.getParcelableExtra("data");
             headIcon.setImageBitmap(bitmap);
             // 保存图片到internal storage
@@ -288,7 +291,7 @@ public class Home_Page extends AppCompatActivity {
                                                                     }
                                                                 });
                                                             } else {
-                                                                Toast.makeText(mContext, "上传失败" , Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(mContext, "上传失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                                                 progressDialog.dismiss();
                                                             }
                                                         }
@@ -450,7 +453,7 @@ public class Home_Page extends AppCompatActivity {
                 borrowBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
                 receiveBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
 
-                displayList();
+                //displayList();
 
                 _User bmobUser = BmobUser.getCurrentUser(_User.class);
                 //查询是否有书主为自己的借书信息
@@ -471,13 +474,12 @@ public class Home_Page extends AppCompatActivity {
                                 textNum2 = 4;
                             } else if (list.get(0).getIfAgree() && list.get(0).getIfLoan() && !list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
                                 loanBtn.setClickable(false);
-                                receiveBtn.setClickable(false);
                             } else if (list.get(0).getIfAgree() && list.get(0).getIfLoan() && list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
                                 loanBtn.setClickable(false);
                                 textNum3 = 6;
+                                receiveBtn.setClickable(true);
                             } else if (list.get(0).getIfAgree() && list.get(0).getIfLoan() && list.get(0).getIfFinish() && list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
                                 loanBtn.setClickable(false);
-                                receiveBtn.setClickable(false);
                             }
                             objectId = list.get(0).getObjectId();
                             userNum = list.get(0).getUserNum();
@@ -485,6 +487,7 @@ public class Home_Page extends AppCompatActivity {
                         } else {
                             //Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
                             loanBtn.setClickable(false);
+                            receiveBtn.setClickable(false);
                         }
                     }
                 });
@@ -510,6 +513,7 @@ public class Home_Page extends AppCompatActivity {
                             }else if (list.get(0).getIfAgree() && list.get(0).getIfLoan() && list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
                                 //借书过程完成
                                 time = list.get(0).getFinishAt().getDate();
+                                borrowBtn.setClickable(false);
                             }
                             objectId = list.get(0).getObjectId();
                             //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();

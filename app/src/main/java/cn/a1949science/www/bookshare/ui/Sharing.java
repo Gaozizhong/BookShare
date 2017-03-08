@@ -14,10 +14,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.util.Date;
 import java.util.List;
 
-import cn.a1949science.www.bookshare.LoadPicture;
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean.Shared_Info;
@@ -370,7 +371,9 @@ public class Sharing extends AppCompatActivity {
                     time.setText(time1);
                     bookOwner.setText(OwnerName1);
                     objectId1 = list.get(0).getObjectId();
-                    new LoadPicture().getPicture(list.get(0).getBookPicture().getFileUrl(),image);
+                    Glide.with(mContext)
+                            .load(list.get(0).getBookPicture().getFileUrl())
+                            .into(image);
                 } else {
                     Toast.makeText(mContext, "查询失败。"+ e.getMessage(), Toast.LENGTH_SHORT).show();
                 }

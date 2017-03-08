@@ -18,7 +18,7 @@ public class Menu_page extends AppCompatActivity {
 
     Context mContext = Menu_page.this;
     View userInfo,shared,read,like, advice;
-    ImageView before;
+    ImageView before,favicon;
     Button logout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +32,7 @@ public class Menu_page extends AppCompatActivity {
     //查找地址
     private void findView(){
         before = (ImageView) findViewById(R.id.before);
+        favicon = (ImageView) findViewById(R.id.favicon);
         userInfo = (View) findViewById(R.id.userInfo);
         shared = (View) findViewById(R.id.shared);
         read = (View) findViewById(R.id.read);

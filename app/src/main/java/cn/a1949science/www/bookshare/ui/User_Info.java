@@ -16,23 +16,30 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
 import cn.a1949science.www.bookshare.R;
+import cn.a1949science.www.bookshare.bean.Book_Info;
+import cn.a1949science.www.bookshare.bean.Shared_Info;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 
+import static android.R.color.black;
+
 public class User_Info extends AppCompatActivity {
     Context mContext = User_Info.this;
-    ImageView before;
+    ImageView before,favicon;
     TextView nickname;
     // 拍照
     private static final int PHOTO_REQUEST_CAREMA = 1;
@@ -66,80 +73,19 @@ public class User_Info extends AppCompatActivity {
             public void done(_User user, BmobException e) {
                 if (e == null) {
                     nickname.setText(user.getNickname());
+                    Glide.with(mContext)
+                            .load(user.getFavicon().getFileUrl())
+                            .override((int)(mContext.getResources().getDisplayMetrics().density*50+0.5f),(int)(mContext.getResources().getDisplayMetrics().density*50+0.5f))
+                            .placeholder(R.drawable.favicon)
+                            .into(favicon);
                 } else {
-                    Toast.makeText(mContext, "昵称显示失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "昵称、头像显示失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        //上传头像
-        final BmobFile bmobFile = new BmobFile(new File(picturePath));
-        bmobFile.uploadblock(new UploadFileListener() {
-            @Override
-            public void done(BmobException e) {
-                if (e == null) {
-                    //更新数据
-                    _User newUser = new _User();
-                    newUser.setFavicon(bmobFile);
-                    BmobUser bmobUser = BmobUser.getCurrentUser();
-                    newUser.update(bmobUser.getObjectId(), new UpdateListener() {
-                        @Override
-                        public void done(BmobException e) {
-                            if (e == null) {
-                                Toast.makeText(mContext, "头像修改成功", Toast.LENGTH_SHORT).show();
-                                finish();
-                            } else {
-                                Toast.makeText(mContext, "头像修改失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                } else {
-                    Toast.makeText(mContext, "头像上传失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
 
-    //选择图书图片
-    private void selectBookPicture() {
-        final String[] items = {"相册","拍照"};
-        AlertDialog dlg = new AlertDialog.Builder(mContext)
-                .setTitle("选择图片")
-                .setItems(items, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-                        // 这里item是根据选择的方式，
-                        if (item == 0) {
-                            //打开相册，选择一张图片
-                            Intent intent1 = new Intent(Intent.ACTION_PICK);
-                            intent1.setType("image/*");
-                            startActivityForResult(intent1, PHOTO_REQUEST_GALLERY);
-                        } else {
-                            //激活相机
-                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            //进入相机前判断下sdcard是否可用，可用进行存储
-                            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                                //获取系统的公用图像文件路径
-                                picturePath = Environment.getExternalStoragePublicDirectory
-                                        (Environment.DIRECTORY_PICTURES).toString();
-                                //利用当前时间组合成一个不会重复的文件名
-                                String fname = "p"+ System.currentTimeMillis() +".jpg";
-                                //按前面的路径和文件名创建Uri对象
-                                imageFile = new File(picturePath,fname);
-                                fileUri = Uri.fromFile(imageFile);
-                                //将uri加到拍照Intent的额外数据中
-                                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-                                //保存照片的质量
-                                intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
-                                //启动相机拍照
-                                startActivityForResult(intent, PHOTO_REQUEST_CAREMA);
-                            } else {
-                                Toast.makeText(mContext, "未找到存储卡，无法存储照片！", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-                }).create();
-        dlg.show();
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -157,33 +103,6 @@ public class User_Info extends AppCompatActivity {
             picturePath = cursor.getString(columnIndex);
             cursor.close();
 
-        } else if (requestCode == PHOTO_REQUEST_CAREMA && data != null) {
-            if (Environment.getExternalStorageState().equals(
-                    Environment.MEDIA_MOUNTED)) {
-                crop(Uri.fromFile(imageFile));
-            } else {
-                Toast.makeText(mContext, "未找到存储卡，无法存储照片！", Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestCode == PHOTO_REQUEST_CUT&& data != null) {
-            final Bitmap bitmap = data.getParcelableExtra("data");
-            headIcon.setImageBitmap(bitmap);
-            // 保存图片到internal storage
-            FileOutputStream outputStream;
-            try {
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                out.flush();
-                // out.close();
-                // final byte[] buffer = out.toByteArray();
-                // outputStream.write(buffer);
-                outputStream = mContext.openFileOutput("_head_icon.jpg",
-                        Context.MODE_PRIVATE);
-                out.writeTo(outputStream);
-                out.close();
-                outputStream.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
         try {
             if (imageFile != null && imageFile.exists())
@@ -191,6 +110,7 @@ public class User_Info extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        updateFile();
     }
 
     private void crop(Uri uri) {
@@ -211,6 +131,51 @@ public class User_Info extends AppCompatActivity {
         startActivityForResult(intent, PHOTO_REQUEST_CUT);
     }
 
+    //上传图片
+    private void updateFile() {
+        AlertDialog dlg = new AlertDialog.Builder(mContext)
+                .setTitle("确认用此图片作为头像？")
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //上传头像
+                        final BmobFile bmobFile = new BmobFile(new File(picturePath));
+                        bmobFile.uploadblock(new UploadFileListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                if (e == null) {
+                                    //更新数据
+                                    _User newUser = new _User();
+                                    newUser.setFavicon(bmobFile);
+                                    BmobUser bmobUser = BmobUser.getCurrentUser();
+                                    newUser.update(bmobUser.getObjectId(), new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                            if (e == null) {
+                                                Toast.makeText(mContext, "头像修改成功", Toast.LENGTH_SHORT).show();
+                                                finish();
+                                            } else {
+                                                Toast.makeText(mContext, "头像修改失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    Toast.makeText(mContext, "头像上传失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                })
+                .create();
+        dlg.show();
+    }
+
     //点击事件
     private void onClick() {
         assert before != null;
@@ -227,6 +192,7 @@ public class User_Info extends AppCompatActivity {
     private void findView() {
         before = (ImageView) findViewById(R.id.before);
         nickname = (TextView) findViewById(R.id.nickname);
+        favicon = (ImageView) findViewById(R.id.favicon);
     }
 
     public void goToDetailInfo(View view) {
@@ -237,13 +203,14 @@ public class User_Info extends AppCompatActivity {
         Intent it = new Intent(this,EditPassword.class);
         startActivity(it);
     }
-
     public void goToEdit(View view) {
         Intent it = new Intent(this,EditNickname.class);
         startActivity(it);
     }
-
     public void goToFavicon(View view) {
-        selectBookPicture();
+        //打开相册，选择一张图片
+        Intent intent1 = new Intent(Intent.ACTION_PICK);
+        intent1.setType("image/*");
+        startActivityForResult(intent1, PHOTO_REQUEST_GALLERY);
     }
 }
