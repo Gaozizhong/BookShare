@@ -107,9 +107,6 @@ public class Sharing extends AppCompatActivity {
                             .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    borrowBtn.setText("等待借书电话");
-                                    borrowBtn.setClickable(false);
-                                    borrowBtn.setBackgroundColor(getResources().getColor(black));
                                     //完成借书过程
                                     Shared_Info sharedInfo = new Shared_Info();
                                     sharedInfo.setIfAgree(true);
@@ -117,7 +114,10 @@ public class Sharing extends AppCompatActivity {
                                         @Override
                                         public void done(BmobException e) {
                                             if (e == null) {
-                                                Toast.makeText(mContext, "可以借出", Toast.LENGTH_SHORT).show();
+                                                borrowBtn.setText("等待借书电话");
+                                                borrowBtn.setClickable(false);
+                                                borrowBtn.setBackgroundColor(getResources().getColor(black));
+                                                //Toast.makeText(mContext, "可以借出", Toast.LENGTH_SHORT).show();
                                             } else {
                                                 Toast.makeText(mContext, "可以借出失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
@@ -177,6 +177,7 @@ public class Sharing extends AppCompatActivity {
                 public void onClick(View view) {
                     AlertDialog dlg = new AlertDialog.Builder(mContext)
                             .setTitle("确认已经借出？")
+                            .setMessage("请确认借书人点击了“完成借入”按钮以保证图书的安全")
                             .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -186,8 +187,6 @@ public class Sharing extends AppCompatActivity {
                             .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    borrowBtn.setClickable(false);
-                                    borrowBtn.setBackgroundColor(getResources().getColor(black));
                                     //完成借书过程
                                     Shared_Info sharedInfo = new Shared_Info();
                                     sharedInfo.setIfLoan(true);
@@ -195,7 +194,9 @@ public class Sharing extends AppCompatActivity {
                                         @Override
                                         public void done(BmobException e) {
                                             if (e == null) {
-                                                Toast.makeText(mContext, "书已借出", Toast.LENGTH_SHORT).show();
+                                                borrowBtn.setClickable(false);
+                                                borrowBtn.setBackgroundColor(getResources().getColor(black));
+                                                //Toast.makeText(mContext, "书已借出", Toast.LENGTH_SHORT).show();
                                             } else {
                                                 Toast.makeText(mContext, "书已借出失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
@@ -224,8 +225,6 @@ public class Sharing extends AppCompatActivity {
                             .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    borrowBtn.setClickable(false);
-                                    borrowBtn.setBackgroundColor(getResources().getColor(black));
                                     //完成借书过程
                                     Shared_Info sharedInfo = new Shared_Info();
                                     sharedInfo.setIfFinish(true);
@@ -237,7 +236,9 @@ public class Sharing extends AppCompatActivity {
                                         @Override
                                         public void done(BmobException e) {
                                             if (e == null) {
-                                                Toast.makeText(mContext, "完成借入", Toast.LENGTH_SHORT).show();
+                                                borrowBtn.setClickable(false);
+                                                borrowBtn.setBackgroundColor(getResources().getColor(black));
+                                                //Toast.makeText(mContext, "完成借入", Toast.LENGTH_SHORT).show();
                                             } else {
                                                 Toast.makeText(mContext, "完成借入失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
@@ -250,13 +251,14 @@ public class Sharing extends AppCompatActivity {
                 }
             });
         } else if (textNum == 6) {
-            borrowBtn.setText("确认还书");
+            borrowBtn.setText("确认归还");
             borrowBtn.setClickable(true);
             borrowBtn.setOnClickListener(new View.OnClickListener() {
                                              @Override
                                              public void onClick(View view) {
                                                  AlertDialog dlg = new AlertDialog.Builder(mContext)
-                                                         .setTitle("确认还书？")
+                                                         .setTitle("确认归还？")
+                                                         .setMessage("请确认书已归还")
                                                          .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                                                              @Override
                                                              public void onClick(DialogInterface dialogInterface, int i) {
@@ -266,8 +268,6 @@ public class Sharing extends AppCompatActivity {
                                                          .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                                              @Override
                                                              public void onClick(DialogInterface dialogInterface, int i) {
-                                                                 borrowBtn.setClickable(false);
-                                                                 borrowBtn.setBackgroundColor(getResources().getColor(black));
                                                                  //完成借书过程
                                                                  Shared_Info sharedInfo = new Shared_Info();
                                                                  sharedInfo.setIfAffirm(true);
@@ -275,7 +275,9 @@ public class Sharing extends AppCompatActivity {
                                                                      @Override
                                                                      public void done(BmobException e) {
                                                                          if (e == null) {
-                                                                             Toast.makeText(mContext, "确认还书", Toast.LENGTH_SHORT).show();
+                                                                             borrowBtn.setClickable(false);
+                                                                             borrowBtn.setBackgroundColor(getResources().getColor(black));
+                                                                             //Toast.makeText(mContext, "确认还书", Toast.LENGTH_SHORT).show();
                                                                          } else {
                                                                              Toast.makeText(mContext, "确认还书失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                                                          }
@@ -304,8 +306,6 @@ public class Sharing extends AppCompatActivity {
                             .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    borrowBtn.setClickable(false);
-                                    borrowBtn.setBackgroundColor(getResources().getColor(black));
                                     //完成借书过程
                                     Shared_Info sharedInfo = new Shared_Info();
                                     sharedInfo.setIfReturn(true);
@@ -334,7 +334,9 @@ public class Sharing extends AppCompatActivity {
                                                     @Override
                                                     public void done(BmobException e) {
                                                         if (e == null) {
-                                                            Toast.makeText(mContext, "还书成功", Toast.LENGTH_SHORT).show();
+                                                            borrowBtn.setClickable(false);
+                                                            borrowBtn.setBackgroundColor(getResources().getColor(black));
+                                                            //Toast.makeText(mContext, "还书成功", Toast.LENGTH_SHORT).show();
                                                         } else {
                                                             Toast.makeText(mContext, "还书失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                                         }
@@ -368,11 +370,12 @@ public class Sharing extends AppCompatActivity {
                     introduce.setText(introduce1);
                     bookName.setText(bookname1);
                     writename.setText(writername1);
-                    time.setText(time1);
+                    time.setText(time1+"天");
                     bookOwner.setText(OwnerName1);
                     objectId1 = list.get(0).getObjectId();
                     Glide.with(mContext)
                             .load(list.get(0).getBookPicture().getFileUrl())
+                            .placeholder(R.drawable.wait)
                             .into(image);
                 } else {
                     Toast.makeText(mContext, "查询失败。"+ e.getMessage(), Toast.LENGTH_SHORT).show();

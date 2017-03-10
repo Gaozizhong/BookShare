@@ -33,7 +33,9 @@ import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Handler;
 
 import cn.a1949science.www.bookshare.MyAdapter;
 import cn.a1949science.www.bookshare.R;
@@ -56,7 +58,7 @@ public class Home_Page extends AppCompatActivity {
     Context mContext = Home_Page.this;
     FrameLayout next_layout;
     RelativeLayout Background;
-    Button borrowBtn,loanBtn,shareBtn,returnBtn,receiveBtn;
+    Button borrowBtn,loanBtn,shareBtn,returnBtn,receiveBtn,handleBtn;
     Animation animation = null;
     ImageButton shortCut;
     ImageView searchImg;
@@ -103,6 +105,7 @@ public class Home_Page extends AppCompatActivity {
         shareBtn = (Button) findViewById(R.id.shareBtn);
         returnBtn = (Button) findViewById(R.id.returnBtn);
         receiveBtn = (Button) findViewById(R.id.receiveBtn);
+        handleBtn = (Button) findViewById(R.id.handleBtn);
     }
 
     //选择图书图片
@@ -443,6 +446,14 @@ public class Home_Page extends AppCompatActivity {
             }
         });
 
+        handleBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent it = new Intent(mContext,HandleBook.class);
+                startActivity(it);
+            }
+        });
+
         assert shortCut != null;
         shortCut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -452,6 +463,7 @@ public class Home_Page extends AppCompatActivity {
                 loanBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
                 borrowBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
                 receiveBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
+                //handleBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
 
                 //displayList();
 
@@ -464,26 +476,39 @@ public class Home_Page extends AppCompatActivity {
                     @Override
                     public void done(final List<Shared_Info> list, BmobException e) {
                         if (e == null && list.size()!=0) {
-                            loanBookNum = list.get(0).getBookNum();
-                            if (!list.get(0).getIfAgree() && !list.get(0).getIfLoan() && !list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
-                                //书主处理借书请求
-                                textNum2 = 2;
-                                receiveBtn.setClickable(false);
-                            } else if (list.get(0).getIfAgree() && !list.get(0).getIfLoan() && !list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
-                                //书主确认书已借出
-                                textNum2 = 4;
-                            } else if (list.get(0).getIfAgree() && list.get(0).getIfLoan() && !list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
-                                loanBtn.setClickable(false);
-                            } else if (list.get(0).getIfAgree() && list.get(0).getIfLoan() && list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
-                                loanBtn.setClickable(false);
-                                textNum3 = 6;
-                                receiveBtn.setClickable(true);
-                            } else if (list.get(0).getIfAgree() && list.get(0).getIfLoan() && list.get(0).getIfFinish() && list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
-                                loanBtn.setClickable(false);
+                            //选择书
+                            final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mContext);
+                            final String[] booklist=new String[list.size()];
+                            for (int i=0;i<list.size();i++) {
+                                booklist[i]="借出第" + (i + 1) + "本书";
                             }
-                            objectId = list.get(0).getObjectId();
-                            userNum = list.get(0).getUserNum();
-                            //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
+                            builder.setSingleChoiceItems(booklist, 0, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    loanBookNum = list.get(i).getBookNum();
+                                    if (!list.get(i).getIfAgree() && !list.get(i).getIfLoan() && !list.get(i).getIfFinish() && !list.get(i).getIfAffirm() && !list.get(i).getIfReturn()) {
+                                        //书主处理借书请求
+                                        textNum2 = 2;
+                                        receiveBtn.setClickable(false);
+                                    } else if (list.get(i).getIfAgree() && !list.get(i).getIfLoan() && !list.get(i).getIfFinish() && !list.get(i).getIfAffirm() && !list.get(i).getIfReturn()) {
+                                        //书主确认书已借出
+                                        textNum2 = 4;
+                                    } else if (list.get(i).getIfAgree() && list.get(i).getIfLoan() && !list.get(i).getIfFinish() && !list.get(i).getIfAffirm() && !list.get(i).getIfReturn()) {
+                                        loanBtn.setClickable(false);
+                                    } else if (list.get(i).getIfAgree() && list.get(i).getIfLoan() && list.get(i).getIfFinish() && !list.get(i).getIfAffirm() && !list.get(i).getIfReturn()) {
+                                        loanBtn.setClickable(false);
+                                        textNum3 = 6;
+                                        receiveBtn.setClickable(true);
+                                    } else if (list.get(i).getIfAgree() && list.get(i).getIfLoan() && list.get(i).getIfFinish() && list.get(i).getIfAffirm() && !list.get(i).getIfReturn()) {
+                                        loanBtn.setClickable(false);
+                                    }
+                                    objectId = list.get(i).getObjectId();
+                                    userNum = list.get(i).getUserNum();
+                                    //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
+                                    dialogInterface.dismiss();
+                                }
+                            });
+                            builder.show();
                         } else {
                             //Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
                             loanBtn.setClickable(false);
@@ -553,6 +578,10 @@ public class Home_Page extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, Menu_page.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.zoomin,R.anim.zoomout);
+                //overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                //overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                //overridePendingTransition(R.anim.in_from_right,R.anim.out_to_left);
             }
         });
     }
@@ -589,6 +618,7 @@ public class Home_Page extends AppCompatActivity {
                             Intent intent = new Intent(mContext, Book_detail.class);
                             intent.putExtras(data);
                             startActivity(intent);
+                            //overridePendingTransition(R.anim.zoomin,R.anim.zoomout);
                         }
                     });
                     //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
@@ -599,7 +629,7 @@ public class Home_Page extends AppCompatActivity {
         });
 
     }
-
+    //两次点击突出应用
     @Override
     public void onBackPressed() {
         //点击两次返回键退出程序

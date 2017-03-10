@@ -70,10 +70,11 @@ public class Book_detail extends AppCompatActivity {
                     introduce.setText(introduce1);
                     bookName.setText(bookname1);
                     writename.setText(writername1);
-                    time.setText(time1);
+                    time.setText(time1+"天");
                     bookOwner.setText(OwnerName1);
                     Glide.with(mContext)
                             .load(book_info.getBookPicture().getFileUrl())
+                            .placeholder(R.drawable.wait)
                             .into(image);
                 } else {
                     Toast.makeText(Book_detail.this, "查询失败。"+ e.getMessage(), Toast.LENGTH_SHORT).show();

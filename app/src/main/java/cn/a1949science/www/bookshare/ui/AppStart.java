@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
@@ -20,10 +21,10 @@ public class AppStart extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*setContentView(R.layout.activity_app_start);*/
+        //setContentView(R.layout.activity_app_start);
+        //加载启动页面
         final View view = View.inflate(this, R.layout.activity_app_start, null);
         setContentView(view);
-
         /*沉浸式标题栏*/
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -63,4 +64,5 @@ public class AppStart extends AppCompatActivity {
                 finish();
             }
         }
+
 }

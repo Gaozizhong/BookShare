@@ -76,7 +76,7 @@ public class User_Info extends AppCompatActivity {
                     Glide.with(mContext)
                             .load(user.getFavicon().getFileUrl())
                             .override((int)(mContext.getResources().getDisplayMetrics().density*50+0.5f),(int)(mContext.getResources().getDisplayMetrics().density*50+0.5f))
-                            .placeholder(R.drawable.favicon)
+                            .placeholder(R.drawable.wait)
                             .into(favicon);
                 } else {
                     Toast.makeText(mContext, "昵称、头像显示失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
