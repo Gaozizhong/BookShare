@@ -45,9 +45,6 @@
             android:layout_marginTop="65dp" />
     </RelativeLayout>
 
-    
-
-
     <Button
         android:layout_width="55dp"
         android:layout_height="40dp"

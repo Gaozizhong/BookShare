@@ -144,24 +144,8 @@ public class Sharing extends AppCompatActivity {
                         public void done(final List<_User> list, BmobException e) {
                             if (e == null) {
                                 phone = list.get(0).getMobilePhoneNumber();
-
-                                AlertDialog dlg = new AlertDialog.Builder(mContext)
-                                        .setTitle("确认拨打电话？")
-                                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                                            }
-                                        })
-                                        .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                Intent it = new Intent("android.intent.action.CALL", Uri.parse("tel:" + phone));
-                                                startActivity(it);
-                                            }
-                                        })
-                                        .create();
-                                dlg.show();
+                                Intent it = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
+                                startActivity(it);
                                 //Toast.makeText(mContext, phone, Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
