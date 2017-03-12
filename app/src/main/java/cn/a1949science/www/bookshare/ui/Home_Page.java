@@ -43,7 +43,9 @@ import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean.Shared_Info;
 import cn.a1949science.www.bookshare.bean._User;
+import cn.bmob.push.BmobPush;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
@@ -88,6 +90,10 @@ public class Home_Page extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(activity_home__page);
         Bmob.initialize(this, "13d736220ecc496d7dcb63c7cf918ba7");
+        // 使用推送服务时的初始化操作
+        BmobInstallation.getCurrentInstallation().save();
+        // 启动推送服务
+        BmobPush.startWork(this);
 
         findView();
         onClick();
@@ -394,7 +400,6 @@ public class Home_Page extends AppCompatActivity {
         shortCut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (!clicked ) {
                     unfold();
                 } else {
@@ -407,6 +412,9 @@ public class Home_Page extends AppCompatActivity {
         searchImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (clicked ) {
+                    fold();
+                }
                 Toast.makeText(mContext, "过两天就能用了！！！", Toast.LENGTH_SHORT).show();
             }
         });
@@ -415,6 +423,9 @@ public class Home_Page extends AppCompatActivity {
         menuImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (clicked ) {
+                    fold();
+                }
                 Intent intent = new Intent(mContext, Menu_page.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.zoomin,R.anim.zoomout);
@@ -440,7 +451,6 @@ public class Home_Page extends AppCompatActivity {
         shortCut.startAnimation(animation);
         clicked = !clicked;
     }
-
     //展开按钮
     private void unfold() {
         shareBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
@@ -455,6 +465,9 @@ public class Home_Page extends AppCompatActivity {
 
         returnBtn.setTextColor(BLUE);
         shareBtn.setTextColor(BLUE);
+        loanBtn.setTextColor(BLACK);
+        borrowBtn.setTextColor(BLACK);
+        receiveBtn.setTextColor(BLACK);
 
         queryShareInfo();
 
@@ -465,6 +478,12 @@ public class Home_Page extends AppCompatActivity {
     }
     //查询ShareInfo
     private void queryShareInfo() {
+
+        final ProgressDialog progress = new ProgressDialog(mContext);
+        progress.setMessage("正在查询信息...");
+        progress.setCanceledOnTouchOutside(false);
+        progress.show();
+
         _User bmobUser = BmobUser.getCurrentUser(_User.class);
         //查询是否有书主为自己的借书信息
         BmobQuery<Shared_Info> query = new BmobQuery<>();
@@ -543,8 +562,10 @@ public class Home_Page extends AppCompatActivity {
                         borrowBtn.setTextColor(BLACK);
                     }
                     objectId = list.get(0).getObjectId();
+                    progress.dismiss();
                     //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
                 } else {
+                    progress.dismiss();
                     //Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -573,7 +594,9 @@ public class Home_Page extends AppCompatActivity {
                     listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                            if (clicked ) {
+                                fold();
+                            }
                             Bundle data = new Bundle();
                             //利用Intent传递数据
                             //data.putString("imageid", list.get(i).getBookPicture().getFileUrl());

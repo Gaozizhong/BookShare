@@ -1,6 +1,7 @@
 package cn.a1949science.www.bookshare.ui;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -219,6 +220,10 @@ public class Book_detail extends AppCompatActivity {
                             .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
+                                    final ProgressDialog progress = new ProgressDialog(mContext);
+                                    progress.setMessage("操作中...");
+                                    progress.setCanceledOnTouchOutside(false);
+                                    progress.show();
                                     //更新此书的状态
                                     Book_Info newBook = new Book_Info();
                                     newBook.setBeShared(true);
@@ -241,9 +246,6 @@ public class Book_detail extends AppCompatActivity {
                                         public void done(BmobException e) {
                                             if (e == null) {
                                                 //Toast.makeText(mContext, "更新用户信息成功", Toast.LENGTH_SHORT).show();
-                                                borrowBtn.setText("等待书主响应");
-                                                borrowBtn.setClickable(false);
-                                                borrowBtn.setBackgroundColor(getResources().getColor(black));
                                             } else {
                                                 Toast.makeText(mContext, "更新用户信息失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
@@ -265,6 +267,10 @@ public class Book_detail extends AppCompatActivity {
                                         @Override
                                         public void done(String s, BmobException e) {
                                             if (e == null) {
+                                                progress.dismiss();
+                                                borrowBtn.setText("等待书主响应");
+                                                borrowBtn.setClickable(false);
+                                                borrowBtn.setBackgroundColor(getResources().getColor(black));
                                                 //Toast.makeText(mContext, "借书信息创建成功", Toast.LENGTH_SHORT).show();
                                             } else {
                                                 Toast.makeText(mContext, "借书信息创建失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();

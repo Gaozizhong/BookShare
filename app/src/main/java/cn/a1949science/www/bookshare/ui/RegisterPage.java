@@ -19,6 +19,7 @@ import cn.bmob.sms.exception.BmobException;
 import cn.bmob.sms.listener.RequestSMSCodeListener;
 import cn.bmob.sms.listener.VerifySMSCodeListener;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.listener.SaveListener;
 
 public class RegisterPage extends AppCompatActivity {
@@ -292,7 +293,6 @@ public class RegisterPage extends AppCompatActivity {
                 if (e == null) {
                     Toast.makeText(mContext, "注册成功！", Toast.LENGTH_LONG).show();
                     finish();
-                    return;
                 } else {
                     Toast.makeText(mContext, "手机号已被注册！", Toast.LENGTH_LONG).show();
                 }

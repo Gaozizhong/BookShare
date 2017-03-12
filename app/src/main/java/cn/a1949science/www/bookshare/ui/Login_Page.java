@@ -86,6 +86,11 @@ public class Login_Page extends AppCompatActivity {
 
                 login.setClickable(false);
 
+                final ProgressDialog progress = new ProgressDialog(mContext);
+                progress.setMessage("正在登录中...");
+                progress.setCanceledOnTouchOutside(false);
+                progress.show();
+
                 _User user = new _User();
                 user.setUsername(phone);
                 user.setPassword(passWord);
@@ -93,14 +98,11 @@ public class Login_Page extends AppCompatActivity {
                     @Override
                     public void done(_User user, BmobException e) {
                         if (e == null) {
-                            final ProgressDialog progress = new ProgressDialog(mContext);
-                            progress.setMessage("正在登录中...");
-                            progress.setCanceledOnTouchOutside(false);
-                            progress.show();
                             //Toast.makeText(mContext, "登录成功", Toast.LENGTH_SHORT).show();
                             //跳转到主页面
                             Intent it = new Intent(mContext,Home_Page.class);
                             startActivity(it);
+                            progress.dismiss();
                             finish();
                         }else {
                             Toast.makeText(mContext, "登录失败", Toast.LENGTH_SHORT).show();

@@ -1,6 +1,7 @@
 package cn.a1949science.www.bookshare.ui;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -107,13 +108,18 @@ public class Sharing extends AppCompatActivity {
                             .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    //完成借书过程
+                                    final ProgressDialog progress = new ProgressDialog(mContext);
+                                    progress.setMessage("操作中...");
+                                    progress.setCanceledOnTouchOutside(false);
+                                    progress.show();
+                                    //完善借书过程
                                     Shared_Info sharedInfo = new Shared_Info();
                                     sharedInfo.setIfAgree(true);
                                     sharedInfo.update(objectId, new UpdateListener() {
                                         @Override
                                         public void done(BmobException e) {
                                             if (e == null) {
+                                                progress.dismiss();
                                                 borrowBtn.setText("等待借书电话");
                                                 borrowBtn.setClickable(false);
                                                 borrowBtn.setBackgroundColor(getResources().getColor(black));
@@ -171,6 +177,10 @@ public class Sharing extends AppCompatActivity {
                             .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
+                                    final ProgressDialog progress = new ProgressDialog(mContext);
+                                    progress.setMessage("操作中...");
+                                    progress.setCanceledOnTouchOutside(false);
+                                    progress.show();
                                     //完成借书过程
                                     Shared_Info sharedInfo = new Shared_Info();
                                     sharedInfo.setIfLoan(true);
@@ -178,6 +188,7 @@ public class Sharing extends AppCompatActivity {
                                         @Override
                                         public void done(BmobException e) {
                                             if (e == null) {
+                                                progress.dismiss();
                                                 borrowBtn.setClickable(false);
                                                 borrowBtn.setBackgroundColor(getResources().getColor(black));
                                                 //Toast.makeText(mContext, "书已借出", Toast.LENGTH_SHORT).show();
@@ -209,6 +220,10 @@ public class Sharing extends AppCompatActivity {
                             .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
+                                    final ProgressDialog progress = new ProgressDialog(mContext);
+                                    progress.setMessage("操作中...");
+                                    progress.setCanceledOnTouchOutside(false);
+                                    progress.show();
                                     //完成借书过程
                                     Shared_Info sharedInfo = new Shared_Info();
                                     sharedInfo.setIfFinish(true);
@@ -220,6 +235,7 @@ public class Sharing extends AppCompatActivity {
                                         @Override
                                         public void done(BmobException e) {
                                             if (e == null) {
+                                                progress.dismiss();
                                                 borrowBtn.setClickable(false);
                                                 borrowBtn.setBackgroundColor(getResources().getColor(black));
                                                 //Toast.makeText(mContext, "完成借入", Toast.LENGTH_SHORT).show();
@@ -252,6 +268,10 @@ public class Sharing extends AppCompatActivity {
                                                          .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                                              @Override
                                                              public void onClick(DialogInterface dialogInterface, int i) {
+                                                                 final ProgressDialog progress = new ProgressDialog(mContext);
+                                                                 progress.setMessage("操作中...");
+                                                                 progress.setCanceledOnTouchOutside(false);
+                                                                 progress.show();
                                                                  //完成借书过程
                                                                  Shared_Info sharedInfo = new Shared_Info();
                                                                  sharedInfo.setIfAffirm(true);
@@ -259,6 +279,7 @@ public class Sharing extends AppCompatActivity {
                                                                      @Override
                                                                      public void done(BmobException e) {
                                                                          if (e == null) {
+                                                                             progress.dismiss();
                                                                              borrowBtn.setClickable(false);
                                                                              borrowBtn.setBackgroundColor(getResources().getColor(black));
                                                                              //Toast.makeText(mContext, "确认还书", Toast.LENGTH_SHORT).show();
@@ -290,6 +311,10 @@ public class Sharing extends AppCompatActivity {
                             .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
+                                    final ProgressDialog progress = new ProgressDialog(mContext);
+                                    progress.setMessage("操作中...");
+                                    progress.setCanceledOnTouchOutside(false);
+                                    progress.show();
                                     //完成借书过程
                                     Shared_Info sharedInfo = new Shared_Info();
                                     sharedInfo.setIfReturn(true);
@@ -326,6 +351,7 @@ public class Sharing extends AppCompatActivity {
                                                         }
                                                     }
                                                 });
+                                                progress.dismiss();
                                                 //Toast.makeText(mContext, "完成归还", Toast.LENGTH_SHORT).show();
                                             } else {
                                                 Toast.makeText(mContext, "完成归还失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
