@@ -13,7 +13,9 @@ import android.view.animation.Animation;
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.ui.Home_Page;
 import cn.a1949science.www.bookshare.ui.Login_Page;
+import cn.bmob.push.BmobPush;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.BmobUser;
 
 public class AppStart extends AppCompatActivity {
@@ -32,6 +34,10 @@ public class AppStart extends AppCompatActivity {
         }
 
         Bmob.initialize(this, "13d736220ecc496d7dcb63c7cf918ba7");
+        // 使用推送服务时的初始化操作
+        BmobInstallation.getCurrentInstallation().save();
+        // 启动推送服务
+        BmobPush.startWork(this);
 
         AlphaAnimation aa = new AlphaAnimation(0.3f,1.0f);
         //设置持续时间

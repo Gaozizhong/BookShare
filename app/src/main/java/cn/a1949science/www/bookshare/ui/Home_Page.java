@@ -91,10 +91,6 @@ public class Home_Page extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(activity_home__page);
         Bmob.initialize(this, "13d736220ecc496d7dcb63c7cf918ba7");
-        // 使用推送服务时的初始化操作
-        BmobInstallation.getCurrentInstallation().save();
-        // 启动推送服务
-        BmobPush.startWork(this);
 
         findView();
         onClick();
