@@ -49,8 +49,7 @@ public class Menu_page extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
-                overridePendingTransition(R.anim.zoomin,R.anim.zoomout);
-                //overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_in_left);
+                //overridePendingTransition(R.anim.zoomin,R.anim.zoomout);
             }
         });
 

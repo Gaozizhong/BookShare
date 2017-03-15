@@ -107,6 +107,7 @@ public class Login_Page extends AppCompatActivity {
                         }else {
                             Toast.makeText(mContext, "登录失败", Toast.LENGTH_SHORT).show();
                             login.setClickable(true);
+                            progress.dismiss();
                         }
                     }
 

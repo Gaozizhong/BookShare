@@ -51,15 +51,17 @@ public class MyAdapter extends BaseAdapter {
         return i;
     }
 
+    private class ViewHolder{
+        ImageView image;
+        TextView book;
+        TextView writer;
+    }
+
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
         //新增一个内部类ViewHolder,用于对控件的实例进行缓存
-        final ViewHolder viewHolder;
+        ViewHolder viewHolder = null;
         if (view == null) {
-            String bookName;
-            String bookWriter;
-            bookName = list.get(i).getBookName();
-            bookWriter = list.get(i).getBookWriter();
             LayoutInflater inflater = LayoutInflater.from(context);
             //实例化一个布局文件
             view = inflater.inflate(R.layout.booklist_item, null);
@@ -67,39 +69,22 @@ public class MyAdapter extends BaseAdapter {
             viewHolder.image = (ImageView) view.findViewById(R.id.image);
             viewHolder.book = (TextView) view.findViewById(R.id.book);
             viewHolder.writer = (TextView) view.findViewById(R.id.writer);
-            view.setTag(viewHolder);//将viewHolder存储在view中
-            //不能直接在主线程中进行从网络端获取图片，而需要单独开一个子线程完成从网络端获取图片
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    //根据表中图片的url地址来得到图片（Bitmap类型）
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    viewHolder.image.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            //将图片放到视图中
-                            Glide.with(context)
-                                    .load(list.get(i).getBookPicture().getFileUrl())
-                                    .into(viewHolder.image);
-                        }
-                    });
-                }
-            }).start();
-            viewHolder.book.setText(bookName);
-            viewHolder.writer.setText(bookWriter);
+
+            view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
+
+        String bookName = list.get(i).getBookName();
+        String bookWriter = list.get(i).getBookWriter();
+
+        Glide.with(context)
+                .load(list.get(i).getBookPicture().getFileUrl())
+                .into(viewHolder.image);
+        viewHolder.book.setText(bookName);
+        viewHolder.writer.setText(bookWriter);
+
         return view;
-    }
-    private class ViewHolder{
-        ImageView image;
-        TextView book;
-        TextView writer;
     }
 
 }

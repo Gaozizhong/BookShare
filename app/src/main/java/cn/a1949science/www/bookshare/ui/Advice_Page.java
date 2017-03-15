@@ -49,6 +49,7 @@ public class Advice_Page extends AppCompatActivity {
         advBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                advBtn.setClickable(false);
                 _User bmobUser = BmobUser.getCurrentUser(_User.class);
                 String username = bmobUser.getUsername();
                 String userPhone = bmobUser.getMobilePhoneNumber();
@@ -63,7 +64,8 @@ public class Advice_Page extends AppCompatActivity {
                             Toast.makeText(Advice_Page.this, "感谢您的建议", Toast.LENGTH_SHORT).show();
                             finish();
                         } else {
-                            Toast.makeText(Advice_Page.this, "图书共享失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Advice_Page.this, "建议失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            advBtn.setClickable(true);
                         }
                     }
                 });

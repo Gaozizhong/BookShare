@@ -46,6 +46,7 @@ import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.push.BmobPush;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobInstallation;
+import cn.bmob.v3.BmobPushManager;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
@@ -199,6 +200,7 @@ public class Home_Page extends AppCompatActivity {
                                                     final ProgressDialog progressDialog = new ProgressDialog(mContext);
                                                     progressDialog.setMessage("正在上传...");
                                                     progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                                    progressDialog.setCanceledOnTouchOutside(false);
                                                     progressDialog.show();
                                                     //上传图片
                                                     bmobFile.uploadblock(new UploadFileListener() {
@@ -230,6 +232,7 @@ public class Home_Page extends AppCompatActivity {
                                                                         }
                                                                     }
                                                                 });
+                                                                progressDialog.dismiss();
                                                             } else {
                                                                 Toast.makeText(mContext, "上传失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                                                 progressDialog.dismiss();
@@ -428,7 +431,7 @@ public class Home_Page extends AppCompatActivity {
                 }
                 Intent intent = new Intent(mContext, Menu_page.class);
                 startActivity(intent);
-                overridePendingTransition(R.anim.zoomin,R.anim.zoomout);
+                //overridePendingTransition(R.anim.zoomin,R.anim.zoomout);
                 //overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 //overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 //overridePendingTransition(R.anim.in_from_right,R.anim.out_to_left);
@@ -581,10 +584,12 @@ public class Home_Page extends AppCompatActivity {
         /*_User bmobUser = BmobUser.getCurrentUser(_User.class);
         String username = bmobUser.getUsername();
         query.addWhereNotEqualTo("ownerName", username);*/
+        query.setLimit(50);
         query.findObjects(new FindListener<Book_Info>() {
             @Override
             public void done(final List<Book_Info> list, BmobException e) {
                 if (e == null) {
+                    //Toast.makeText(mContext, "查询成功：共" + list.size() + "条数据。", Toast.LENGTH_SHORT).show();
                     final int[] bookNum = new int[list.size()];
                     for (int i=0;i<list.size();i++) {
                         bookNum[i] = list.get(i).getBookNum();
@@ -605,7 +610,6 @@ public class Home_Page extends AppCompatActivity {
                             Intent intent = new Intent(mContext, Book_detail.class);
                             intent.putExtras(data);
                             startActivity(intent);
-                            //overridePendingTransition(R.anim.zoomin,R.anim.zoomout);
                         }
                     });
                     //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
