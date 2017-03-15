@@ -17,6 +17,7 @@ import cn.bmob.push.BmobPush;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.update.BmobUpdateAgent;
 
 public class AppStart extends AppCompatActivity {
 

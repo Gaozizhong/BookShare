@@ -285,6 +285,7 @@ public class RegisterPage extends AppCompatActivity {
         user.setUserClass(Class.getText().toString());
         user.setMobilePhoneNumber(phoneNum.getText().toString());
         user.setPassword(password.getText().toString());
+        user.setNickname(phoneNum.getText().toString());
         user.setNeedReturn(false);
 
         user.signUp(new SaveListener<_User>() {

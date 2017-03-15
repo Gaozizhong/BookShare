@@ -26,6 +26,8 @@
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <meta-data android:value="BookShareRefresh" android:name="BMOB_CHANNEL"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -55,6 +57,9 @@
         <activity android:name=".ui.Sharing" />
         <activity android:name=".ui.EditNickname" />
         <activity android:name=".ui.HandleBook" />
+        <activity
+            android:name="cn.bmob.v3.update.UpdateDialogActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <!--注册BmobPush SDK运行所需的推送服务和消息接收器-->
         <service

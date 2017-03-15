@@ -211,6 +211,7 @@ public class Book_detail extends AppCompatActivity {
                 if (!bmobUser.getNeedReturn()) {
                     AlertDialog dlg = new AlertDialog.Builder(mContext)
                             .setTitle("确认借此书？")
+                            .setMessage("确定后请关注书主同意情况，若同意，请电话联系书主。")
                             .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {

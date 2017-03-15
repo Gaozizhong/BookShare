@@ -27,34 +27,31 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:background="#ffffff"
-        android:layout_marginTop="40px"
+        android:layout_marginTop="10dp"
         android:gravity="center_vertical|center_horizontal"
         android:weightSum="1"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:id="@+id/userInfo"
-        android:nestedScrollingEnabled="true">
+        android:id="@+id/userInfo">
 
         <ImageView
-            android:layout_width="200px"
-            android:layout_height="200px"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:id="@+id/favicon"
-            android:src="@drawable/favicon"
             android:layout_marginLeft="40dp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="暖倾心"
             android:id="@+id/nickname"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:layout_weight="1"
             android:gravity="center_vertical|center_horizontal" />
 
         <ImageView
-            android:layout_width="100px"
-            android:layout_height="100px"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:id="@+id/imageView8"
             android:src="@drawable/after"
             android:layout_gravity="center_vertical" />
@@ -65,26 +62,25 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#ffffff"
-        android:layout_marginTop="40px"
+        android:layout_marginTop="10dp"
         android:gravity="center_vertical|center_horizontal"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:id="@+id/shared"
-        android:nestedScrollingEnabled="true">
+        android:id="@+id/shared">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="我分享的"
             android:id="@+id/myShare"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:layout_weight="1"
             android:gravity="center_vertical|center_horizontal" />
 
         <ImageView
-            android:layout_width="100px"
-            android:layout_height="100px"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:id="@+id/imageView4"
             android:src="@drawable/after" />
 
@@ -99,22 +95,21 @@
         android:gravity="center_vertical|center_horizontal"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:id="@+id/read"
-        android:nestedScrollingEnabled="true">
+        android:id="@+id/read">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="我看过的"
             android:id="@+id/myRead"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:layout_weight="1"
             android:gravity="center_vertical|center_horizontal" />
 
         <ImageView
-            android:layout_width="100px"
-            android:layout_height="100px"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:id="@+id/imageView5"
             android:src="@drawable/after" />
     </LinearLayout>
@@ -128,22 +123,21 @@
         android:gravity="center_vertical|center_horizontal"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:id="@+id/like"
-        android:nestedScrollingEnabled="true">
+        android:id="@+id/like">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="我喜欢的"
             android:id="@+id/myLike"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:layout_weight="1"
             android:gravity="center_vertical|center_horizontal" />
 
         <ImageView
-            android:layout_width="100px"
-            android:layout_height="100px"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:id="@+id/imageView6"
             android:src="@drawable/after" />
 
@@ -158,23 +152,50 @@
         android:gravity="center_vertical|center_horizontal"
         android:id="@+id/advice"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:nestedScrollingEnabled="true">
+        android:paddingRight="10dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="意见反馈"
             android:id="@+id/myAdvice"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:layout_weight="1"
             android:gravity="center_vertical|center_horizontal" />
 
         <ImageView
-            android:layout_width="100px"
-            android:layout_height="100px"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:id="@+id/imageView7"
+            android:src="@drawable/after" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="1dp"
+        android:background="#ffffff"
+        android:gravity="center_vertical|center_horizontal"
+        android:id="@+id/refrush"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="版本更新"
+            android:id="@+id/myRefrush"
+            android:textSize="14sp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|center_horizontal" />
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/imageView"
             android:src="@drawable/after" />
     </LinearLayout>
 
@@ -184,6 +205,6 @@
         android:text="退出登录"
         android:id="@+id/logout"
         android:background="#ffffff"
-        android:layout_marginTop="180dp" />
+        android:layout_marginTop="10dp"/>
 
 </LinearLayout>
