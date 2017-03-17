@@ -29,8 +29,11 @@ public class HandleBook extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager viewPager;
 
-    private List<String> mTitleList = new ArrayList<>();//页卡标题集合
-    private List<View> mViewList = new ArrayList<>();//页卡视图集合
+    //页卡标题集合
+    private List<String> mTitleList = new ArrayList<>();
+    //页卡视图集合
+    private List<View> mViewList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,10 +84,10 @@ public class HandleBook extends AppCompatActivity {
     }
 
     //ViewPager适配器
-    class MyPagerAdapter extends PagerAdapter {
+    private class MyPagerAdapter extends PagerAdapter {
         private List<View> mViewList;
 
-        public MyPagerAdapter(List<View> mViewList) {
+        MyPagerAdapter(List<View> mViewList) {
             this.mViewList = mViewList;
         }
 

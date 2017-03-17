@@ -442,7 +442,7 @@ public class Home_Page extends AppCompatActivity {
         loanBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
         borrowBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
         receiveBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
-        //handleBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
+        handleBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
 
         displayList();
         animation = AnimationUtils.loadAnimation(mContext, R.anim.rotate_return);
@@ -457,7 +457,7 @@ public class Home_Page extends AppCompatActivity {
         loanBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
         borrowBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
         receiveBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
-        //handleBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
+        handleBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
         loanBtn.setClickable(false);
         borrowBtn.setClickable(false);
         receiveBtn.setClickable(false);
