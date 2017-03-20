@@ -57,6 +57,7 @@ public class My_Book_List extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+                overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
             }
         });
 

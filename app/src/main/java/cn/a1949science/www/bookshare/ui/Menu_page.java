@@ -84,7 +84,7 @@ public class Menu_page extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
-                //overridePendingTransition(R.anim.zoomin,R.anim.zoomout);
+                overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
             }
         });
 
@@ -93,6 +93,7 @@ public class Menu_page extends AppCompatActivity {
             public void onClick(View view) {
                 Intent it = new Intent(mContext,User_Info.class);
                 startActivity(it);
+                overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
             }
         });
 
@@ -101,6 +102,7 @@ public class Menu_page extends AppCompatActivity {
             public void onClick(View view) {
                 Intent it = new Intent(mContext,My_Book_List.class);
                 startActivity(it);
+                overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
             }
         });
 
@@ -109,6 +111,7 @@ public class Menu_page extends AppCompatActivity {
             public void onClick(View view) {
                 Intent it = new Intent(mContext,MyRead.class);
                 startActivity(it);
+                overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
             }
         });
 
@@ -117,6 +120,7 @@ public class Menu_page extends AppCompatActivity {
             public void onClick(View view) {
                 Intent it = new Intent(mContext,MyLike.class);
                 startActivity(it);
+                overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
             }
         });
 
@@ -125,6 +129,7 @@ public class Menu_page extends AppCompatActivity {
             public void onClick(View view) {
                 Intent it = new Intent(mContext,Advice_Page.class);
                 startActivity(it);
+                overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
             }
         });
 
@@ -159,6 +164,7 @@ public class Menu_page extends AppCompatActivity {
                                 //清空源来栈中的Activity，新建栈打开相应的Activity
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
+                                overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
                             }
                         })
                         .create();

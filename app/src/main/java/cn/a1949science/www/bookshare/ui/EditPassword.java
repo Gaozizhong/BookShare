@@ -47,6 +47,7 @@ public class EditPassword extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+                overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
             }
         });
 
@@ -87,6 +88,7 @@ public class EditPassword extends AppCompatActivity {
                                 if (e == null) {
                                     Toast.makeText(mContext, "密码修改成功", Toast.LENGTH_SHORT).show();
                                     finish();
+                                    overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
                                 } else {
                                     Toast.makeText(mContext, "密码修改失败"+ e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }

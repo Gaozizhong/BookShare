@@ -50,6 +50,7 @@ public class Detail_Info extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+                overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
             }
         });
 
@@ -58,6 +59,7 @@ public class Detail_Info extends AppCompatActivity {
             public void onClick(View view) {
                 Intent it = new Intent(mContext,Edit_Detail_Info.class);
                 startActivity(it);
+                overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
             }
         });
     }

@@ -414,10 +414,7 @@ public class Home_Page extends AppCompatActivity {
                 }
                 Intent intent = new Intent(mContext, Menu_page.class);
                 startActivity(intent);
-                //overridePendingTransition(R.anim.zoomin,R.anim.zoomout);
-                //overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                //overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                //overridePendingTransition(R.anim.in_from_right,R.anim.out_to_left);
+                overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
             }
         });
 
@@ -593,6 +590,7 @@ public class Home_Page extends AppCompatActivity {
                             Intent intent = new Intent(mContext, Book_detail.class);
                             intent.putExtras(data);
                             startActivity(intent);
+                            overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
                         }
                     });
                     //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();

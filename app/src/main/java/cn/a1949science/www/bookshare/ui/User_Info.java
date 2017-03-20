@@ -184,6 +184,7 @@ public class User_Info extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+                overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
             }
         });
 
@@ -199,14 +200,17 @@ public class User_Info extends AppCompatActivity {
     public void goToDetailInfo(View view) {
         Intent it = new Intent(this,Detail_Info.class);
         startActivity(it);
+        overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
     }
     public void goToEditPassword(View view) {
         Intent it = new Intent(this,EditPassword.class);
         startActivity(it);
+        overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
     }
     public void goToEdit(View view) {
         Intent it = new Intent(this,EditNickname.class);
         startActivity(it);
+        overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
     }
     public void goToFavicon(View view) {
         //打开相册，选择一张图片
