@@ -1,8 +1,6 @@
 package cn.a1949science.www.bookshare;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,16 +10,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.List;
 
 import cn.a1949science.www.bookshare.bean.Book_Info;
-import cn.bmob.v3.datatype.BmobFile;
 
 /**
  * Created by 高子忠 on 2017/1/2.

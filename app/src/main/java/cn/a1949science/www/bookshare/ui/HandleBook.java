@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -23,16 +24,17 @@ import java.util.List;
 import java.util.Objects;
 
 import cn.a1949science.www.bookshare.R;
+import cn.a1949science.www.bookshare.fragment.FourFragment;
+import cn.a1949science.www.bookshare.fragment.OneFragment;
+import cn.a1949science.www.bookshare.fragment.ThreeFragment;
+import cn.a1949science.www.bookshare.fragment.TwoFragment;
 
 public class HandleBook extends AppCompatActivity {
     Context mContext = HandleBook.this;
     TabLayout tabLayout;
     ViewPager viewPager;
 
-    //页卡标题集合
-    private List<String> mTitleList = new ArrayList<>();
-    //页卡视图集合
-    private List<View> mViewList = new ArrayList<>();
+    private String[] title = new String[]{"借入", "借出", "归还", "收书"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,36 @@ public class HandleBook extends AppCompatActivity {
         setContentView(R.layout.activity_handle_book);
 
         findView();
-        init();
+        initView();
+        initEvents();
+    }
+
+    private void initEvents() {
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (tab == tabLayout.getTabAt(0)) {
+                    viewPager.setCurrentItem(0);
+                } else if (tab == tabLayout.getTabAt(1)) {
+                    viewPager.setCurrentItem(1);
+                } else if (tab == tabLayout.getTabAt(2)) {
+                    viewPager.setCurrentItem(2);
+                }else if (tab == tabLayout.getTabAt(3)){
+                    viewPager.setCurrentItem(3);
+                }
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     //查找地址
@@ -50,74 +81,33 @@ public class HandleBook extends AppCompatActivity {
     }
 
 
-    private void init() {
-        LayoutInflater mInflater = LayoutInflater.from(this);
-        View view1 = mInflater.inflate(R.layout.info_item, null);
-        View view2 = mInflater.inflate(R.layout.info_item2, null);
-        View view3 = mInflater.inflate(R.layout.info_item3, null);
-        View view4 = mInflater.inflate(R.layout.info_item4, null);
-        //添加页卡视图
-        mViewList.add(view1);
-        mViewList.add(view2);
-        mViewList.add(view3);
-        mViewList.add(view4);
-        //添加页卡标题
-        mTitleList.add("借入");
-        mTitleList.add("借出");
-        mTitleList.add("归还");
-        mTitleList.add("收书");
-        //设置tab模式，当前为系统默认模式
-        tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        //添加tab选项卡
-        tabLayout.addTab(tabLayout.newTab().setText(mTitleList.get(0)));
-        tabLayout.addTab(tabLayout.newTab().setText(mTitleList.get(1)));
-        tabLayout.addTab(tabLayout.newTab().setText(mTitleList.get(2)));
-        tabLayout.addTab(tabLayout.newTab().setText(mTitleList.get(3)));
+    private void initView() {
+        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
 
-        MyPagerAdapter mAdapter = new MyPagerAdapter(mViewList);
-        //给ViewPager设置适配器
-        viewPager.setAdapter(mAdapter);
-        //将TabLayout和ViewPager关联起来。
+            @Override
+            public Fragment getItem(int position) {
+                if (position == 1) {
+                    return new TwoFragment();
+                } else if (position == 2) {
+                    return new ThreeFragment();
+                }else if (position==3){
+                    return new FourFragment();
+                }
+                return new OneFragment();
+            }
+
+            @Override
+            public int getCount() {
+                return title.length;
+            }
+
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return title[position];
+            }
+        });
+
         tabLayout.setupWithViewPager(viewPager);
-        //给Tabs设置适配器
-        tabLayout.setTabsFromPagerAdapter(mAdapter);
     }
-
-    //ViewPager适配器
-    private class MyPagerAdapter extends PagerAdapter {
-        private List<View> mViewList;
-
-        MyPagerAdapter(List<View> mViewList) {
-            this.mViewList = mViewList;
-        }
-
-        @Override
-        public int getCount() {
-            return mViewList.size();//页卡数
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;//官方推荐写法
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            container.addView(mViewList.get(position));//添加页卡
-            return mViewList.get(position);
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView(mViewList.get(position));//删除页卡
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mTitleList.get(position);//页卡标题
-        }
-
-    }
-
 
 }

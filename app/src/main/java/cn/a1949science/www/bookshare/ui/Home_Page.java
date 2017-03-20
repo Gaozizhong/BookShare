@@ -2,16 +2,12 @@ package cn.a1949science.www.bookshare.ui;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -30,23 +26,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Handler;
 
-import b.Android;
 import cn.a1949science.www.bookshare.MyAdapter;
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean.Shared_Info;
 import cn.a1949science.www.bookshare.bean._User;
-import cn.bmob.push.BmobPush;
 import cn.bmob.v3.Bmob;
-import cn.bmob.v3.BmobInstallation;
-import cn.bmob.v3.BmobPushManager;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
@@ -138,7 +126,6 @@ public class Home_Page extends AppCompatActivity {
             cursor.close();
         }
     }
-
     //点击事件
     private void onClick() {
         //分享按钮
@@ -433,8 +420,8 @@ public class Home_Page extends AppCompatActivity {
                 //overridePendingTransition(R.anim.in_from_right,R.anim.out_to_left);
             }
         });
-    }
 
+    }
     //折叠按钮
     private void fold() {
         shareBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
