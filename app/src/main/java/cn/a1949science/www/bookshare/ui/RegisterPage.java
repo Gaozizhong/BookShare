@@ -294,6 +294,7 @@ public class RegisterPage extends AppCompatActivity {
                 if (e == null) {
                     Toast.makeText(mContext, "注册成功！", Toast.LENGTH_LONG).show();
                     finish();
+                    overridePendingTransition(R.anim.slide_left_out,R.anim.slide_right_in);
                 } else {
                     Toast.makeText(mContext, "手机号已被注册！", Toast.LENGTH_LONG).show();
                 }

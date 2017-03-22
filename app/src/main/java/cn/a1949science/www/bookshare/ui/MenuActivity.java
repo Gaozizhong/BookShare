@@ -9,8 +9,16 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -29,8 +37,8 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.List;
 
-import cn.a1949science.www.bookshare.adapter.MyAdapter;
 import cn.a1949science.www.bookshare.R;
+import cn.a1949science.www.bookshare.adapter.MyAdapter;
 import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean.Shared_Info;
 import cn.a1949science.www.bookshare.bean._User;
@@ -45,11 +53,15 @@ import cn.bmob.v3.listener.UploadFileListener;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.BLUE;
-import static cn.a1949science.www.bookshare.R.layout.activity_home__page;
 
+/**
+ * Created by 高子忠 on 2017/3/22.
+ */
 
-public class Home_Page extends AppCompatActivity {
-    Context mContext = Home_Page.this;
+public class MenuActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener{
+
+    Context mContext = MenuActivity.this;
     FrameLayout next_layout;
     RelativeLayout Background;
     Button borrowBtn,loanBtn,shareBtn,returnBtn,receiveBtn,handleBtn;
@@ -77,15 +89,105 @@ public class Home_Page extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(activity_home__page);
+        setContentView(R.layout.activity_main);
         Bmob.initialize(this, "13d736220ecc496d7dcb63c7cf918ba7");
 
         findView();
         onClick();
         displayList();
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }//点击两次返回键退出程序
+        else if(System.currentTimeMillis() - exitTime > 2000) {
+            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            exitTime = System.currentTimeMillis();
+        } else {
+            finish();
+            System.exit(0);
+            android.os.Process.killProcess(android.os.Process.myPid());
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.share) {
+            Intent it = new Intent(mContext,My_Book_List.class);
+            startActivity(it);
+            overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
+        } else if (id == R.id.read) {
+            Intent it = new Intent(mContext,MyRead.class);
+            startActivity(it);
+            overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
+        } else if (id == R.id.like) {
+            Intent it = new Intent(mContext,MyLike.class);
+            startActivity(it);
+            overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
+        } else if (id == R.id.advice) {
+            Intent it = new Intent(mContext,Advice_Page.class);
+            startActivity(it);
+            overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
+        } else if (id == R.id.refrush) {
+            Toast.makeText(mContext, "过两天就能用了！！！", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.quit) {
+            AlertDialog dlg = new AlertDialog.Builder(mContext)
+                    .setTitle("确认退出？")
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    })
+                    .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            BmobUser.logOut();
+                            BmobUser currentUser = BmobUser.getCurrentUser();
+                            Intent intent = new Intent(mContext, Login_Page.class);
+                            //清空源来栈中的Activity，新建栈打开相应的Activity
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
+                        }
+                    })
+                    .create();
+            dlg.show();
+        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
     //查找地址
     private void findView() {
         Background = (RelativeLayout) findViewById(R.id.Background);
@@ -101,7 +203,6 @@ public class Home_Page extends AppCompatActivity {
         receiveBtn = (Button) findViewById(R.id.receiveBtn);
         handleBtn = (Button) findViewById(R.id.handleBtn);
     }
-
     //选择图书图片
     private void selectBookPicture() {
         //打开相册，选择一张图片
@@ -394,32 +495,6 @@ public class Home_Page extends AppCompatActivity {
             }
         });
 
-        assert searchImg != null;
-        searchImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (clicked ) {
-                    fold();
-                }
-                Toast.makeText(mContext, "过两天就能用了！！！", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(mContext, MenuActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
-            }
-        });
-
-        assert menuImg != null;
-        menuImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (clicked ) {
-                    fold();
-                }
-                Intent intent = new Intent(mContext, Menu_page.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
-            }
-        });
 
     }
     //折叠按钮
@@ -604,18 +679,4 @@ public class Home_Page extends AppCompatActivity {
         });
 
     }
-    //两次点击突出应用
-    @Override
-    public void onBackPressed() {
-        //点击两次返回键退出程序
-        if(System.currentTimeMillis() - exitTime > 2000) {
-            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
-            exitTime = System.currentTimeMillis();
-        } else {
-            finish();
-            System.exit(0);
-            android.os.Process.killProcess(android.os.Process.myPid());
-        }
-    }
-
 }

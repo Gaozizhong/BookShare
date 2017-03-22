@@ -1,33 +1,26 @@
 package cn.a1949science.www.bookshare.fragment;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.List;
 
-import cn.a1949science.www.bookshare.MyAdapter;
+import cn.a1949science.www.bookshare.adapter.MyAdapter;
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean.Shared_Info;
 import cn.a1949science.www.bookshare.bean._User;
-import cn.a1949science.www.bookshare.ui.Book_detail;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
-
-import static android.graphics.Color.BLACK;
-import static android.graphics.Color.BLUE;
 
 /**
  * Created by 高子忠 on 2017/3/18.

@@ -15,7 +15,7 @@ import android.widget.Toast;
 import java.util.Arrays;
 import java.util.List;
 
-import cn.a1949science.www.bookshare.MyAdapter;
+import cn.a1949science.www.bookshare.adapter.MyAdapter;
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean.Read_Book;

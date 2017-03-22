@@ -75,13 +75,13 @@ public class Login_Page extends AppCompatActivity {
                     editor.putString("phoneNum", phone);
                     editor.putString("password", passWord);
                     editor.putBoolean("pass_input", true);
-                    editor.commit();
+                    editor.apply();
                 } else {
                     SharedPreferences.Editor editor = sp.edit();
                     editor.putString("phoneNum", null);
                     editor.putString("password", null);
                     editor.putBoolean("pass_input", false);
-                    editor.commit();
+                    editor.apply();
                 }
 
                 login.setClickable(false);
@@ -100,10 +100,11 @@ public class Login_Page extends AppCompatActivity {
                         if (e == null) {
                             //Toast.makeText(mContext, "登录成功", Toast.LENGTH_SHORT).show();
                             //跳转到主页面
-                            Intent it = new Intent(mContext,Home_Page.class);
+                            Intent it = new Intent(mContext,MenuActivity.class);
                             startActivity(it);
                             progress.dismiss();
                             finish();
+                            overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
                         }else {
                             Toast.makeText(mContext, "登录失败", Toast.LENGTH_SHORT).show();
                             login.setClickable(true);
@@ -121,6 +122,7 @@ public class Login_Page extends AppCompatActivity {
                 //跳转到注册页面
                 Intent it = new Intent(mContext,RegisterPage.class);
                 startActivity(it);
+                overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
             }
         });
     }

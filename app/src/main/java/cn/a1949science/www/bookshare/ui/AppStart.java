@@ -62,7 +62,7 @@ public class AppStart extends AppCompatActivity {
         private void redirectTo(){
             BmobUser bmobUser = BmobUser.getCurrentUser();
             if (bmobUser != null) {
-                Intent intent = new Intent(this, Home_Page.class);
+                Intent intent = new Intent(this, MenuActivity.class);
                 startActivity(intent);
                 finish();
             } else {

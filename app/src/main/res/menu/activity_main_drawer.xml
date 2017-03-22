@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/share"
+            android:title="我分享的" />
+        <item
+            android:id="@+id/read"
+            android:title="我看过的" />
+        <item
+            android:id="@+id/like"
+            android:title="我喜欢的" />
+        <item
+            android:id="@+id/advice"
+            android:title="意见反馈" />
+        <item
+            android:id="@+id/refrush"
+            android:title="版本更新" />
+    </group>
+
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/quit"
+                android:title="退出登录" />
+        </menu>
+    </item>
+</menu>
