@@ -1,35 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:id="@+id/mine"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="160dp"
-    android:background="#484"
-    android:gravity="bottom"
-    android:paddingBottom="16dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="16dp"
+    android:layout_height="150dp"
+    android:background="#fff"
+    android:gravity="center_vertical"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        app:srcCompat="@android:drawable/sym_def_app_icon" />
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/favicon"
+        android:layout_marginLeft="40dp" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:text="Android Studio"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-    <TextView
-        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="android.studio@android.com" />
-
+        android:textColor="#000"
+        android:id="@+id/nickname"
+        android:textSize="20sp"
+        android:layout_marginLeft="20dp"/>
 </LinearLayout>

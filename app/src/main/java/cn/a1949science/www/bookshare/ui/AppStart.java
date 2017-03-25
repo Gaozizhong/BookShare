@@ -4,20 +4,16 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
 import cn.a1949science.www.bookshare.R;
-import cn.a1949science.www.bookshare.ui.Home_Page;
-import cn.a1949science.www.bookshare.ui.Login_Page;
 import cn.bmob.push.BmobPush;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.update.BmobUpdateAgent;
 
 public class AppStart extends AppCompatActivity {
 

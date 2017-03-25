@@ -72,6 +72,7 @@ public class MyAdapter extends BaseAdapter {
 
         Glide.with(context)
                 .load(list.get(i).getBookPicture().getFileUrl())
+                .thumbnail(0.1f)
                 .into(viewHolder.image);
         viewHolder.book.setText(bookName);
         viewHolder.writer.setText(bookWriter);

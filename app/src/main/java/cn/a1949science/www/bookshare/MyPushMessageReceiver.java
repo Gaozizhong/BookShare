@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
-import cn.a1949science.www.bookshare.ui.Home_Page;
 import cn.bmob.push.PushConstants;
 
 /**

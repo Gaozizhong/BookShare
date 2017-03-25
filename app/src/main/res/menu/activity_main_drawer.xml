@@ -2,18 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
+            android:icon="@mipmap/my_favourite"
             android:id="@+id/share"
             android:title="我分享的" />
         <item
+            android:icon="@mipmap/my_favourite"
             android:id="@+id/read"
             android:title="我看过的" />
         <item
+            android:icon="@mipmap/my_favourite"
             android:id="@+id/like"
             android:title="我喜欢的" />
         <item
+            android:icon="@mipmap/my_favourite"
             android:id="@+id/advice"
             android:title="意见反馈" />
         <item
+            android:icon="@mipmap/my_favourite"
             android:id="@+id/refrush"
             android:title="版本更新" />
     </group>

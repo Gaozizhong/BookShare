@@ -29,10 +29,13 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.util.List;
@@ -48,6 +51,7 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadFileListener;
 
@@ -62,16 +66,13 @@ public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
     Context mContext = MenuActivity.this;
-    FrameLayout next_layout;
-    RelativeLayout Background;
     Button borrowBtn,loanBtn,shareBtn,returnBtn,receiveBtn,handleBtn;
     Animation animation = null;
     ImageButton shortCut;
-    ImageView searchImg;
-    ImageView menuImg;
+    ImageView favicon;
+    TextView nickname;
     ListView listview;
     boolean clicked  = false;
-    private Uri fileUri;
     // 拍照
     private static final int PHOTO_REQUEST_CAREMA = 1;
     // 从相册选取照片
@@ -79,12 +80,10 @@ public class MenuActivity extends AppCompatActivity
     // 剪切照片
     private static final int PHOTO_REQUEST_CUT = 3;
     String picturePath="";
-    //定义一个保存图片的File变量
-    private File imageFile = null;
     private long exitTime = 0;
-    private ImageView headIcon;
     Integer borrowBookNum,loanBookNum,textNum1,textNum2,textNum3,userNum;
     String objectId,time;
+    View mine,headerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +94,7 @@ public class MenuActivity extends AppCompatActivity
         findView();
         onClick();
         displayList();
+        display();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -107,6 +107,17 @@ public class MenuActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        headerLayout = navigationView.getHeaderView(0);
+        headerLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent it = new Intent(mContext,User_Info.class);
+                startActivity(it);
+                overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
+            }
+        });
+        nickname = (TextView) headerLayout.findViewById(R.id.nickname);
+        favicon = (ImageView) headerLayout.findViewById(R.id.favicon);
     }
 
     @Override
@@ -134,10 +145,12 @@ public class MenuActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        if (id == R.id.action_settings) {
 
+        }
         return super.onOptionsItemSelected(item);
     }
-
+    //侧滑菜单中的点击事件
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -190,11 +203,7 @@ public class MenuActivity extends AppCompatActivity
     }
     //查找地址
     private void findView() {
-        Background = (RelativeLayout) findViewById(R.id.Background);
-        next_layout = (FrameLayout) findViewById(R.id.home__page);
         shortCut = (ImageButton) findViewById(R.id.shortcut);
-        searchImg = (ImageView) findViewById(R.id.searchImg);
-        menuImg = (ImageView) findViewById(R.id.menuImg);
         listview = (ListView) findViewById(R.id.booklist);
         borrowBtn = (Button) findViewById(R.id.borrowBtn);
         loanBtn = (Button) findViewById(R.id.loanBtn);
@@ -202,6 +211,7 @@ public class MenuActivity extends AppCompatActivity
         returnBtn = (Button) findViewById(R.id.returnBtn);
         receiveBtn = (Button) findViewById(R.id.receiveBtn);
         handleBtn = (Button) findViewById(R.id.handleBtn);
+        mine = findViewById(R.id.mine);
     }
     //选择图书图片
     private void selectBookPicture() {
@@ -632,18 +642,40 @@ public class MenuActivity extends AppCompatActivity
             }
         });
     }
+    //显示头像、昵称
+    private void display() {
+        BmobUser bmobUser = BmobUser.getCurrentUser();
+        bmobUser.getObjectId();
+        BmobQuery<_User> query = new BmobQuery<_User>();
+        query.getObject(bmobUser.getObjectId(), new QueryListener<_User>() {
+            @Override
+            public void done(_User user, BmobException e) {
+                if (e == null) {
+                    nickname.setText(user.getNickname());
+                    Glide.with(mContext)
+                            .load(user.getFavicon().getFileUrl())
+                            .override((int)(mContext.getResources().getDisplayMetrics().density*60+0.5f),(int)(mContext.getResources().getDisplayMetrics().density*60+0.5f))
+                            .placeholder(R.drawable.wait)
+                            .error(R.drawable.wait)
+                            .into(favicon);
+                } else {
+                    Toast.makeText(mContext, "昵称、头像显示失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
     //显示列表
     private void displayList() {
         //查找book
-        BmobQuery<Book_Info> query = new BmobQuery<>();
+        BmobQuery<Book_Info> query1 = new BmobQuery<>();
         //查找出有ownerNum的信息
-        query.addWhereEqualTo("BeShared", false);
+        query1.addWhereEqualTo("BeShared", false);
         //列表中不显示自己分享的书
         /*_User bmobUser = BmobUser.getCurrentUser(_User.class);
         String username = bmobUser.getUsername();
         query.addWhereNotEqualTo("ownerName", username);*/
-        query.setLimit(50);
-        query.findObjects(new FindListener<Book_Info>() {
+        query1.setLimit(50);
+        query1.findObjects(new FindListener<Book_Info>() {
             @Override
             public void done(final List<Book_Info> list, BmobException e) {
                 if (e == null) {

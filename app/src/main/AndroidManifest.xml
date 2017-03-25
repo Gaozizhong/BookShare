@@ -43,9 +43,7 @@
         </activity>
         <activity android:name=".ui.Login_Page" />
         <activity android:name=".ui.RegisterPage" />
-        <activity android:name=".ui.Home_Page" />
         <activity android:name=".ui.Book_detail" />
-        <activity android:name=".ui.Menu_page" />
         <activity android:name=".ui.User_Info" />
         <activity android:name=".ui.Advice_Page" />
         <activity android:name=".ui.Detail_Info" />
@@ -57,11 +55,7 @@
         <activity android:name=".ui.Sharing" />
         <activity android:name=".ui.EditNickname" />
         <activity android:name=".ui.HandleBook" />
-        <activity
-            android:name=".ui.MenuActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+        <activity android:name=".ui.MenuActivity"/>
         <activity
             android:name="cn.bmob.v3.update.UpdateDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
