@@ -28,9 +28,7 @@ dependencies {
     //bmob-im：Bmob的即时通讯包，注意每个版本的im依赖特定版本的bmob-sdk，具体的依赖关系可查看下面注释[2]
     //bmob-push：Bmob的推送包
     //如果你想应用能够兼容Android6.0，请添加此依赖(org.apache.http.legacy.jar)
-    //添加图片加载工具glide
     //圆形图片
-    //选择图片
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
     compile 'cn.bmob.android:bmob-sdk:3.5.3'
@@ -38,8 +36,11 @@ dependencies {
     compile 'cn.bmob.android:bmob-im:2.0.5@aar'
     compile 'cn.bmob.android:bmob-push:0.8'
     compile 'cn.bmob.android:http-legacy:1.0'
+    //添加图片加载工具glide\picasso
+    compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
+    //选择图片
     compile 'com.lzy.widget:imagepicker:0.5.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
     testCompile 'junit:junit:4.12'

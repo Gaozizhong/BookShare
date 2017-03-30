@@ -81,7 +81,7 @@ public class MenuActivity extends AppCompatActivity
     Context mContext = MenuActivity.this;
     Button borrowBtn,loanBtn,shareBtn,returnBtn,receiveBtn;
     Animation animation = null;
-    ImageButton shortCut;
+    ImageButton shortCut,RedPoint;
     ImageView favicon;
     TextView nickname;
     ListView listview;
@@ -238,6 +238,7 @@ public class MenuActivity extends AppCompatActivity
     }
     //查找地址
     private void findView() {
+        RedPoint= (ImageButton) findViewById(R.id.RedPoint);
         shortCut = (ImageButton) findViewById(R.id.shortcut);
         listview = (ListView) findViewById(R.id.booklist);
         borrowBtn = (Button) findViewById(R.id.borrowBtn);
@@ -638,8 +639,11 @@ public class MenuActivity extends AppCompatActivity
                         }
                     });
                     builder.show();
+                } else if (list.size() != 0) {
+                    Toast.makeText(mContext,  "123123。", Toast.LENGTH_SHORT).show();
+                    RedPoint.setVisibility(View.VISIBLE);
                 } else {
-                    //Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
+                    RedPoint.setVisibility(View.GONE);
                     borrowBtn.setTextColor(BLACK);
                 }
             }
@@ -653,6 +657,7 @@ public class MenuActivity extends AppCompatActivity
             @Override
             public void done(final List<Shared_Info> list, BmobException e) {
                 if (e == null && list.size()!=0) {
+                    RedPoint.setVisibility(View.VISIBLE);
                     borrowBookNum = list.get(0).getBookNum();
                     if (!list.get(0).getIfAgree() && !list.get(0).getIfLoan() && !list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
                         //借书人刚发送借书请求
@@ -678,13 +683,14 @@ public class MenuActivity extends AppCompatActivity
                     progress.dismiss();
                     //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
                 } else {
+                    RedPoint.setVisibility(View.GONE);
                     progress.dismiss();
                     //Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
-    //显示头像、昵称
+    //显示头像、昵称、小红点
     private void display() {
         BmobUser bmobUser = BmobUser.getCurrentUser();
         bmobUser.getObjectId();
@@ -706,6 +712,7 @@ public class MenuActivity extends AppCompatActivity
                 }
             }
         });
+        queryShareInfo();
     }
     //显示列表
     private void displayList() {

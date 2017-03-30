@@ -20,9 +20,11 @@ public class GlideImageLoader implements ImageLoader {
     public void displayImage(Activity activity, String path, ImageView imageView, int width, int height) {
         Glide.with(activity)
                 .load(new File(path))
-                .override((int)(activity.getResources().getDisplayMetrics().density*60+0.5f),(int)(activity.getResources().getDisplayMetrics().density*60+0.5f))
+                .centerCrop()
+                .dontAnimate()
+                .thumbnail(0.5f)
                 .placeholder(R.drawable.wait)
-                .error(R.drawable.wait)
+                .placeholder(R.drawable.wait)
                 .into(imageView);
     }
 
