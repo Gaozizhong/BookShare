@@ -6,11 +6,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -36,8 +39,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.lzy.imagepicker.bean.ImageItem;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.a1949science.www.bookshare.R;
@@ -50,13 +57,19 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.BmobUpdateListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadFileListener;
+import cn.bmob.v3.update.BmobUpdateAgent;
+import cn.bmob.v3.update.UpdateResponse;
+import cn.bmob.v3.update.UpdateStatus;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.BLUE;
+import static cn.a1949science.www.bookshare.R.id.imageView;
 
 /**
  * Created by 高子忠 on 2017/3/22.
@@ -66,13 +79,14 @@ public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
     Context mContext = MenuActivity.this;
-    Button borrowBtn,loanBtn,shareBtn,returnBtn,receiveBtn,handleBtn;
+    Button borrowBtn,loanBtn,shareBtn,returnBtn,receiveBtn;
     Animation animation = null;
     ImageButton shortCut;
     ImageView favicon;
     TextView nickname;
     ListView listview;
     boolean clicked  = false;
+    private static final int IMAGE_PICKER = 0;
     // 拍照
     private static final int PHOTO_REQUEST_CAREMA = 1;
     // 从相册选取照片
@@ -90,6 +104,27 @@ public class MenuActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Bmob.initialize(this, "13d736220ecc496d7dcb63c7cf918ba7");
+        //只在wifi下更新
+        BmobUpdateAgent.setUpdateOnlyWifi(true);
+        BmobUpdateAgent.setUpdateListener(new BmobUpdateListener() {
+            @Override
+            public void onUpdateReturned(int i, UpdateResponse updateResponse) {
+                if (i == UpdateStatus.Yes) {//版本有更新
+                    Toast.makeText(mContext, "版本有更新", Toast.LENGTH_SHORT).show();
+                }else if(i == UpdateStatus.No){
+                    Toast.makeText(mContext, "版本无更新", Toast.LENGTH_SHORT).show();
+                }else if(i== UpdateStatus.EmptyField){
+                    Toast.makeText(mContext, "请检查你AppVersion表的必填项，1、target_size（文件大小）是否填写；2、path或者android_url两者必填其中一项。", Toast.LENGTH_SHORT).show();
+                }else if(i==UpdateStatus.IGNORED){
+                    Toast.makeText(mContext, "该版本已被忽略更新", Toast.LENGTH_SHORT).show();
+                }else if(i==UpdateStatus.ErrorSizeFormat){
+                    Toast.makeText(mContext, "请检查target_size填写的格式，请使用file.length()方法获取apk大小。", Toast.LENGTH_SHORT).show();
+                }else if(i==UpdateStatus.TimeOut){
+                    Toast.makeText(mContext, "查询出错或查询超时", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        BmobUpdateAgent.update(this);
 
         findView();
         onClick();
@@ -172,7 +207,7 @@ public class MenuActivity extends AppCompatActivity
             startActivity(it);
             overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
         } else if (id == R.id.refrush) {
-            Toast.makeText(mContext, "过两天就能用了！！！", Toast.LENGTH_SHORT).show();
+            BmobUpdateAgent.forceUpdate(mContext);
         } else if (id == R.id.quit) {
             AlertDialog dlg = new AlertDialog.Builder(mContext)
                     .setTitle("确认退出？")
@@ -210,15 +245,15 @@ public class MenuActivity extends AppCompatActivity
         shareBtn = (Button) findViewById(R.id.shareBtn);
         returnBtn = (Button) findViewById(R.id.returnBtn);
         receiveBtn = (Button) findViewById(R.id.receiveBtn);
-        handleBtn = (Button) findViewById(R.id.handleBtn);
         mine = findViewById(R.id.mine);
     }
     //选择图书图片
     private void selectBookPicture() {
-        //打开相册，选择一张图片
         Intent intent1 = new Intent(Intent.ACTION_PICK);
-        intent1.setType("image/*");
+        intent1.setType("image");
         startActivityForResult(intent1, PHOTO_REQUEST_GALLERY);
+        /*Intent intent = new Intent(this, ImagePicker.class);
+        startActivityForResult(intent,IMAGE_PICKER);*/
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -236,6 +271,22 @@ public class MenuActivity extends AppCompatActivity
             picturePath = cursor.getString(columnIndex);
             cursor.close();
         }
+        /*if (resultCode == com.lzy.imagepicker.ImagePicker.RESULT_CODE_ITEMS) {
+            if (data != null && requestCode == IMAGE_PICKER) {
+                ArrayList<ImageItem> images = (ArrayList<ImageItem>)
+                        data.getSerializableExtra(com.lzy.imagepicker.ImagePicker.EXTRA_RESULT_ITEMS);
+                String path =images.get(0).path;
+                if (path != null) {
+                    File file1 = new File(path);
+                    path = file1.getAbsolutePath();
+                }
+                //用此方法加入到circleView当中
+                com.lzy.imagepicker.ImagePicker.getInstance().getImageLoader().displayImage
+                        (this,path,favicon,favicon.getWidth(),favicon.getHeight());
+            } else {
+                Toast.makeText(this, "没有数据", Toast.LENGTH_SHORT).show();
+            }
+        }*/
     }
     //点击事件
     private void onClick() {
@@ -484,14 +535,6 @@ public class MenuActivity extends AppCompatActivity
             }
         });
 
-        handleBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fold();
-                Intent it = new Intent(mContext,HandleBook.class);
-                startActivity(it);
-            }
-        });
 
         assert shortCut != null;
         shortCut.setOnClickListener(new View.OnClickListener() {
@@ -514,7 +557,6 @@ public class MenuActivity extends AppCompatActivity
         loanBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
         borrowBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
         receiveBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
-        handleBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
 
         displayList();
         animation = AnimationUtils.loadAnimation(mContext, R.anim.rotate_return);
@@ -529,7 +571,7 @@ public class MenuActivity extends AppCompatActivity
         loanBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
         borrowBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
         receiveBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
-        handleBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
+
         loanBtn.setClickable(false);
         borrowBtn.setClickable(false);
         receiveBtn.setClickable(false);
@@ -655,6 +697,7 @@ public class MenuActivity extends AppCompatActivity
                     Glide.with(mContext)
                             .load(user.getFavicon().getFileUrl())
                             .override((int)(mContext.getResources().getDisplayMetrics().density*60+0.5f),(int)(mContext.getResources().getDisplayMetrics().density*60+0.5f))
+                            .centerCrop()
                             .placeholder(R.drawable.wait)
                             .error(R.drawable.wait)
                             .into(favicon);

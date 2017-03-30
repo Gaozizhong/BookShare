@@ -21,15 +21,6 @@
         <Button
             android:layout_width="55dp"
             android:layout_height="40dp"
-            android:text="操作"
-            android:id="@+id/handleBtn"
-            android:layout_gravity="right|bottom"
-            android:layout_marginRight="30dp"
-            android:layout_marginBottom="310dp"
-            android:visibility="gone" />
-        <Button
-            android:layout_width="55dp"
-            android:layout_height="40dp"
             android:text="收书"
             android:id="@+id/receiveBtn"
             android:layout_gravity="right|bottom"

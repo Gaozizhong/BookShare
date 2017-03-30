@@ -36,7 +36,7 @@ import static android.R.color.black;
 public class Sharing extends AppCompatActivity {
 
     Context mContext = Sharing.this;
-    ImageView before,image,phoneBtn;
+    ImageView before,image;
     TextView introduce,bookName,writename,time,bookOwner;
     ImageButton likeBtn,readBtn;
     String objectId,objectId1,introduce1,bookname1,writername1,OwnerName1,time1,phone;

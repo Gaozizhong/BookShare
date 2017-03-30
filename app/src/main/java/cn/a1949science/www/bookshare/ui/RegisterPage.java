@@ -299,6 +299,9 @@ public class RegisterPage extends AppCompatActivity {
         user.setPassword(password.getText().toString());
         user.setNickname(phoneNum.getText().toString());
         user.setNeedReturn(false);
+        /*String picPath = "http://bmob-cdn-7908.b0.upaiyun.com/2017/03/28/b488323cae1c474eb124ec07b941482a.png";
+        BmobFile bmobFile = new BmobFile(new File(picPath));
+        user.setFavicon(bmobFile);*/
 
         user.signUp(new SaveListener<_User>() {
             @Override

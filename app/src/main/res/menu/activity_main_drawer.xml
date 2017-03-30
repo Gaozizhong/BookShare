@@ -21,13 +21,9 @@
             android:icon="@mipmap/my_favourite"
             android:id="@+id/refrush"
             android:title="版本更新" />
+        <item
+            android:icon="@mipmap/my_favourite"
+            android:id="@+id/quit"
+            android:title="退出登录" />
     </group>
-
-    <item android:title="">
-        <menu>
-            <item
-                android:id="@+id/quit"
-                android:title="退出登录" />
-        </menu>
-    </item>
 </menu>

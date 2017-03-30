@@ -22,6 +22,7 @@ import cn.a1949science.www.bookshare.bean.Book_Info;
 public class MyAdapter extends BaseAdapter {
     private Context context;
     private List<Book_Info> list;
+    ViewHolder viewHolder = null;
 
     public MyAdapter(Context context, List<Book_Info> list) {
         this.context = context;
@@ -52,7 +53,6 @@ public class MyAdapter extends BaseAdapter {
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
         //新增一个内部类ViewHolder,用于对控件的实例进行缓存
-        ViewHolder viewHolder = null;
         if (view == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
             //实例化一个布局文件
@@ -70,9 +70,32 @@ public class MyAdapter extends BaseAdapter {
         String bookName = list.get(i).getBookName();
         String bookWriter = list.get(i).getBookWriter();
 
+        /*Luban.get(context)
+                .load(list.get(i).getBookPicture().getLocalFile())
+                .putGear(Luban.THIRD_GEAR)
+                .setCompressListener(new OnCompressListener() {
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        Glide.with(context)
+                                .load(file)
+                                .into(viewHolder.image);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });*/
+
         Glide.with(context)
                 .load(list.get(i).getBookPicture().getFileUrl())
-                .thumbnail(0.1f)
+                .thumbnail(0.5f)
+                .override((int)(context.getResources().getDisplayMetrics().density*120+0.5f),(int)(context.getResources().getDisplayMetrics().density*120+0.5f))
                 .into(viewHolder.image);
         viewHolder.book.setText(bookName);
         viewHolder.writer.setText(bookWriter);
