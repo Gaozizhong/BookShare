@@ -13,7 +13,7 @@ public class ImagePicker extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_picker);
+        //setContentView(R.layout.activity_image_picker);
 
         com.lzy.imagepicker.ImagePicker imagePicker = com.lzy.imagepicker.ImagePicker.getInstance();
         //设置图片加载器

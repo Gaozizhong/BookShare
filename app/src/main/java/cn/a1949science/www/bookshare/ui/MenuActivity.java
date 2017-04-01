@@ -66,6 +66,8 @@ import cn.bmob.v3.update.BmobUpdateAgent;
 import cn.bmob.v3.update.UpdateResponse;
 import cn.bmob.v3.update.UpdateStatus;
 import de.hdodenhof.circleimageview.CircleImageView;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.BLUE;
@@ -98,6 +100,7 @@ public class MenuActivity extends AppCompatActivity
     Integer borrowBookNum,loanBookNum,textNum1,textNum2,textNum3,userNum;
     String objectId,time;
     View mine,headerLayout;
+    BmobFile bmobFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,22 +112,15 @@ public class MenuActivity extends AppCompatActivity
         BmobUpdateAgent.setUpdateListener(new BmobUpdateListener() {
             @Override
             public void onUpdateReturned(int i, UpdateResponse updateResponse) {
-                if (i == UpdateStatus.Yes) {//版本有更新
-                    Toast.makeText(mContext, "版本有更新", Toast.LENGTH_SHORT).show();
+                if (i == UpdateStatus.Yes) {
+                    //Toast.makeText(mContext, "版本有更新", Toast.LENGTH_SHORT).show();
+                    BmobUpdateAgent.update(mContext);
                 }else if(i == UpdateStatus.No){
                     Toast.makeText(mContext, "版本无更新", Toast.LENGTH_SHORT).show();
-                }else if(i== UpdateStatus.EmptyField){
-                    Toast.makeText(mContext, "请检查你AppVersion表的必填项，1、target_size（文件大小）是否填写；2、path或者android_url两者必填其中一项。", Toast.LENGTH_SHORT).show();
-                }else if(i==UpdateStatus.IGNORED){
-                    Toast.makeText(mContext, "该版本已被忽略更新", Toast.LENGTH_SHORT).show();
-                }else if(i==UpdateStatus.ErrorSizeFormat){
-                    Toast.makeText(mContext, "请检查target_size填写的格式，请使用file.length()方法获取apk大小。", Toast.LENGTH_SHORT).show();
-                }else if(i==UpdateStatus.TimeOut){
-                    Toast.makeText(mContext, "查询出错或查询超时", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        BmobUpdateAgent.update(this);
+        //BmobUpdateAgent.update(this);
 
         findView();
         onClick();
@@ -251,10 +247,8 @@ public class MenuActivity extends AppCompatActivity
     //选择图书图片
     private void selectBookPicture() {
         Intent intent1 = new Intent(Intent.ACTION_PICK);
-        intent1.setType("image");
+        intent1.setType("image/*");
         startActivityForResult(intent1, PHOTO_REQUEST_GALLERY);
-        /*Intent intent = new Intent(this, ImagePicker.class);
-        startActivityForResult(intent,IMAGE_PICKER);*/
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -272,22 +266,6 @@ public class MenuActivity extends AppCompatActivity
             picturePath = cursor.getString(columnIndex);
             cursor.close();
         }
-        /*if (resultCode == com.lzy.imagepicker.ImagePicker.RESULT_CODE_ITEMS) {
-            if (data != null && requestCode == IMAGE_PICKER) {
-                ArrayList<ImageItem> images = (ArrayList<ImageItem>)
-                        data.getSerializableExtra(com.lzy.imagepicker.ImagePicker.EXTRA_RESULT_ITEMS);
-                String path =images.get(0).path;
-                if (path != null) {
-                    File file1 = new File(path);
-                    path = file1.getAbsolutePath();
-                }
-                //用此方法加入到circleView当中
-                com.lzy.imagepicker.ImagePicker.getInstance().getImageLoader().displayImage
-                        (this,path,favicon,favicon.getWidth(),favicon.getHeight());
-            } else {
-                Toast.makeText(this, "没有数据", Toast.LENGTH_SHORT).show();
-            }
-        }*/
     }
     //点击事件
     private void onClick() {
@@ -336,64 +314,85 @@ public class MenuActivity extends AppCompatActivity
                                         || bookWriter.getText().toString() .equals("") || shareTime.getText().toString() .equals("")||picturePath.equals("")) {
                                     Toast.makeText(mContext, "信息不全！！！", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    final BmobFile bmobFile = new BmobFile(new File(picturePath));
-                                    new AlertDialog.Builder(mContext)
-                                            .setMessage("上传此图片？")
-                                            .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                    //用Luban压缩图片
+                                    Luban.get(mContext)
+                                            .load(new File(picturePath))
+                                            .putGear(Luban.THIRD_GEAR)
+                                            .setCompressListener(new OnCompressListener() {
                                                 @Override
-                                                public void onClick(DialogInterface dialogInterface, int i) {
-                                                    //等待框
-                                                    final ProgressDialog progressDialog = new ProgressDialog(mContext);
-                                                    progressDialog.setMessage("正在上传...");
-                                                    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                                                    progressDialog.setCanceledOnTouchOutside(false);
-                                                    progressDialog.show();
-                                                    //上传图片
-                                                    bmobFile.uploadblock(new UploadFileListener() {
-                                                        @Override
-                                                        public void done(BmobException e) {
-                                                            if (e == null) {
-                                                                picturePath = "";
-                                                                progressDialog.dismiss();
-                                                                //上传其他信息
-                                                                _User bmobUser = BmobUser.getCurrentUser(_User.class);
-                                                                String username = bmobUser.getUsername();
-                                                                Book_Info book = new Book_Info();
-                                                                book.setOwner(bmobUser);
-                                                                book.setOwnerName(username);
-                                                                book.setBookName(bookName.getText().toString());
-                                                                book.setBookDescribe(describe.getText().toString());
-                                                                book.setBookWriter(bookWriter.getText().toString());
-                                                                book.setkeepTime(shareTime.getText().toString());
-                                                                book.setBeShared(false);
-                                                                book.setBookPicture(bmobFile);
-                                                                book.save(new SaveListener<String>() {
-                                                                    @Override
-                                                                    public void done(String s, BmobException e) {
-                                                                        if (e == null) {
-                                                                            Toast.makeText(mContext, "图书共享成功", Toast.LENGTH_SHORT).show();
-                                                                            displayList();
-                                                                        } else {
-                                                                            Toast.makeText(mContext, "图书共享失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                public void onStart() {
+
+                                                }
+
+                                                @Override
+                                                public void onSuccess(File file) {
+                                                    bmobFile = new BmobFile(file);
+                                                    new AlertDialog.Builder(mContext)
+                                                            .setMessage("上传此图片？")
+                                                            .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                                    //等待框
+                                                                    final ProgressDialog progressDialog = new ProgressDialog(mContext);
+                                                                    progressDialog.setMessage("正在上传...");
+                                                                    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                                                    progressDialog.setCanceledOnTouchOutside(false);
+                                                                    progressDialog.show();
+                                                                    //上传图片
+                                                                    bmobFile.uploadblock(new UploadFileListener() {
+                                                                        @Override
+                                                                        public void done(BmobException e) {
+                                                                            if (e == null) {
+                                                                                picturePath = "";
+                                                                                progressDialog.dismiss();
+                                                                                //上传其他信息
+                                                                                _User bmobUser = BmobUser.getCurrentUser(_User.class);
+                                                                                String username = bmobUser.getUsername();
+                                                                                Book_Info book = new Book_Info();
+                                                                                book.setOwner(bmobUser);
+                                                                                book.setOwnerName(username);
+                                                                                book.setBookName(bookName.getText().toString());
+                                                                                book.setBookDescribe(describe.getText().toString());
+                                                                                book.setBookWriter(bookWriter.getText().toString());
+                                                                                book.setkeepTime(shareTime.getText().toString());
+                                                                                book.setBeShared(false);
+                                                                                book.setBookPicture(bmobFile);
+                                                                                book.save(new SaveListener<String>() {
+                                                                                    @Override
+                                                                                    public void done(String s, BmobException e) {
+                                                                                        if (e == null) {
+                                                                                            Toast.makeText(mContext, "图书共享成功", Toast.LENGTH_SHORT).show();
+                                                                                            displayList();
+                                                                                        } else {
+                                                                                            Toast.makeText(mContext, "图书共享失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                                        }
+                                                                                    }
+                                                                                });
+                                                                                progressDialog.dismiss();
+                                                                            } else {
+                                                                                Toast.makeText(mContext, "上传失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                                progressDialog.dismiss();
+                                                                            }
                                                                         }
-                                                                    }
-                                                                });
-                                                                progressDialog.dismiss();
-                                                            } else {
-                                                                Toast.makeText(mContext, "上传失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                progressDialog.dismiss();
-                                                            }
-                                                        }
-                                                    });
+                                                                    });
+                                                                }
+                                                            })
+                                                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                                    Toast.makeText(mContext, "请重新填写分享信息", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            })
+                                                            .show();
                                                 }
-                                            })
-                                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
                                                 @Override
-                                                public void onClick(DialogInterface dialogInterface, int i) {
-                                                    Toast.makeText(mContext, "请重新填写分享信息", Toast.LENGTH_SHORT).show();
+                                                public void onError(Throwable e) {
+
                                                 }
-                                            })
-                                            .show();
+                                            }).launch();
+
+
                                 }
                             }
                         })
@@ -639,11 +638,7 @@ public class MenuActivity extends AppCompatActivity
                         }
                     });
                     builder.show();
-                } else if (list.size() != 0) {
-                    Toast.makeText(mContext,  "123123。", Toast.LENGTH_SHORT).show();
-                    RedPoint.setVisibility(View.VISIBLE);
                 } else {
-                    RedPoint.setVisibility(View.GONE);
                     borrowBtn.setTextColor(BLACK);
                 }
             }
@@ -657,7 +652,6 @@ public class MenuActivity extends AppCompatActivity
             @Override
             public void done(final List<Shared_Info> list, BmobException e) {
                 if (e == null && list.size()!=0) {
-                    RedPoint.setVisibility(View.VISIBLE);
                     borrowBookNum = list.get(0).getBookNum();
                     if (!list.get(0).getIfAgree() && !list.get(0).getIfLoan() && !list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
                         //借书人刚发送借书请求
@@ -683,7 +677,6 @@ public class MenuActivity extends AppCompatActivity
                     progress.dismiss();
                     //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
                 } else {
-                    RedPoint.setVisibility(View.GONE);
                     progress.dismiss();
                     //Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
                 }
@@ -694,7 +687,7 @@ public class MenuActivity extends AppCompatActivity
     private void display() {
         BmobUser bmobUser = BmobUser.getCurrentUser();
         bmobUser.getObjectId();
-        BmobQuery<_User> query = new BmobQuery<_User>();
+        BmobQuery<_User> query = new BmobQuery<>();
         query.getObject(bmobUser.getObjectId(), new QueryListener<_User>() {
             @Override
             public void done(_User user, BmobException e) {
@@ -712,7 +705,37 @@ public class MenuActivity extends AppCompatActivity
                 }
             }
         });
-        queryShareInfo();
+
+        final _User bmobUser2 = BmobUser.getCurrentUser(_User.class);
+
+        //查询是否有借书人为自己的借书信息
+        BmobQuery<Shared_Info> query1 = new BmobQuery<>();
+        query1.addWhereEqualTo("UserNum", bmobUser2.getUserNum());
+        query1.addWhereEqualTo("ifFinish", false);
+        query1.findObjects(new FindListener<Shared_Info>() {
+            @Override
+            public void done(final List<Shared_Info> list, BmobException e) {
+                if (e == null && list.size()!=0) {
+                    RedPoint.setVisibility(View.VISIBLE);
+                } else {
+                    //查询是否有书主为自己的借书信息
+                    BmobQuery<Shared_Info> query2 = new BmobQuery<>();
+                    query2.addWhereEqualTo("ownerName", bmobUser2.getUsername());
+                    query2.addWhereEqualTo("ifAgree", false);
+                    query2.findObjects(new FindListener<Shared_Info>() {
+                        @Override
+                        public void done(final List<Shared_Info> list, BmobException e) {
+                            if (e == null && list.size()!=0) {
+                                RedPoint.setVisibility(View.VISIBLE);
+                            } else {
+                                RedPoint.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
     }
     //显示列表
     private void displayList() {

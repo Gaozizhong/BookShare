@@ -45,5 +45,5 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
     testCompile 'junit:junit:4.12'
     //图片压缩工具
-
+    compile 'top.zibin:Luban:1.0.9'
 }
