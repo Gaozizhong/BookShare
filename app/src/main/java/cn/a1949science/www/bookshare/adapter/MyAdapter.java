@@ -70,28 +70,6 @@ public class MyAdapter extends BaseAdapter {
         String bookName = list.get(i).getBookName();
         String bookWriter = list.get(i).getBookWriter();
 
-        /*Luban.get(context)
-                .load(list.get(i).getBookPicture().getLocalFile())
-                .putGear(Luban.THIRD_GEAR)
-                .setCompressListener(new OnCompressListener() {
-                    @Override
-                    public void onStart() {
-
-                    }
-
-                    @Override
-                    public void onSuccess(File file) {
-                        Glide.with(context)
-                                .load(file)
-                                .into(viewHolder.image);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-                });*/
-
         Glide.with(context)
                 .load(list.get(i).getBookPicture().getFileUrl())
                 .thumbnail(0.5f)

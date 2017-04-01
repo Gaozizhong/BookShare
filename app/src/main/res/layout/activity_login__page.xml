@@ -56,25 +56,28 @@
     </LinearLayout>
 
     <Button
-        style="?android:attr/buttonStyleSmall"
         android:layout_width="300dp"
-        android:layout_height="55dp"
+        android:layout_height="wrap_content"
         android:text="@string/login"
         android:id="@+id/login"
         android:textSize="20sp"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/rs_select_btn_blue"
+        android:textColor="#FFFFFF"/>
 
     <Button
-        style="?android:attr/buttonStyleSmall"
+        android:layout_marginTop="5dp"
         android:layout_width="300dp"
-        android:layout_height="55dp"
+        android:layout_height="wrap_content"
         android:text="@string/register"
         android:id="@+id/register"
         android:textSize="20sp"
         android:layout_below="@+id/login"
         android:layout_alignLeft="@+id/login"
-        android:layout_alignStart="@+id/login" />
+        android:layout_alignStart="@+id/login"
+        android:background="@drawable/rs_select_btn_blue"
+        android:textColor="#FFFFFF"/>
 
     <CheckBox
         android:text="记住密码"
