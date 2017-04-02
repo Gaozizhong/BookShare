@@ -10,8 +10,8 @@ android {
         applicationId "cn.a1949science.www.bookshare"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.2"
     }
     buildTypes {
         release {
@@ -39,7 +39,6 @@ dependencies {
     //添加图片加载工具glide\picasso
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'de.hdodenhof:circleimageview:2.1.0'
     //选择图片
     compile 'com.lzy.widget:imagepicker:0.5.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
