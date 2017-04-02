@@ -19,6 +19,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,7 +42,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.lzy.imagepicker.*;
+import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
+import com.lzy.imagepicker.ui.ImageGridActivity;
+import com.lzy.imagepicker.view.CropImageView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -52,6 +57,7 @@ import cn.a1949science.www.bookshare.adapter.MyAdapter;
 import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean.Shared_Info;
 import cn.a1949science.www.bookshare.bean._User;
+import cn.a1949science.www.bookshare.widget.GlideImageLoader;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -101,6 +107,7 @@ public class MenuActivity extends AppCompatActivity
     String objectId,time;
     View mine,headerLayout;
     BmobFile bmobFile;
+    private com.lzy.imagepicker.ImagePicker imagePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +128,8 @@ public class MenuActivity extends AppCompatActivity
             }
         });
         //BmobUpdateAgent.update(this);
+        imagePicker = ImagePicker.getInstance();
+        imagePicker.setImageLoader(new GlideImageLoader());
 
         findView();
         onClick();
@@ -246,25 +255,34 @@ public class MenuActivity extends AppCompatActivity
     }
     //选择图书图片
     private void selectBookPicture() {
-        Intent intent1 = new Intent(Intent.ACTION_PICK);
-        intent1.setType("image/*");
-        startActivityForResult(intent1, PHOTO_REQUEST_GALLERY);
+        imagePicker.setImageLoader(new GlideImageLoader());
+        imagePicker.setMultiMode(false);
+        imagePicker.setStyle(CropImageView.Style.RECTANGLE);
+        Integer width = 200;
+        Integer height = 200;
+        width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, width, getResources().getDisplayMetrics());
+        height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, getResources().getDisplayMetrics());
+        imagePicker.setFocusWidth(width);
+        imagePicker.setFocusHeight(height);
+        imagePicker.setOutPutX(800);
+        imagePicker.setOutPutY(800);
+
+        Intent intent1 = new Intent(this, ImageGridActivity.class);
+        startActivityForResult(intent1, 100);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PHOTO_REQUEST_GALLERY && data != null) {
+        if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
+            if (data != null && requestCode == 100) {
 
-            Uri selectedImage = data.getData();
+                ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+                picturePath = images.get(0).path;
 
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-            assert cursor != null;
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            picturePath = cursor.getString(columnIndex);
-            cursor.close();
+                Toast.makeText(this,picturePath, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "没有数据", Toast.LENGTH_SHORT).show();
+            }
         }
     }
     //点击事件
