@@ -259,13 +259,13 @@ public class MenuActivity extends AppCompatActivity
         imagePicker.setMultiMode(false);
         imagePicker.setStyle(CropImageView.Style.RECTANGLE);
         Integer width = 200;
-        Integer height = 200;
+        Integer height = 300;
         width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, width, getResources().getDisplayMetrics());
         height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, getResources().getDisplayMetrics());
         imagePicker.setFocusWidth(width);
         imagePicker.setFocusHeight(height);
         imagePicker.setOutPutX(800);
-        imagePicker.setOutPutY(800);
+        imagePicker.setOutPutY(1200);
 
         Intent intent1 = new Intent(this, ImageGridActivity.class);
         startActivityForResult(intent1, 100);
@@ -275,11 +275,8 @@ public class MenuActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
             if (data != null && requestCode == 100) {
-
                 ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
                 picturePath = images.get(0).path;
-
-                Toast.makeText(this,picturePath, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "没有数据", Toast.LENGTH_SHORT).show();
             }
