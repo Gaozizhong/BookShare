@@ -9,11 +9,14 @@
     android:gravity="center_vertical"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
+    <cn.a1949science.www.bookshare.widget.CircleImageView
+        android:id="@+id/favicon2"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:id="@+id/favicon"
-        android:layout_marginLeft="40dp" />
+        android:layout_marginLeft="40dp"
+        android:src="@drawable/favicon"
+        app:civ_border_width="2dp"
+        app:civ_border_color="#FF222222"/>
 
     <TextView
         android:layout_width="wrap_content"

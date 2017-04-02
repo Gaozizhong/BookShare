@@ -45,6 +45,7 @@ import cn.a1949science.www.bookshare.adapter.MyAdapter;
 import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean.Shared_Info;
 import cn.a1949science.www.bookshare.bean._User;
+import cn.a1949science.www.bookshare.widget.CircleImageView;
 import cn.a1949science.www.bookshare.widget.GlideImageLoader;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
@@ -77,16 +78,10 @@ public class MenuActivity extends AppCompatActivity
     Animation animation = null;
     ImageButton shortCut,RedPoint;
     ImageView favicon;
+    CircleImageView favicon2;
     TextView nickname;
     ListView listview;
     boolean clicked  = false;
-    private static final int IMAGE_PICKER = 0;
-    // 拍照
-    private static final int PHOTO_REQUEST_CAREMA = 1;
-    // 从相册选取照片
-    private static final int PHOTO_REQUEST_GALLERY = 2;
-    // 剪切照片
-    private static final int PHOTO_REQUEST_CUT = 3;
     String picturePath="";
     private long exitTime = 0;
     Integer borrowBookNum,loanBookNum,textNum1,textNum2,textNum3,userNum;
@@ -144,6 +139,7 @@ public class MenuActivity extends AppCompatActivity
         });
         nickname = (TextView) headerLayout.findViewById(R.id.nickname);
         favicon = (ImageView) headerLayout.findViewById(R.id.favicon);
+        favicon2 = (CircleImageView) headerLayout.findViewById(R.id.favicon2);
     }
 
     @Override
@@ -698,9 +694,7 @@ public class MenuActivity extends AppCompatActivity
                             .load(user.getFavicon().getFileUrl())
                             .override((int)(mContext.getResources().getDisplayMetrics().density*60+0.5f),(int)(mContext.getResources().getDisplayMetrics().density*60+0.5f))
                             .centerCrop()
-                            .placeholder(R.drawable.wait)
-                            .error(R.drawable.wait)
-                            .into(favicon);
+                            .into(favicon2);
                 } else {
                     Toast.makeText(mContext, "昵称、头像显示失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
