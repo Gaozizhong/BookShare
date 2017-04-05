@@ -20,7 +20,6 @@ public class AppStart extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_app_start);
         //加载启动页面
         final View view = View.inflate(this, R.layout.activity_app_start, null);
         setContentView(view);
