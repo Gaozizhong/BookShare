@@ -105,10 +105,11 @@ public class MenuActivity extends AppCompatActivity
                     BmobUpdateAgent.update(mContext);
                 }else if(i == UpdateStatus.No){
                     Toast.makeText(mContext, "版本无更新", Toast.LENGTH_SHORT).show();
+                }else if(i==UpdateStatus.IGNORED){
+                    Toast.makeText(mContext, "该版本已被忽略更新", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        //BmobUpdateAgent.update(this);
         imagePicker = ImagePicker.getInstance();
         imagePicker.setImageLoader(new GlideImageLoader());
 

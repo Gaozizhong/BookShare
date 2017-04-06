@@ -40,11 +40,9 @@ public class Login_Page extends AppCompatActivity {
         Bmob.initialize(this, "13d736220ecc496d7dcb63c7cf918ba7");
         BmobSMS.initialize(mContext,"13d736220ecc496d7dcb63c7cf918ba7");
         setContentView(R.layout.activity_login__page);
-
         findView();
         onClick();
     }
-
     //查找地址
     private void findView(){
         phoneNum = (EditText) findViewById(R.id.phoneNum);
@@ -77,10 +75,8 @@ public class Login_Page extends AppCompatActivity {
             }
         });
     }
-
     //点击事件
     private void onClick(){
-
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,7 +87,10 @@ public class Login_Page extends AppCompatActivity {
                     Toast.makeText(mContext, "手机号码或密码不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                if (passWord.contains(" ")) {
+                    Toast.makeText(mContext, "密码不能包含空格", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 //记住密码
                 boolean CheckBoxLogin = pass_input.isChecked();
                 //按钮被选中，下次进入时显示账号和密码
@@ -108,7 +107,6 @@ public class Login_Page extends AppCompatActivity {
                     editor.putBoolean("pass_input", false);
                     editor.apply();
                 }
-
                 login.setClickable(false);
 
                 final ProgressDialog progress = new ProgressDialog(mContext);
@@ -123,7 +121,6 @@ public class Login_Page extends AppCompatActivity {
                     @Override
                     public void done(_User user, BmobException e) {
                         if (e == null) {
-                            //Toast.makeText(mContext, "登录成功", Toast.LENGTH_SHORT).show();
                             //跳转到主页面
                             Intent it = new Intent(mContext,MenuActivity.class);
                             startActivity(it);
