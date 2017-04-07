@@ -265,6 +265,7 @@ public class Book_detail extends AppCompatActivity {
                                     sharedInfo.setIfFinish(false);
                                     sharedInfo.setIfAffirm(false);
                                     sharedInfo.setIfReturn(false);
+                                    sharedInfo.setIfRefuse(false);
                                     sharedInfo.save(new SaveListener<String>() {
                                         @Override
                                         public void done(String s, BmobException e) {

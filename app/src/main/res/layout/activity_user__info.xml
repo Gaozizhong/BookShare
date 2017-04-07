@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="cn.a1949science.www.bookshare.ui.User_Info"
     android:background="#ebecf0">
@@ -48,12 +49,12 @@
             android:layout_weight="1"
             android:gravity="left|center_vertical" />
 
-        <ImageView
+        <cn.a1949science.www.bookshare.widget.CircleImageView
+            android:id="@+id/favicon"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:id="@+id/favicon"
-            android:gravity="center_horizontal"
-            android:layout_marginRight="20dp" />
+            android:layout_marginRight="20dp"
+            android:src="@drawable/favicon" />
 
         <ImageView
             android:layout_width="35dp"

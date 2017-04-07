@@ -600,6 +600,7 @@ public class MenuActivity extends AppCompatActivity
         BmobQuery<Shared_Info> query = new BmobQuery<>();
         query.addWhereEqualTo("ownerName", bmobUser.getUsername());
         query.addWhereEqualTo("ifAffirm", false);
+        query.addWhereEqualTo("ifRefuse", false);
         query.findObjects(new FindListener<Shared_Info>() {
             @Override
             public void done(final List<Shared_Info> list, BmobException e) {
@@ -646,6 +647,7 @@ public class MenuActivity extends AppCompatActivity
         BmobQuery<Shared_Info> query1 = new BmobQuery<>();
         query1.addWhereEqualTo("UserNum", bmobUser.getUserNum());
         query1.addWhereEqualTo("ifReturn", false);
+        query1.addWhereEqualTo("ifRefuse", false);
         query1.findObjects(new FindListener<Shared_Info>() {
             @Override
             public void done(final List<Shared_Info> list, BmobException e) {

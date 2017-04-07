@@ -21,14 +21,16 @@ public class Shared_Info extends BmobObject {
     //用createdAT作为分享时间，用z最后的updatedAT作为归还时间
     //书主是否同意
     private Boolean ifAgree;
-    //书主是否同意
+    //书主是否借出
     private Boolean ifLoan;
-    //书主是否同意
+    //借书过程是否完成
     private Boolean ifFinish;
     //是否确认还书
     private Boolean ifAffirm;
     //图书是否归还
     private Boolean ifReturn;
+    //书主是否拒绝
+    private Boolean ifRefuse;
     //借书完成时间
     private BmobDate finishAt;
 
@@ -58,6 +60,9 @@ public class Shared_Info extends BmobObject {
 
     public Boolean getIfReturn(){return ifReturn;}
     public void setIfReturn(Boolean ifReturn){this.ifReturn =  ifReturn;}
+
+    public Boolean getIfRefuse(){return ifRefuse;}
+    public void setIfRefuse(Boolean ifRefuse){this.ifRefuse =  ifRefuse;}
 
     public BmobDate getFinishAt(){return finishAt;}
     public void setFinishAt(BmobDate finishAt){this.finishAt =  finishAt;}
