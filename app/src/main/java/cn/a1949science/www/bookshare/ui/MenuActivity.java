@@ -56,6 +56,7 @@ import cn.bmob.v3.listener.BmobUpdateListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 import cn.bmob.v3.update.BmobUpdateAgent;
 import cn.bmob.v3.update.UpdateResponse;
@@ -63,6 +64,7 @@ import cn.bmob.v3.update.UpdateStatus;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
+import static android.R.color.black;
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.BLUE;
 
@@ -117,6 +119,7 @@ public class MenuActivity extends AppCompatActivity
         onClick();
         displayList();
         display();
+        ifNeedReturn();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -710,6 +713,7 @@ public class MenuActivity extends AppCompatActivity
         BmobQuery<Shared_Info> query1 = new BmobQuery<>();
         query1.addWhereEqualTo("UserNum", bmobUser2.getUserNum());
         query1.addWhereEqualTo("ifFinish", false);
+        query1.addWhereEqualTo("ifRefuse", false);
         query1.findObjects(new FindListener<Shared_Info>() {
             @Override
             public void done(final List<Shared_Info> list, BmobException e) {
@@ -720,6 +724,7 @@ public class MenuActivity extends AppCompatActivity
                     BmobQuery<Shared_Info> query2 = new BmobQuery<>();
                     query2.addWhereEqualTo("ownerName", bmobUser2.getUsername());
                     query2.addWhereEqualTo("ifAgree", false);
+                    query2.addWhereEqualTo("ifRefuse", false);
                     query2.findObjects(new FindListener<Shared_Info>() {
                         @Override
                         public void done(final List<Shared_Info> list, BmobException e) {
@@ -781,5 +786,38 @@ public class MenuActivity extends AppCompatActivity
             }
         });
 
+    }
+    //看自己是否可以借书
+    private void ifNeedReturn() {
+        final _User bmobUser = BmobUser.getCurrentUser(_User.class);
+
+        //查询是否有借书人为自己的借书信息
+        BmobQuery<Shared_Info> query1 = new BmobQuery<>();
+        query1.addWhereEqualTo("UserNum", bmobUser.getUserNum());
+        query1.addWhereEqualTo("ifFinish", false);
+        query1.addWhereEqualTo("ifRefuse", false);
+        query1.findObjects(new FindListener<Shared_Info>() {
+            @Override
+            public void done(final List<Shared_Info> list, BmobException e) {
+                if (e == null && list.size()!=0) {
+
+                } else {
+                    //更新用户借书状态
+                    _User newUser = new _User();
+                    newUser.setNeedReturn(false);
+                    BmobUser bmobUser = BmobUser.getCurrentUser();
+                    newUser.update(bmobUser.getObjectId(), new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null) {
+
+                            } else {
+                                Toast.makeText(mContext, "还书失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
 }
