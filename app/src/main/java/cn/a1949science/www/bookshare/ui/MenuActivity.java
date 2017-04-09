@@ -689,7 +689,6 @@ public class MenuActivity extends AppCompatActivity
     //显示头像、昵称、小红点
     private void display() {
         BmobUser bmobUser = BmobUser.getCurrentUser();
-        bmobUser.getObjectId();
         BmobQuery<_User> query = new BmobQuery<>();
         query.getObject(bmobUser.getObjectId(), new QueryListener<_User>() {
             @Override

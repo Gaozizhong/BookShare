@@ -1,6 +1,7 @@
 package cn.a1949science.www.bookshare.ui;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,21 +12,29 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.lzy.imagepicker.*;
+import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.bean.ImageItem;
+import com.lzy.imagepicker.ui.ImageGridActivity;
+import com.lzy.imagepicker.view.CropImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean.Shared_Info;
 import cn.a1949science.www.bookshare.bean._User;
+import cn.a1949science.www.bookshare.widget.GlideImageLoader;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
@@ -34,6 +43,8 @@ import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 import static android.R.color.black;
 
@@ -41,22 +52,17 @@ public class User_Info extends AppCompatActivity {
     Context mContext = User_Info.this;
     ImageView before,favicon;
     TextView nickname;
-    // 拍照
-    private static final int PHOTO_REQUEST_CAREMA = 1;
-    // 从相册选取照片
-    private static final int PHOTO_REQUEST_GALLERY = 2;
-    // 剪切照片
-    private static final int PHOTO_REQUEST_CUT = 3;
     String picturePath="";
     //定义一个保存图片的File变量
     private File imageFile = null;
-    private Uri fileUri;
-    private ImageView headIcon;
+    private com.lzy.imagepicker.ImagePicker imagePicker;
+    BmobFile bmobFile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user__info);
-
+        imagePicker = ImagePicker.getInstance();
+        imagePicker.setImageLoader(new GlideImageLoader());
         findView();
         onClick();
         display();
@@ -76,8 +82,6 @@ public class User_Info extends AppCompatActivity {
                     Glide.with(mContext)
                             .load(user.getFavicon().getFileUrl())
                             .override((int)(mContext.getResources().getDisplayMetrics().density*50+0.5f),(int)(mContext.getResources().getDisplayMetrics().density*50+0.5f))
-                            .placeholder(R.drawable.wait)
-                            .error(R.drawable.wait)
                             .into(favicon);
                 } else {
                     Toast.makeText(mContext, "昵称、头像显示失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -91,62 +95,32 @@ public class User_Info extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PHOTO_REQUEST_GALLERY && data != null) {
-
-            Uri selectedImage = data.getData();
-
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-            assert cursor != null;
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            picturePath = cursor.getString(columnIndex);
-            cursor.close();
-
-        }
-        try {
-            if (imageFile != null && imageFile.exists())
-                imageFile.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (resultCode == com.lzy.imagepicker.ImagePicker.RESULT_CODE_ITEMS) {
+            if (data != null && requestCode == 100) {
+                ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(com.lzy.imagepicker.ImagePicker.EXTRA_RESULT_ITEMS);
+                picturePath = images.get(0).path;
+            } else {
+                Toast.makeText(this, "没有数据", Toast.LENGTH_SHORT).show();
+            }
         }
         updateFile();
     }
 
-    private void crop(Uri uri) {
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri, "image/*");
-        intent.putExtra("crop", true);
-        //裁剪框比例
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        //裁剪后输出图片的尺寸大小
-        intent.putExtra("outputX", 250);
-        intent.putExtra("outputY", 250);
-        //图片格式
-        intent.putExtra("outputFormat", "JPEG");
-        //取消人脸识别
-        intent.putExtra("noFaceDetection", true);
-        intent.putExtra("return-data", true);
-        startActivityForResult(intent, PHOTO_REQUEST_CUT);
-    }
-
     //上传图片
     private void updateFile() {
-        AlertDialog dlg = new AlertDialog.Builder(mContext)
-                .setTitle("确认用此图片作为头像？")
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        //用Luban压缩图片
+        Luban.get(mContext)
+                .load(new File(picturePath))
+                .putGear(Luban.THIRD_GEAR)
+                .setCompressListener(new OnCompressListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    public void onStart() {
 
                     }
-                })
-                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        //上传头像
-                        final BmobFile bmobFile = new BmobFile(new File(picturePath));
+                    public void onSuccess(File file) {
+                        bmobFile = new BmobFile(file);
                         bmobFile.uploadblock(new UploadFileListener() {
                             @Override
                             public void done(BmobException e) {
@@ -172,9 +146,13 @@ public class User_Info extends AppCompatActivity {
                             }
                         });
                     }
-                })
-                .create();
-        dlg.show();
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                }).launch();
+
     }
 
     //点击事件
@@ -213,9 +191,19 @@ public class User_Info extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
     }
     public void goToFavicon(View view) {
-        //打开相册，选择一张图片
-        Intent intent1 = new Intent(Intent.ACTION_PICK);
-        intent1.setType("image/*");
-        startActivityForResult(intent1, PHOTO_REQUEST_GALLERY);
+        imagePicker.setImageLoader(new GlideImageLoader());
+        imagePicker.setMultiMode(false);
+        imagePicker.setStyle(CropImageView.Style.RECTANGLE);
+        Integer width = 200;
+        Integer height = 200;
+        width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, width, getResources().getDisplayMetrics());
+        height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, getResources().getDisplayMetrics());
+        imagePicker.setFocusWidth(width);
+        imagePicker.setFocusHeight(height);
+        imagePicker.setOutPutX(800);
+        imagePicker.setOutPutY(800);
+
+        Intent intent1 = new Intent(this, ImageGridActivity.class);
+        startActivityForResult(intent1, 100);
     }
 }
