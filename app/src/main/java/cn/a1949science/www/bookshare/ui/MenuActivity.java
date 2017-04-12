@@ -6,10 +6,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -67,6 +69,8 @@ import top.zibin.luban.OnCompressListener;
 import static android.R.color.black;
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.BLUE;
+import static android.graphics.Color.GREEN;
+import static android.graphics.Color.RED;
 
 /**
  * Created by 高子忠 on 2017/3/22.
@@ -91,6 +95,7 @@ public class MenuActivity extends AppCompatActivity
     View mine,headerLayout;
     BmobFile bmobFile;
     private com.lzy.imagepicker.ImagePicker imagePicker;
+    SwipeRefreshLayout refresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -229,6 +234,22 @@ public class MenuActivity extends AppCompatActivity
     }
     //查找地址
     private void findView() {
+        //下拉刷新
+        refresh = (SwipeRefreshLayout) findViewById(R.id.refresh);
+
+        //refresh.setColorSchemeColors(BLUE,RED,GREEN);
+        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        displayList();
+                        refresh.setRefreshing(false);
+                    }
+                },3000);
+            }
+        });
         RedPoint= (ImageButton) findViewById(R.id.RedPoint);
         shortCut = (ImageButton) findViewById(R.id.shortcut);
         listview = (ListView) findViewById(R.id.booklist);

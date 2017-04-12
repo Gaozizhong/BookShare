@@ -12,12 +12,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#ebecf0">
-        <ListView
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/booklist"
-            android:dividerHeight="10dp"
-            android:divider="#ebecf0"/>
+            android:layout_height="match_parent">
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/booklist"
+                android:dividerHeight="10dp"
+                android:divider="#ebecf0"/>
+        </android.support.v4.widget.SwipeRefreshLayout>
         <Button
             android:layout_width="55dp"
             android:layout_height="40dp"
