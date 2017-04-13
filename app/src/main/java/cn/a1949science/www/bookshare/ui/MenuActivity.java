@@ -771,6 +771,7 @@ public class MenuActivity extends AppCompatActivity
         String username = bmobUser.getUsername();
         query.addWhereNotEqualTo("ownerName", username);*/
         query1.setLimit(50);
+        query1.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
         query1.findObjects(new FindListener<Book_Info>() {
             @Override
             public void done(final List<Book_Info> list, BmobException e) {
