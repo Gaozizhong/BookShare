@@ -69,7 +69,6 @@ public class MyAdapter extends BaseAdapter {
 
         String bookName = list.get(i).getBookName();
         String bookWriter = list.get(i).getBookWriter();
-
         Glide.with(context)
                 .load(list.get(i).getBookPicture().getFileUrl())
                 .thumbnail(0.5f)

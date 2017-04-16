@@ -167,11 +167,11 @@ public class MenuActivity extends AppCompatActivity
         }
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -236,18 +236,10 @@ public class MenuActivity extends AppCompatActivity
     private void findView() {
         //下拉刷新
         refresh = (SwipeRefreshLayout) findViewById(R.id.refresh);
-
-        //refresh.setColorSchemeColors(BLUE,RED,GREEN);
         refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        displayList();
-                        refresh.setRefreshing(false);
-                    }
-                },3000);
+                refreshBookList();
             }
         });
         RedPoint= (ImageButton) findViewById(R.id.RedPoint);
@@ -259,7 +251,30 @@ public class MenuActivity extends AppCompatActivity
         returnBtn = (Button) findViewById(R.id.returnBtn);
         receiveBtn = (Button) findViewById(R.id.receiveBtn);
         mine = findViewById(R.id.mine);
+        returnBtn.setTextColor(BLUE);
+        shareBtn.setTextColor(BLUE);
+        loanBtn.setTextColor(BLACK);
+        borrowBtn.setTextColor(BLACK);
+        receiveBtn.setTextColor(BLACK);
     }
+
+    //下拉刷新
+    private void refreshBookList() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        displayList();
+                        //queryShareInfo();
+                        refresh.setRefreshing(false);
+                    }
+                });
+            }
+        }).start();
+    }
+
     //选择图书图片
     private void selectBookPicture() {
         imagePicker.setImageLoader(new GlideImageLoader());
@@ -598,11 +613,6 @@ public class MenuActivity extends AppCompatActivity
         borrowBtn.setClickable(false);
         receiveBtn.setClickable(false);
 
-        returnBtn.setTextColor(BLUE);
-        shareBtn.setTextColor(BLUE);
-        loanBtn.setTextColor(BLACK);
-        borrowBtn.setTextColor(BLACK);
-        receiveBtn.setTextColor(BLACK);
 
         queryShareInfo();
 
@@ -613,11 +623,6 @@ public class MenuActivity extends AppCompatActivity
     }
     //查询ShareInfo
     private void queryShareInfo() {
-
-        final ProgressDialog progress = new ProgressDialog(mContext);
-        progress.setMessage("正在查询信息...");
-        progress.setCanceledOnTouchOutside(false);
-        progress.show();
 
         _User bmobUser = BmobUser.getCurrentUser(_User.class);
         //查询是否有书主为自己的借书信息
@@ -698,10 +703,8 @@ public class MenuActivity extends AppCompatActivity
                         borrowBtn.setTextColor(BLACK);
                     }
                     objectId = list.get(0).getObjectId();
-                    progress.dismiss();
                     //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
                 } else {
-                    progress.dismiss();
                     //Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -771,7 +774,7 @@ public class MenuActivity extends AppCompatActivity
         String username = bmobUser.getUsername();
         query.addWhereNotEqualTo("ownerName", username);*/
         query1.setLimit(50);
-        query1.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        //query1.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
         query1.findObjects(new FindListener<Book_Info>() {
             @Override
             public void done(final List<Book_Info> list, BmobException e) {
