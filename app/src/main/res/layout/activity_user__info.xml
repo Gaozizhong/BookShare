@@ -8,21 +8,7 @@
     tools:context="cn.a1949science.www.bookshare.activity.User_Info"
     android:background="#ebecf0">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="#ffffff"
-        android:id="@+id/relativeLayout2">
-
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:id="@+id/before"
-            android:src="@drawable/before"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-    </RelativeLayout>
+    <include layout="@layout/bar_main" />
 
     <LinearLayout
         android:orientation="horizontal"

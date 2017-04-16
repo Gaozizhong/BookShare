@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -34,19 +35,19 @@ import cn.bmob.v3.listener.UpdateListener;
 import static android.R.color.black;
 
 public class Sharing extends AppCompatActivity {
-
     Context mContext = Sharing.this;
-    ImageView before,image;
+    ImageView image;
     TextView introduce,bookName,writename,time,bookOwner;
     ImageButton likeBtn,readBtn;
     String objectId,objectId1,introduce1,bookname1,writername1,OwnerName1,time1,phone;
     int booknum1,textNum,userNum;
     boolean ifLike=false,ifRead=false;
     Button borrowBtn;
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book__info);
+        setContentView(R.layout.activity_book_detail_can);
 
         findView();
         detail();
@@ -397,7 +398,15 @@ public class Sharing extends AppCompatActivity {
 
     //查找地址
     private void findView() {
-        before = (ImageView) findViewById(R.id.before);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.mipmap.left);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
+            }
+        });
         image = (ImageView) findViewById(R.id.image);
         introduce = (TextView) findViewById(R.id.introduce);
         bookName = (TextView) findViewById(R.id.bookName);
@@ -411,13 +420,6 @@ public class Sharing extends AppCompatActivity {
 
     //点击事件
     private void onClick() {
-        assert before != null;
-        before.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
 
         likeBtn.setOnClickListener(new View.OnClickListener() {
             @Override

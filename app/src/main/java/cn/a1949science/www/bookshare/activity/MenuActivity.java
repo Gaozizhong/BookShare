@@ -246,13 +246,7 @@ public class MenuActivity extends AppCompatActivity
         returnBtn = (Button) findViewById(R.id.returnBtn);
         receiveBtn = (Button) findViewById(R.id.receiveBtn);
         mine = findViewById(R.id.mine);
-        returnBtn.setTextColor(BLUE);
-        shareBtn.setTextColor(BLUE);
-        loanBtn.setTextColor(BLACK);
-        borrowBtn.setTextColor(BLACK);
-        receiveBtn.setTextColor(BLACK);
     }
-
     //下拉刷新
     private void refreshBookList() {
         new Thread(new Runnable() {
@@ -261,6 +255,8 @@ public class MenuActivity extends AppCompatActivity
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        display();
+                        ifNeedReturn();
                         displayList();
                         //queryShareInfo();
                         refresh.setRefreshing(false);
@@ -269,7 +265,6 @@ public class MenuActivity extends AppCompatActivity
             }
         }).start();
     }
-
     //选择图书图片
     private void selectBookPicture() {
         imagePicker.setImageLoader(new GlideImageLoader());
@@ -608,6 +603,12 @@ public class MenuActivity extends AppCompatActivity
         borrowBtn.setClickable(false);
         receiveBtn.setClickable(false);
 
+        returnBtn.setTextColor(BLUE);
+        shareBtn.setTextColor(BLUE);
+        loanBtn.setTextColor(BLACK);
+        borrowBtn.setTextColor(BLACK);
+        receiveBtn.setTextColor(BLACK);
+
 
         queryShareInfo();
 
@@ -618,6 +619,10 @@ public class MenuActivity extends AppCompatActivity
     }
     //查询ShareInfo
     private void queryShareInfo() {
+        final ProgressDialog progress = new ProgressDialog(mContext);
+        progress.setMessage("正在查询信息...");
+        progress.setCanceledOnTouchOutside(false);
+        progress.show();
 
         _User bmobUser = BmobUser.getCurrentUser(_User.class);
         //查询是否有书主为自己的借书信息
@@ -698,8 +703,10 @@ public class MenuActivity extends AppCompatActivity
                         borrowBtn.setTextColor(BLACK);
                     }
                     objectId = list.get(0).getObjectId();
+                    progress.dismiss();
                     //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
                 } else {
+                    progress.dismiss();
                     //Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
                 }
             }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -28,38 +29,31 @@ import cn.bmob.v3.listener.UpdateListener;
 
 public class MyLike extends AppCompatActivity {
     Context mContext = MyLike.this;
-    ImageView before;
     ListView listview;
     String countText;
     TextView count;
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_like);
 
         findView();
-        onClick();
         displayList();
     }
 
     //查找地址
     private void findView(){
-        before = (ImageView) findViewById(R.id.before);
-        listview = (ListView) findViewById(R.id.myBookList);
-        count = (TextView) findViewById(R.id.count);
-    }
-
-    //点击事件
-    private void onClick(){
-        assert before != null;
-        before.setOnClickListener(new View.OnClickListener() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
                 overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
             }
         });
-
+        listview = (ListView) findViewById(R.id.myBookList);
+        count = (TextView) findViewById(R.id.count);
     }
 
     //显示列表

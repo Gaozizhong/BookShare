@@ -1,37 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="cn.a1949science.www.bookshare.activity.My_Book_List"
     android:background="#ebecf0">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="#ffffff"
-        android:id="@+id/relativeLayout4">
-
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:id="@+id/before"
-            android:src="@drawable/before"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-    </RelativeLayout>
+    <include layout="@layout/bar_main" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="150px"
+        android:layout_height="50dp"
         android:background="#ffffff"
         android:gravity="center_vertical"
         android:id="@+id/relativeLayout5"
-        android:layout_below="@+id/relativeLayout4"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="2px">
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -44,7 +29,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:textSize="15dp" />
+            android:textSize="15sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -56,23 +41,11 @@
             android:layout_alignTop="@+id/textView15"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:textSize="15dp" />
+            android:textSize="15sp" />
     </RelativeLayout>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="2px"
-        android:id="@+id/imageView20"
-        android:background="#ebecf0"
-        android:layout_below="@+id/relativeLayout5"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
     <ListView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/myBookList"
-        android:layout_below="@+id/imageView20"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-</RelativeLayout>
+        android:id="@+id/myBookList" />
+</LinearLayout>

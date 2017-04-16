@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,13 +35,14 @@ import top.zibin.luban.OnCompressListener;
 
 public class User_Info extends AppCompatActivity {
     Context mContext = User_Info.this;
-    ImageView before,favicon;
+    ImageView favicon;
     TextView nickname;
     String picturePath="";
     //定义一个保存图片的File变量
     private File imageFile = null;
     private com.lzy.imagepicker.ImagePicker imagePicker;
     BmobFile bmobFile;
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +50,6 @@ public class User_Info extends AppCompatActivity {
         imagePicker = ImagePicker.getInstance();
         imagePicker.setImageLoader(new GlideImageLoader());
         findView();
-        onClick();
         display();
 
     }
@@ -139,22 +140,16 @@ public class User_Info extends AppCompatActivity {
 
     }
 
-    //点击事件
-    private void onClick() {
-        assert before != null;
-        before.setOnClickListener(new View.OnClickListener() {
+    //地址查询
+    private void findView() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
                 overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
             }
         });
-
-    }
-
-    //地址查询
-    private void findView() {
-        before = (ImageView) findViewById(R.id.before);
         nickname = (TextView) findViewById(R.id.nickname);
         favicon = (ImageView) findViewById(R.id.favicon);
     }

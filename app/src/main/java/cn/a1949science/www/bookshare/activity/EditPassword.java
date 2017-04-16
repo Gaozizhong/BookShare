@@ -3,6 +3,7 @@ package cn.a1949science.www.bookshare.activity;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -19,9 +20,9 @@ import cn.bmob.v3.listener.UpdateListener;
 
 public class EditPassword extends AppCompatActivity {
     Context mContext = EditPassword.this;
-    ImageView before;
     EditText oldPassword,newPassword1,newPassword2;
     Button EditOk;
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +35,14 @@ public class EditPassword extends AppCompatActivity {
 
     //查找地址
     private void findView(){
-        before = (ImageView) findViewById(R.id.before);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
+            }
+        });
         oldPassword = (EditText) findViewById(R.id.oldPassword);
         newPassword1 = (EditText) findViewById(R.id.newPassword1);
         newPassword2 = (EditText) findViewById(R.id.newPassword2);
@@ -42,14 +50,6 @@ public class EditPassword extends AppCompatActivity {
     }
     //点击事件
     protected void onClick(){
-        assert before != null;
-        before.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-                overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
-            }
-        });
 
         EditOk.setOnClickListener(new View.OnClickListener() {
             @Override

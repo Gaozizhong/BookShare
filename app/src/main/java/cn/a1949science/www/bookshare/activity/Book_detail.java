@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -34,15 +35,15 @@ import cn.bmob.v3.listener.UpdateListener;
 import static android.R.color.black;
 
 public class Book_detail extends AppCompatActivity {
-
     Context mContext = Book_detail.this;
-    ImageView before,image;
+    ImageView image;
     TextView introduce,bookName,writename,time,bookOwner;
     ImageButton likeBtn,readBtn;
-    String objectId1,objectId,introduce1,bookname1,writername1,OwnerName1,time1,phone;
+    String objectId,introduce1,bookname1,writername1,OwnerName1,time1,phone;
     int booknum1;
     boolean ifLike=false,ifRead=false;
     Button borrowBtn;
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,7 +122,15 @@ public class Book_detail extends AppCompatActivity {
 
     //查找地址
     private void findView(){
-        before = (ImageView) findViewById(R.id.before);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.mipmap.left);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
+            }
+        });
         image = (ImageView) findViewById(R.id.image);
         introduce = (TextView) findViewById(R.id.introduce);
         bookName = (TextView) findViewById(R.id.bookName);
@@ -135,14 +144,6 @@ public class Book_detail extends AppCompatActivity {
 
     //点击事件
     private void onClick(){
-        assert before != null;
-        before.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-                overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
-            }
-        });
 
         likeBtn.setOnClickListener(new View.OnClickListener() {
             @Override

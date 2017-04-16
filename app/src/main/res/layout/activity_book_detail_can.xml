@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="cn.a1949science.www.bookshare.activity.Book_detail"
-    android:background="#ebecf0">
-
+    android:background="#ebecf0"
+    tools:context="cn.a1949science.www.bookshare.activity.BookDetailCan">
     <include layout="@layout/bar_main" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -203,7 +202,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="vertical"
+                    android:orientation="horizontal"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:gravity="center_vertical|center_horizontal"
@@ -213,9 +212,19 @@
                     <Button
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="我想借书"
+                        android:layout_weight="1"
+                        android:text="拒绝借出"
+                        android:id="@+id/RefuseBtn"
+                        android:textSize="15sp"
+                        android:background="#dc2727"
+                        android:textColor="#ffffff" />
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="同意借出"
                         android:id="@+id/borrowBtn"
-                        android:textSize="20sp"
+                        android:textSize="15sp"
                         android:background="#dc2727"
                         android:textColor="#ffffff" />
                 </LinearLayout>
@@ -223,4 +232,5 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>
