@@ -1,15 +1,7 @@
-package cn.a1949science.www.bookshare.ui;
+package cn.a1949science.www.bookshare.activity;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -19,20 +11,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.lzy.imagepicker.*;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.lzy.imagepicker.view.CropImageView;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import cn.a1949science.www.bookshare.R;
-import cn.a1949science.www.bookshare.bean.Book_Info;
-import cn.a1949science.www.bookshare.bean.Shared_Info;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.a1949science.www.bookshare.widget.GlideImageLoader;
 import cn.bmob.v3.BmobQuery;
@@ -40,13 +27,10 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
-import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
-
-import static android.R.color.black;
 
 public class User_Info extends AppCompatActivity {
     Context mContext = User_Info.this;

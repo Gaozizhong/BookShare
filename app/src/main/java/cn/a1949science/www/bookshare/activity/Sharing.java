@@ -1,4 +1,4 @@
-package cn.a1949science.www.bookshare.ui;
+package cn.a1949science.www.bookshare.activity;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -32,8 +32,6 @@ import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 import static android.R.color.black;
-import static android.graphics.Color.BLACK;
-import static android.graphics.Color.BLUE;
 
 public class Sharing extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package cn.a1949science.www.bookshare.ui;
+package cn.a1949science.www.bookshare.activity;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -66,11 +65,8 @@ import cn.bmob.v3.update.UpdateStatus;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
-import static android.R.color.black;
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.BLUE;
-import static android.graphics.Color.GREEN;
-import static android.graphics.Color.RED;
 
 /**
  * Created by 高子忠 on 2017/3/22.
@@ -167,11 +163,11 @@ public class MenuActivity extends AppCompatActivity
         }
     }
 
-    /*@Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
-    }*/
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -217,7 +213,6 @@ public class MenuActivity extends AppCompatActivity
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             BmobUser.logOut();
-                            BmobUser currentUser = BmobUser.getCurrentUser();
                             Intent intent = new Intent(mContext, Login_Page.class);
                             //清空源来栈中的Activity，新建栈打开相应的Activity
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);

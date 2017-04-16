@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cn.a1949science.www.bookshare.ui.Advice_Page">
+    tools:context="cn.a1949science.www.bookshare.activity.Advice_Page">
 
     <RelativeLayout
         android:layout_width="match_parent"

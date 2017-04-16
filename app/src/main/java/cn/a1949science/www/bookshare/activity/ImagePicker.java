@@ -1,11 +1,10 @@
-package cn.a1949science.www.bookshare.ui;
+package cn.a1949science.www.bookshare.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.lzy.imagepicker.view.CropImageView;
 
-import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.widget.GlideImageLoader;
 
 public class ImagePicker extends AppCompatActivity {

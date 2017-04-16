@@ -34,27 +34,27 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.AppStart">
+        <activity android:name=".activity.AppStart">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.Login_Page" />
-        <activity android:name=".ui.RegisterPage" />
-        <activity android:name=".ui.Book_detail" />
-        <activity android:name=".ui.User_Info" />
-        <activity android:name=".ui.Advice_Page" />
-        <activity android:name=".ui.Detail_Info" />
-        <activity android:name=".ui.My_Book_List" />
-        <activity android:name=".ui.EditPassword" />
-        <activity android:name=".ui.Edit_Detail_Info" />
-        <activity android:name=".ui.MyRead" />
-        <activity android:name=".ui.MyLike" />
-        <activity android:name=".ui.Sharing" />
-        <activity android:name=".ui.EditNickname" />
-        <activity android:name=".ui.MenuActivity" />
+        <activity android:name=".activity.Login_Page" />
+        <activity android:name=".activity.RegisterPage" />
+        <activity android:name=".activity.Book_detail" />
+        <activity android:name=".activity.User_Info" />
+        <activity android:name=".activity.Advice_Page" />
+        <activity android:name=".activity.Detail_Info" />
+        <activity android:name=".activity.My_Book_List" />
+        <activity android:name=".activity.EditPassword" />
+        <activity android:name=".activity.Edit_Detail_Info" />
+        <activity android:name=".activity.MyRead" />
+        <activity android:name=".activity.MyLike" />
+        <activity android:name=".activity.Sharing" />
+        <activity android:name=".activity.EditNickname" />
+        <activity android:name=".activity.MenuActivity" />
         <activity android:name="cn.bmob.v3.update.UpdateDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
@@ -110,7 +110,7 @@
             </intent-filter>
         </receiver>
         -->
-        <activity android:name=".ui.ImagePicker"></activity>
+        <activity android:name=".activity.ImagePicker"></activity>
     </application>
 
 </manifest>

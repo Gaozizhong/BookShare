@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="cn.a1949science.www.bookshare.ui.RegisterPage"
+    tools:context="cn.a1949science.www.bookshare.activity.RegisterPage"
     android:gravity="center_vertical|center_horizontal"
     android:background="@mipmap/login">
 

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="cn.a1949science.www.bookshare.ui.Detail_Info"
+    tools:context="cn.a1949science.www.bookshare.activity.Detail_Info"
     android:background="#ebecf0">
 
     <RelativeLayout

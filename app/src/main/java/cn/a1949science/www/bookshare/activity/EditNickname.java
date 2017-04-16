@@ -1,4 +1,4 @@
-package cn.a1949science.www.bookshare.ui;
+package cn.a1949science.www.bookshare.activity;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;

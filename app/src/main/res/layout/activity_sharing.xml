@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cn.a1949science.www.bookshare.ui.Sharing"
+    tools:context="cn.a1949science.www.bookshare.activity.Sharing"
     android:background="#ebecf0">
 
     <ImageView

@@ -4,7 +4,7 @@
     android:id="@+id/activity_edit_favicon"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cn.a1949science.www.bookshare.ui.EditNickname"
+    tools:context="cn.a1949science.www.bookshare.activity.EditNickname"
     android:orientation="vertical"
     android:gravity="center_horizontal">
 

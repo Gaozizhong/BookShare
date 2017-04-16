@@ -1,4 +1,4 @@
-package cn.a1949science.www.bookshare.ui;
+package cn.a1949science.www.bookshare.activity;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
