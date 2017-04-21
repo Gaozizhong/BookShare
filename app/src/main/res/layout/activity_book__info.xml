@@ -162,6 +162,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/no_refuse"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -216,6 +217,77 @@
                         android:text="我想借书"
                         android:id="@+id/borrowBtn"
                         android:textSize="20sp"
+                        android:background="#dc2727"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/can_refuse"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:background="#ebecf0"
+                android:gravity="center_vertical"
+                android:weightSum="1"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="#ffffff"
+                    android:gravity="center_vertical|center_horizontal">
+
+                    <ImageButton
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:id="@+id/likeBtn2"
+                        android:background="#ffffff"
+                        android:src="@mipmap/favourite"
+                        android:scaleType="fitXY" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="#ffffff"
+                    android:gravity="center_vertical|center_horizontal" >
+
+                    <ImageButton
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:id="@+id/readBtn2"
+                        android:background="#ffffff"
+                        android:src="@mipmap/not_seen"
+                        android:scaleType="fitXY" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="1dp">
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="拒绝借出"
+                        android:id="@+id/RefuseBtn"
+                        android:textSize="15sp"
+                        android:background="#dc2727"
+                        android:textColor="#ffffff" />
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="同意借出"
+                        android:id="@+id/borrowBtn2"
+                        android:textSize="15sp"
                         android:background="#dc2727"
                         android:textColor="#ffffff" />
                 </LinearLayout>

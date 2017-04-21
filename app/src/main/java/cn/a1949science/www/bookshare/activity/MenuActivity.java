@@ -295,7 +295,7 @@ public class MenuActivity extends AppCompatActivity
         }
     }
     //点击事件
-    private void onClick() {
+    private void onClick()  {
         //分享按钮
         shareBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -543,7 +543,6 @@ public class MenuActivity extends AppCompatActivity
                 Intent intent = new Intent(mContext, Sharing.class);
                 intent.putExtras(data);
                 startActivity(intent);
-                //Toast.makeText(mContext, 123123 , Toast.LENGTH_SHORT).show();
             }
         });
 

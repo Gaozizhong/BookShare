@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,14 +43,15 @@ public class Sharing extends AppCompatActivity {
     String objectId,objectId1,introduce1,bookname1,writername1,OwnerName1,time1,phone;
     int booknum1,textNum,userNum;
     boolean ifLike=false,ifRead=false;
-    Button borrowBtn;
+    Button borrowBtn,borrowBtn2,RefuseBtn;
     Toolbar toolbar;
+    LinearLayout no_refuse, can_refuse;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book__info);
 
-        findView();
+        initView();
         detail();
         onClick();
     }
@@ -65,6 +67,8 @@ public class Sharing extends AppCompatActivity {
             borrowBtn.setClickable(false);
             borrowBtn.setBackgroundColor(getResources().getColor(black));
         } else if (textNum == 2) {
+            no_refuse.setVisibility(View.GONE);
+            can_refuse.setVisibility(View.VISIBLE);
             //借书人信息查询
             BmobQuery<_User> query = new BmobQuery<>();
             query.addWhereEqualTo("userNum", userNum);
@@ -76,13 +80,13 @@ public class Sharing extends AppCompatActivity {
                                 .setTitle("借书人信息")
                                 .setMessage("借书人："+list.get(0).getUsername()+"\n"+"借书人电话："+list.get(0).getMobilePhoneNumber()+"\n"+
                                         "借书人地址："+list.get(0).getUserSchool()+list.get(0).getUserDorm())
-                                .setNegativeButton("拒绝", new DialogInterface.OnClickListener() {
+                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        refuseShare();
+
                                     }
                                 })
-                                .setPositiveButton("同意", new DialogInterface.OnClickListener() {
+                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                     }
@@ -94,8 +98,14 @@ public class Sharing extends AppCompatActivity {
                     }
                 }
             });
-            borrowBtn.setText("可以借出");
-            borrowBtn.setOnClickListener(new View.OnClickListener() {
+            RefuseBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    refuseShare();
+                }
+            });
+            borrowBtn2.setText("可以借出");
+            borrowBtn2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     AlertDialog dlg = new AlertDialog.Builder(mContext)
@@ -121,10 +131,11 @@ public class Sharing extends AppCompatActivity {
                                         public void done(BmobException e) {
                                             if (e == null) {
                                                 progress.dismiss();
-                                                borrowBtn.setText("等待借书电话");
-                                                borrowBtn.setClickable(false);
-                                                borrowBtn.setBackgroundColor(getResources().getColor(black));
-                                                //Toast.makeText(mContext, "可以借出", Toast.LENGTH_SHORT).show();
+                                                borrowBtn2.setText("等待借书电话");
+                                                borrowBtn2.setClickable(false);
+                                                RefuseBtn.setClickable(false);
+                                                borrowBtn2.setBackgroundColor(getResources().getColor(black));
+                                                RefuseBtn.setBackgroundColor(getResources().getColor(black));
                                             } else {
                                                 Toast.makeText(mContext, "可以借出失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
@@ -162,8 +173,16 @@ public class Sharing extends AppCompatActivity {
                 }
             });
         } else if (textNum == 4) {
-            borrowBtn.setText("书已借出");
-            borrowBtn.setOnClickListener(new View.OnClickListener() {
+            no_refuse.setVisibility(View.GONE);
+            can_refuse.setVisibility(View.VISIBLE);
+            borrowBtn2.setText("书已借出");
+            RefuseBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    refuseShare();
+                }
+            });
+            borrowBtn2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     AlertDialog dlg = new AlertDialog.Builder(mContext)
@@ -190,8 +209,10 @@ public class Sharing extends AppCompatActivity {
                                         public void done(BmobException e) {
                                             if (e == null) {
                                                 progress.dismiss();
-                                                borrowBtn.setClickable(false);
-                                                borrowBtn.setBackgroundColor(getResources().getColor(black));
+                                                RefuseBtn.setClickable(false);
+                                                borrowBtn2.setClickable(false);
+                                                RefuseBtn.setBackgroundColor(getResources().getColor(black));
+                                                borrowBtn2.setBackgroundColor(getResources().getColor(black));
                                                 //Toast.makeText(mContext, "书已借出", Toast.LENGTH_SHORT).show();
                                             } else {
                                                 Toast.makeText(mContext, "书已借出失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -397,7 +418,9 @@ public class Sharing extends AppCompatActivity {
     }
 
     //查找地址
-    private void findView() {
+    private void initView() {
+        no_refuse = (LinearLayout) findViewById(R.id.no_refuse);
+        can_refuse = (LinearLayout) findViewById(R.id.can_refuse);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.mipmap.left);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -416,6 +439,8 @@ public class Sharing extends AppCompatActivity {
         likeBtn = (ImageButton)findViewById(R.id.likeBtn);
         readBtn = (ImageButton) findViewById(R.id.readBtn);
         borrowBtn = (Button) findViewById(R.id.borrowBtn);
+        borrowBtn2 = (Button) findViewById(R.id.borrowBtn2);
+        RefuseBtn = (Button) findViewById(R.id.RefuseBtn);
     }
 
     //点击事件
@@ -488,7 +513,10 @@ public class Sharing extends AppCompatActivity {
                             @Override
                             public void done(BmobException e) {
                                 if (e == null) {
-                                    //Toast.makeText(mContext, "更新信息成功", Toast.LENGTH_SHORT).show();
+                                    RefuseBtn.setClickable(false);
+                                    borrowBtn2.setClickable(false);
+                                    RefuseBtn.setBackgroundColor(getResources().getColor(black));
+                                    borrowBtn2.setBackgroundColor(getResources().getColor(black));
                                 } else {
                                     Toast.makeText(mContext, "更新信息失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
