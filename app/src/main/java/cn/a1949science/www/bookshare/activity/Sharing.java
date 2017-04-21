@@ -47,7 +47,7 @@ public class Sharing extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book_detail_can);
+        setContentView(R.layout.activity_book__info);
 
         findView();
         detail();

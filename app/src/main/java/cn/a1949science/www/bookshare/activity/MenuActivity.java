@@ -820,25 +820,38 @@ public class MenuActivity extends AppCompatActivity
         //查询是否有借书人为自己的借书信息
         BmobQuery<Shared_Info> query1 = new BmobQuery<>();
         query1.addWhereEqualTo("UserNum", bmobUser.getUserNum());
-        query1.addWhereEqualTo("ifFinish", false);
+        query1.addWhereEqualTo("ifReturn", false);
         query1.addWhereEqualTo("ifRefuse", false);
         query1.findObjects(new FindListener<Shared_Info>() {
             @Override
             public void done(final List<Shared_Info> list, BmobException e) {
-                if (e == null && list.size()!=0) {
-
-                } else {
+                if (e == null && list.size()==0) {
                     //更新用户借书状态
                     _User newUser = new _User();
                     newUser.setNeedReturn(false);
                     BmobUser bmobUser = BmobUser.getCurrentUser();
                     newUser.update(bmobUser.getObjectId(), new UpdateListener() {
                         @Override
-                        public void done(BmobException e) {
-                            if (e == null) {
-
+                        public void done(BmobException e1) {
+                            if (e1 == null) {
+                                Toast.makeText(mContext, "修改状态成功", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(mContext, "还书失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, "修改状态失败:" + e1.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                } else if (e == null && list.size()!=0){
+                    //更新用户借书状态
+                    _User newUser = new _User();
+                    newUser.setNeedReturn(true);
+                    BmobUser bmobUser = BmobUser.getCurrentUser();
+                    newUser.update(bmobUser.getObjectId(), new UpdateListener() {
+                        @Override
+                        public void done(BmobException e1) {
+                            if (e1 == null) {
+                                Toast.makeText(mContext, "修改状态成功", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(mContext, "修改状态失败:" + e1.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
