@@ -22,7 +22,6 @@ import cn.a1949science.www.bookshare.bean.Book_Info;
 public class MyAdapter extends BaseAdapter {
     private Context context;
     private List<Book_Info> list;
-    ViewHolder viewHolder = null;
 
     public MyAdapter(Context context, List<Book_Info> list) {
         this.context = context;
@@ -53,6 +52,7 @@ public class MyAdapter extends BaseAdapter {
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
         //新增一个内部类ViewHolder,用于对控件的实例进行缓存
+        ViewHolder viewHolder;
         if (view == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
             //实例化一个布局文件
