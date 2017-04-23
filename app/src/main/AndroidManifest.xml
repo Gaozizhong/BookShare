@@ -114,7 +114,8 @@
         </receiver>
         -->
         <activity android:name=".activity.ImagePicker" />
-        <activity android:name=".activity.BookDetailCan"></activity>
+        <activity android:name=".activity.BookDetailCan" />
+        <activity android:name=".activity.ForgetPassword"></activity>
     </application>
 
 </manifest>

@@ -37,12 +37,12 @@ public class RegisterPage extends AppCompatActivity {
         BmobSMS.initialize(mContext,"13d736220ecc496d7dcb63c7cf918ba7");
 
 
-        findView();
+        initView();
         onClick();
     }
 
     //查找地址
-    private void findView(){
+    private void initView(){
         name = (EditText) findViewById(R.id.name);
         gender = (EditText) findViewById(R.id.gender);
         school = (EditText) findViewById(R.id.school);

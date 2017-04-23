@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import cn.a1949science.www.bookshare.R;
@@ -28,6 +29,7 @@ public class Login_Page extends AppCompatActivity {
     Context mContext = Login_Page.this;
     Button login,register;
     EditText phoneNum,password;
+    TextView forgetPass;
     CheckBox pass_input;
     SharedPreferences sp;
     @Override
@@ -41,6 +43,7 @@ public class Login_Page extends AppCompatActivity {
     }
     //查找地址
     private void findView(){
+        forgetPass = (TextView) findViewById(R.id.forgetPass);
         phoneNum = (EditText) findViewById(R.id.phoneNum);
         password = (EditText) findViewById(R.id.password);
         login  = (Button) findViewById(R.id.login);
@@ -73,6 +76,16 @@ public class Login_Page extends AppCompatActivity {
     }
     //点击事件
     private void onClick(){
+        forgetPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //跳转到注册页面
+                Intent it = new Intent(mContext,ForgetPassword.class);
+                startActivity(it);
+                overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
+            }
+        });
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
