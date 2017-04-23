@@ -21,7 +21,7 @@
                 android:layout_height="match_parent"
                 android:id="@+id/booklist"
                 android:dividerHeight="10dp"
-                android:divider="#ebecf0"/>
+                android:divider="#ebecf0" />
         </android.support.v4.widget.SwipeRefreshLayout>
         <Button
             android:layout_width="55dp"

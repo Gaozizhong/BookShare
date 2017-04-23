@@ -65,16 +65,16 @@
         android:layout_height="55dp" >
 
         <EditText
+            android:id="@+id/dorm"
             android:layout_width="300dp"
             android:layout_height="55dp"
-            android:ems="10"
-            android:id="@+id/dorm"
-            android:hint="请选择宿舍号"
-            android:selectAllOnFocus="true"
             android:layout_weight="1"
-            android:focusableInTouchMode="false"
+            android:clickable="false"
+            android:ems="10"
             android:focusable="false"
-            android:clickable="false" />
+            android:focusableInTouchMode="false"
+            android:hint="请选择宿舍号"
+            android:selectAllOnFocus="true" />
     </LinearLayout>
 
     <LinearLayout

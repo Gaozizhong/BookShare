@@ -13,6 +13,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
@@ -28,6 +30,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +47,7 @@ import java.util.List;
 
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.adapter.MyAdapter;
+import cn.a1949science.www.bookshare.adapter.myAdapterRecyclerView;
 import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean.Shared_Info;
 import cn.a1949science.www.bookshare.bean._User;
@@ -772,16 +776,14 @@ public class MenuActivity extends AppCompatActivity
         //查找出有ownerNum的信息
         query1.addWhereEqualTo("BeShared", false);
         //列表中不显示自己分享的书
-        /*_User bmobUser = BmobUser.getCurrentUser(_User.class);
+        _User bmobUser = BmobUser.getCurrentUser(_User.class);
         String username = bmobUser.getUsername();
-        query.addWhereNotEqualTo("ownerName", username);*/
+        query1.addWhereNotEqualTo("ownerName", username);
         query1.setLimit(50);
-        //query1.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
         query1.findObjects(new FindListener<Book_Info>() {
             @Override
             public void done(final List<Book_Info> list, BmobException e) {
                 if (e == null) {
-                    //Toast.makeText(mContext, "查询成功：共" + list.size() + "条数据。", Toast.LENGTH_SHORT).show();
                     final int[] bookNum = new int[list.size()];
                     for (int i=0;i<list.size();i++) {
                         bookNum[i] = list.get(i).getBookNum();
