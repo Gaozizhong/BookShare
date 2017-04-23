@@ -5,98 +5,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="cn.a1949science.www.bookshare.activity.RegisterPage"
-    android:gravity="center"
+    android:gravity="center_horizontal"
     android:background="@mipmap/login">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="300dp"
-        android:layout_height="55dp">
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="55dp"
-            android:ems="10"
-            android:id="@+id/name"
-            android:hint="请输入姓名"
-            android:selectAllOnFocus="true"
-            android:layout_weight="1" />
-    </LinearLayout>
+    <include layout="@layout/bar_main_title"/>
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="300dp"
-        android:layout_height="55dp" >
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="55dp"
-            android:ems="10"
-            android:id="@+id/gender"
-            android:hint="请选择性别"
-            android:selectAllOnFocus="true"
-            android:layout_weight="1"
-            android:clickable="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="300dp"
-        android:layout_height="55dp" >
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="55dp"
-            android:ems="10"
-            android:id="@+id/school"
-            android:hint="请选择学校"
-            android:selectAllOnFocus="true"
-            android:layout_weight="1"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:clickable="false" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="300dp"
-        android:layout_height="55dp" >
-
-        <EditText
-            android:id="@+id/dorm"
-            android:layout_width="300dp"
-            android:layout_height="55dp"
-            android:layout_weight="1"
-            android:clickable="false"
-            android:ems="10"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:hint="请选择宿舍号"
-            android:selectAllOnFocus="true" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="300dp"
-        android:layout_height="55dp" >
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="55dp"
-            android:ems="10"
-            android:id="@+id/Class"
-            android:hint="请选择年级"
-            android:selectAllOnFocus="true"
-            android:layout_weight="1"
-            android:clickable="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
+        android:layout_marginTop="100dp"
         android:layout_width="300dp"
         android:layout_height="wrap_content">
 
@@ -187,7 +103,7 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="300dp"
         android:layout_height="55dp"
-        android:text="确认注册"
+        android:text="下一步"
         android:id="@+id/registerOk"
         android:textSize="20sp" />
 

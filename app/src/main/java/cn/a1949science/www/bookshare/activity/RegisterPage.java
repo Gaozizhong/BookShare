@@ -1,15 +1,15 @@
 package cn.a1949science.www.bookshare.activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import cn.a1949science.www.bookshare.R;
@@ -22,12 +22,12 @@ import cn.bmob.v3.Bmob;
 import cn.bmob.v3.listener.SaveListener;
 
 public class RegisterPage extends AppCompatActivity {
-
     Context mContext = RegisterPage.this;
     Button getCode,registerOk;
-    EditText name,gender,school,dorm,Class,phoneNum,code,password,password2;
+    EditText phoneNum,code,password,password2;
     MyCountTimer timer;
-    boolean sex1;
+    Toolbar toolbar;
+    TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,18 +36,22 @@ public class RegisterPage extends AppCompatActivity {
         Bmob.initialize(this, "13d736220ecc496d7dcb63c7cf918ba7");
         BmobSMS.initialize(mContext,"13d736220ecc496d7dcb63c7cf918ba7");
 
-
         initView();
         onClick();
     }
 
     //查找地址
     private void initView(){
-        name = (EditText) findViewById(R.id.name);
-        gender = (EditText) findViewById(R.id.gender);
-        school = (EditText) findViewById(R.id.school);
-        dorm = (EditText) findViewById(R.id.dorm);
-        Class = (EditText) findViewById(R.id.Class);
+        title = (TextView) findViewById(R.id.title);
+        title.setText("注册");
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
+            }
+        });
         phoneNum = (EditText) findViewById(R.id.phoneNum);
         code = (EditText) findViewById(R.id.code);
         getCode = (Button) findViewById(R.id.getCode);
@@ -112,11 +116,6 @@ public class RegisterPage extends AppCompatActivity {
         registerOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if (TextUtils.isEmpty(name.getText().toString())) {
-                    Toast.makeText(mContext, "用户名不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 if (TextUtils.isEmpty(password.getText().toString())) {
                     Toast.makeText(mContext, "密码不能为空", Toast.LENGTH_SHORT).show();
                     return;
@@ -153,142 +152,18 @@ public class RegisterPage extends AppCompatActivity {
             }
         });
 
-        //选择性别
-        gender.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                final String[] sex = {"男","女"};
-                builder.setSingleChoiceItems(sex, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (sex[i].equals("男")) {
-                            sex1 = true;
-                        } else {
-                            sex1 = false;
-                        }
-                        gender.setText(sex[i]);
-                        dialogInterface.dismiss();
-                    }
-                });
-                builder.show();
-            }
-        });
-
-        //选择学校
-        school.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                final String[] schoolText = {"河北工业大学——北辰校区","河北工业大学——红桥校区"};
-                builder.setSingleChoiceItems(schoolText, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        school.setText(schoolText[i]);
-                        dialogInterface.dismiss();
-                    }
-                });
-                builder.show();
-            }
-        });
-
-        //选择宿舍号
-        dorm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final AlertDialog.Builder builder1 = new AlertDialog.Builder(mContext);
-                final String[] dromText = {"西一","西二","西三","西四","西五",
-                        "东一","东二","东三","东四", "东五","东六", "东七","东八","东九",
-                        "其他"};
-                builder1.setSingleChoiceItems(dromText, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dorm.setText(dromText[i]);
-
-                        final AlertDialog.Builder builder2 = new AlertDialog.Builder(mContext);
-                        final String[] drom2Text = {"A","B"};
-                        builder2.setSingleChoiceItems(drom2Text, 0, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dorm.setText(dorm.getText().toString()+drom2Text[i]);
-
-                                final AlertDialog.Builder builder3 = new AlertDialog.Builder(mContext);
-                                final String[] drom3Text = {"1","2","3","4","5"};
-                                builder3.setSingleChoiceItems(drom3Text, 0, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        dorm.setText(dorm.getText().toString()+drom3Text[i]);
-
-                                        final AlertDialog.Builder builder4 = new AlertDialog.Builder(mContext);
-                                        final String[] drom4Text = {"01","02","03","04","05","06","07","08","09","10"
-                                                ,"11","12","13","14","15","16","17","18","19","20"
-                                                ,"21","22","23","24","25","26","27","28","29","30"
-                                                ,"31","32","33","34","35","36","37","38","39","40"
-                                                ,"41","42","43","44","45","46","47","48","49","50"
-                                                ,"51","52","53","54","55","56","57","58","59","60"
-                                                ,"61","62","63","64","65","66","67","68","69","70"};
-                                        builder4.setSingleChoiceItems(drom4Text, 0, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                dorm.setText(dorm.getText().toString()+drom4Text[i]);
-                                                dialogInterface.dismiss();
-                                            }
-                                        });
-                                        builder4.show();
-
-                                        dialogInterface.dismiss();
-                                    }
-                                });
-                                builder3.show();
-
-                                dialogInterface.dismiss();
-                            }
-                        });
-                        builder2.show();
-
-                        dialogInterface.dismiss();
-                    }
-                });
-                builder1.show();
-            }
-        });
-
-        Class.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                final String[] classsText = {"大一","大二","大三","大四","研一","研二","研三","博士"};
-                builder.setSingleChoiceItems(classsText, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Class.setText(classsText[i]);
-                        dialogInterface.dismiss();
-                    }
-                });
-                builder.show();
-            }
-        });
 
 
     }
 
     //注册
     private void registerUser(){
-
         //注册
         final _User user = new _User();
-        user.setUsername(name.getText().toString());
-        user.setUsersex(sex1);
-        user.setUserSchool(school.getText().toString());
-        user.setUserDorm(dorm.getText().toString());
-        user.setUserClass(Class.getText().toString());
         user.setMobilePhoneNumber(phoneNum.getText().toString());
         user.setPassword(password.getText().toString());
         user.setNickname(phoneNum.getText().toString());
         user.setNeedReturn(false);
-        /*String picPath = "http://bmob-cdn-7908.b0.upaiyun.com/2017/03/28/b488323cae1c474eb124ec07b941482a.png";
-        BmobFile bmobFile = new BmobFile(new File(picPath));
-        user.setFavicon(bmobFile);*/
 
         user.signUp(new SaveListener<_User>() {
             @Override
