@@ -38,8 +38,6 @@ public class User_Info extends AppCompatActivity {
     ImageView favicon;
     TextView nickname;
     String picturePath="";
-    //定义一个保存图片的File变量
-    private File imageFile = null;
     private com.lzy.imagepicker.ImagePicker imagePicker;
     BmobFile bmobFile;
     Toolbar toolbar;

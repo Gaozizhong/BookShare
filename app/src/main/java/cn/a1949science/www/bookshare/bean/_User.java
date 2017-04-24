@@ -34,6 +34,8 @@ public class _User extends BmobUser {
     private String nickname;
     //用户头像
     private BmobFile favicon;
+    //用户学生证照片
+    private BmobFile StudentCard;
 
     public Integer getUserNum(){return userNum;}
     public void setUserNum(Integer userNum){this.userNum =  userNum;}
@@ -77,5 +79,8 @@ public class _User extends BmobUser {
 
     public BmobFile getFavicon(){return favicon;}
     public void setFavicon(BmobFile favicon){this.favicon =  favicon;}
+
+    public BmobFile getStudentCard(){return StudentCard;}
+    public void setStudentCard(BmobFile StudentCard){this.StudentCard =  StudentCard;}
 
 }

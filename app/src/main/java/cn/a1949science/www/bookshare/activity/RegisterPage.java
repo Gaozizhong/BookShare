@@ -1,6 +1,7 @@
 package cn.a1949science.www.bookshare.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -142,38 +143,36 @@ public class RegisterPage extends AppCompatActivity {
                     public void done(BmobException e) {
                         if (e == null) {
                             registerUser();
-
                         } else {
                             Toast.makeText(mContext, "验证失败", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-
             }
         });
-
-
-
     }
 
     //注册
     private void registerUser(){
         //注册
         final _User user = new _User();
+        user.setUsername("123");
         user.setMobilePhoneNumber(phoneNum.getText().toString());
         user.setPassword(password.getText().toString());
         user.setNickname(phoneNum.getText().toString());
         user.setNeedReturn(false);
 
         user.signUp(new SaveListener<_User>() {
+
             @Override
-            public void done(_User s, cn.bmob.v3.exception.BmobException e) {
+            public void done(_User user, cn.bmob.v3.exception.BmobException e) {
                 if (e == null) {
-                    Toast.makeText(mContext, "注册成功！", Toast.LENGTH_LONG).show();
+                    Intent it = new Intent(mContext,RegisterPage2.class);
+                    startActivity(it);
                     finish();
                     overridePendingTransition(R.anim.slide_left_out,R.anim.slide_right_in);
                 } else {
-                    Toast.makeText(mContext, "手机号已被注册！", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "手机号已被注册！"+e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });

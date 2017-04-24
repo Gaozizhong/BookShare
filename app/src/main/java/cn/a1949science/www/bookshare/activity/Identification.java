@@ -2,22 +2,36 @@ package cn.a1949science.www.bookshare.activity;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.lzy.imagepicker.bean.ImageItem;
+import com.lzy.imagepicker.ui.ImageGridActivity;
+import com.lzy.imagepicker.view.CropImageView;
+
+import java.io.File;
+import java.util.ArrayList;
+
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean._User;
+import cn.a1949science.www.bookshare.widget.GlideImageLoader;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
+import cn.bmob.v3.listener.UploadFileListener;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 public class Identification extends AppCompatActivity implements View.OnClickListener{
     Context mContext = Identification.this;
@@ -25,10 +39,15 @@ public class Identification extends AppCompatActivity implements View.OnClickLis
     Button updateImage,afterThat,certificationOk;
     EditText name,gender,school,Class;
     boolean sex1;
+    private com.lzy.imagepicker.ImagePicker imagePicker;
+    String picturePath="";
+    BmobFile bmobFile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_identification);
+        imagePicker = com.lzy.imagepicker.ImagePicker.getInstance();
+        imagePicker.setImageLoader(new GlideImageLoader());
         initView();
     }
 
@@ -59,8 +78,11 @@ public class Identification extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.updateImage:
+                updateImg();
                 break;
             case R.id.afterThat:
+                finish();
+                overridePendingTransition(R.anim.slide_left_out,R.anim.slide_right_in);
                 break;
             case R.id.certificationOk:
                 certification();
@@ -77,6 +99,86 @@ public class Identification extends AppCompatActivity implements View.OnClickLis
                 selectClass();
                 break;
         }
+    }
+
+    private void updateImg() {
+        imagePicker.setImageLoader(new GlideImageLoader());
+        imagePicker.setMultiMode(false);
+        imagePicker.setStyle(CropImageView.Style.RECTANGLE);
+        Integer width = 1000;
+        Integer height = 1000;
+        width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, width, getResources().getDisplayMetrics());
+        height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, getResources().getDisplayMetrics());
+        imagePicker.setFocusWidth(width);
+        imagePicker.setFocusHeight(height);
+        imagePicker.setOutPutX(800);
+        imagePicker.setOutPutY(800);
+
+        Intent intent1 = new Intent(this, ImageGridActivity.class);
+        startActivityForResult(intent1, 100);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == com.lzy.imagepicker.ImagePicker.RESULT_CODE_ITEMS) {
+            if (data != null && requestCode == 100) {
+                ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(com.lzy.imagepicker.ImagePicker.EXTRA_RESULT_ITEMS);
+                picturePath = images.get(0).path;
+                updateFile();
+            } else {
+                Toast.makeText(this, "没有数据", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    //上传图片
+    private void updateFile() {
+        //用Luban压缩图片
+        Luban.get(mContext)
+                .load(new File(picturePath))
+                .putGear(Luban.THIRD_GEAR)
+                .setCompressListener(new OnCompressListener() {
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        bmobFile = new BmobFile(file);
+                        bmobFile.uploadblock(new UploadFileListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                if (e == null) {
+                                    //更新数据
+                                    _User newUser = new _User();
+                                    newUser.setStudentCard(bmobFile);
+                                    BmobUser bmobUser = BmobUser.getCurrentUser();
+                                    newUser.update(bmobUser.getObjectId(), new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                            if (e == null) {
+                                                Toast.makeText(mContext, "学生证上传成功", Toast.LENGTH_SHORT).show();
+                                                finish();
+                                            } else {
+                                                Toast.makeText(mContext, "学生证上传失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    Toast.makeText(mContext, "学生证上传失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                }).launch();
+
     }
 
     private void selectClass() {

@@ -1,9 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@mipmap/login"
     tools:context="cn.a1949science.www.bookshare.activity.RegisterPage2">
 
-</android.support.constraint.ConstraintLayout>
+    <include layout="@layout/bar_main_title"/>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_weight="1"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content">
+
+        <cn.a1949science.www.bookshare.widget.CircleImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/favicon"
+            android:src="@drawable/favicon"/>
+
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="55dp"
+            android:ems="10"
+            android:id="@+id/nickname"
+            android:hint="请输入昵称"
+            android:selectAllOnFocus="true" />
+    </LinearLayout>
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="20dp"
+        android:text="完成注册"
+        android:id="@+id/registerOk"
+        android:textSize="20sp" />
+</LinearLayout>
