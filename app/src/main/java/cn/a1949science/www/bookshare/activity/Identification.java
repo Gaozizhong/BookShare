@@ -240,7 +240,7 @@ public class Identification extends AppCompatActivity implements View.OnClickLis
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    Toast.makeText(mContext, "实名认证成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "实名认证成功，请等待后台验证", Toast.LENGTH_SHORT).show();
                     finish();
                     overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
 

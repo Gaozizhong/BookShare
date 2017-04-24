@@ -83,7 +83,7 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="300dp"
         android:layout_height="55dp"
-        android:text="上传图片"
+        android:text="上传学生证照片"
         android:id="@+id/updateImage"
         android:textSize="20sp" />
     <LinearLayout
