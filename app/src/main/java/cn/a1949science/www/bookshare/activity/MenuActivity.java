@@ -263,7 +263,6 @@ public class MenuActivity extends AppCompatActivity
                         display();
                         ifNeedReturn();
                         displayList();
-                        //queryShareInfo();
                         refresh.setRefreshing(false);
                     }
                 });

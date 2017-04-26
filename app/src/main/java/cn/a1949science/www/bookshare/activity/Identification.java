@@ -72,6 +72,7 @@ public class Identification extends AppCompatActivity implements View.OnClickLis
         school = (EditText) findViewById(R.id.school);
         school.setOnClickListener(this);
         Class = (EditText) findViewById(R.id.Class);
+        Class.setOnClickListener(this);
     }
 
     @Override
@@ -82,7 +83,7 @@ public class Identification extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.afterThat:
                 finish();
-                overridePendingTransition(R.anim.slide_left_out,R.anim.slide_right_in);
+                overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
                 break;
             case R.id.certificationOk:
                 certification();
@@ -96,6 +97,7 @@ public class Identification extends AppCompatActivity implements View.OnClickLis
                 selectSchool();
                 break;
             case R.id.Class:
+                //选择年级
                 selectClass();
                 break;
         }

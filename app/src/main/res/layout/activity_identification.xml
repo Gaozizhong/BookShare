@@ -21,7 +21,7 @@
             android:layout_height="55dp"
             android:ems="10"
             android:id="@+id/name"
-            android:hint="请输入姓名"
+            android:hint="请输入真实姓名"
             android:selectAllOnFocus="true"
             android:layout_weight="1" />
     </LinearLayout>

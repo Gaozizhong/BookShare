@@ -36,6 +36,8 @@ public class _User extends BmobUser {
     private BmobFile favicon;
     //用户学生证照片
     private BmobFile StudentCard;
+    //用户是否通过认证
+    private Boolean certificationOk;
 
     public Integer getUserNum(){return userNum;}
     public void setUserNum(Integer userNum){this.userNum =  userNum;}
@@ -82,5 +84,8 @@ public class _User extends BmobUser {
 
     public BmobFile getStudentCard(){return StudentCard;}
     public void setStudentCard(BmobFile StudentCard){this.StudentCard =  StudentCard;}
+
+    public Boolean getCertificationOk() {return certificationOk;}
+    public void setCertificationOk(Boolean certificationOk){this.certificationOk = certificationOk;}
 
 }

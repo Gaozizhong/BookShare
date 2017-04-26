@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -168,8 +169,6 @@ public class Book_detail extends AppCompatActivity {
                     });
                     ifLike = true;
                 } else {
-                    /*likeBtn.setImageResource(R.mipmap.favourite);
-                    ifLike = false;*/
                     Toast.makeText(mContext, "请到菜单中编辑所有喜爱书籍", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -199,8 +198,6 @@ public class Book_detail extends AppCompatActivity {
 
                     ifRead = true;
                 } else {
-                    /*readBtn.setImageResource(R.mipmap.not_seen);
-                    ifRead = false;*/
                     Toast.makeText(mContext, "请到菜单中编辑所有看过书籍", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -210,7 +207,8 @@ public class Book_detail extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 _User bmobUser = BmobUser.getCurrentUser(_User.class);
-                if (!bmobUser.getNeedReturn()) {
+
+               /* if (!bmobUser.getNeedReturn()) {
                     AlertDialog dlg = new AlertDialog.Builder(mContext)
                             .setTitle("确认借此书？")
                             .setMessage("确定后请关注书主同意情况，若同意，请电话联系书主。")
@@ -290,8 +288,113 @@ public class Book_detail extends AppCompatActivity {
                             .setTitle("你已经借过一本书了，请看完、归还后再借书吧！(可以点击左下角喜欢按钮，以便下次更快借书)")
                             .create();
                     dlg.show();
-                }
+                }*/
 
+
+
+                if (bmobUser.getCertificationOk()) {
+                    if (!bmobUser.getNeedReturn()) {
+                        AlertDialog dlg = new AlertDialog.Builder(mContext)
+                                .setTitle("确认借此书？")
+                                .setMessage("确定后请关注书主同意情况，若同意，请电话联系书主。")
+                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                })
+                                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        final ProgressDialog progress = new ProgressDialog(mContext);
+                                        progress.setMessage("操作中...");
+                                        progress.setCanceledOnTouchOutside(false);
+                                        progress.show();
+                                        //更新此书的状态
+                                        Book_Info newBook = new Book_Info();
+                                        newBook.setBeShared(true);
+                                        newBook.update(objectId, new UpdateListener() {
+                                            @Override
+                                            public void done(BmobException e) {
+                                                if (e == null) {
+                                                    //Toast.makeText(mContext, "更新信息成功", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    Toast.makeText(mContext, "更新信息失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                                        //更新用户借书状态
+                                        _User newUser = new _User();
+                                        newUser.setNeedReturn(true);
+                                        BmobUser bmobUser = BmobUser.getCurrentUser();
+                                        newUser.update(bmobUser.getObjectId(), new UpdateListener() {
+                                            @Override
+                                            public void done(BmobException e) {
+                                                if (e == null) {
+                                                    //Toast.makeText(mContext, "更新用户信息成功", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    Toast.makeText(mContext, "更新用户信息失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+
+                                        Shared_Info sharedInfo = new Shared_Info();
+                                        _User bmobUser1 = BmobUser.getCurrentUser(_User.class);
+                                        Integer userNum = bmobUser1.getUserNum();
+                                        sharedInfo.setBookNum(booknum1);
+                                        sharedInfo.setUserNum(userNum);
+                                        sharedInfo.setOwnerName(OwnerName1);
+                                        sharedInfo.setIfAgree(false);
+                                        sharedInfo.setIfLoan(false);
+                                        sharedInfo.setIfFinish(false);
+                                        sharedInfo.setIfAffirm(false);
+                                        sharedInfo.setIfReturn(false);
+                                        sharedInfo.setIfRefuse(false);
+                                        sharedInfo.save(new SaveListener<String>() {
+                                            @Override
+                                            public void done(String s, BmobException e) {
+                                                if (e == null) {
+                                                    progress.dismiss();
+                                                    borrowBtn.setText("等待书主响应");
+                                                    borrowBtn.setClickable(false);
+                                                    borrowBtn.setBackgroundColor(getResources().getColor(black));
+                                                    //Toast.makeText(mContext, "借书信息创建成功", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    Toast.makeText(mContext, "借书信息创建失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                                    }
+                                })
+                                .create();
+                        dlg.show();
+                    } else {
+                        AlertDialog dlg = new AlertDialog.Builder(mContext)
+                                .setTitle("你已经借过一本书了，请看完、归还后再借书吧！(可以点击左下角喜欢按钮，以便下次更快借书)")
+                                .create();
+                        dlg.show();
+                    }
+                } else{
+                    AlertDialog dlg = new AlertDialog.Builder(mContext)
+                            .setTitle("请进行实名认证")
+                            .setMessage("请进行实名认证")
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            })
+                            .setPositiveButton("去认证", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Intent it = new Intent(mContext, Identification.class);
+                                    startActivity(it);
+                                    overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
+                                }
+                            })
+                            .create();
+                    dlg.show();
+                }
 
             }
         });
