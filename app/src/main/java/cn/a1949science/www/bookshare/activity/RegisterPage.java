@@ -64,7 +64,7 @@ public class RegisterPage extends AppCompatActivity {
     //按钮效果
     private class MyCountTimer extends CountDownTimer {
 
-        public MyCountTimer(long millisInFuture, long countDownInterval) {
+        MyCountTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
         @Override
@@ -161,6 +161,7 @@ public class RegisterPage extends AppCompatActivity {
         user.setPassword(password.getText().toString());
         user.setNickname(phoneNum.getText().toString());
         user.setNeedReturn(false);
+        user.setCertificationOk(false);
 
         user.signUp(new SaveListener<_User>() {
 

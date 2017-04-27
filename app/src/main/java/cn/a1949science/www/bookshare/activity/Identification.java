@@ -39,15 +39,10 @@ public class Identification extends AppCompatActivity implements View.OnClickLis
     Button updateImage,afterThat,certificationOk;
     EditText name,gender,school,Class;
     boolean sex1;
-    private com.lzy.imagepicker.ImagePicker imagePicker;
-    String picturePath="";
-    BmobFile bmobFile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_identification);
-        imagePicker = com.lzy.imagepicker.ImagePicker.getInstance();
-        imagePicker.setImageLoader(new GlideImageLoader());
         initView();
     }
 
@@ -79,7 +74,9 @@ public class Identification extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.updateImage:
-                updateImg();
+                Intent intent = new Intent(mContext, Identification2.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
                 break;
             case R.id.afterThat:
                 finish();
@@ -101,86 +98,6 @@ public class Identification extends AppCompatActivity implements View.OnClickLis
                 selectClass();
                 break;
         }
-    }
-
-    private void updateImg() {
-        imagePicker.setImageLoader(new GlideImageLoader());
-        imagePicker.setMultiMode(false);
-        imagePicker.setStyle(CropImageView.Style.RECTANGLE);
-        Integer width = 1000;
-        Integer height = 1000;
-        width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, width, getResources().getDisplayMetrics());
-        height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, getResources().getDisplayMetrics());
-        imagePicker.setFocusWidth(width);
-        imagePicker.setFocusHeight(height);
-        imagePicker.setOutPutX(800);
-        imagePicker.setOutPutY(800);
-
-        Intent intent1 = new Intent(this, ImageGridActivity.class);
-        startActivityForResult(intent1, 100);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == com.lzy.imagepicker.ImagePicker.RESULT_CODE_ITEMS) {
-            if (data != null && requestCode == 100) {
-                ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(com.lzy.imagepicker.ImagePicker.EXTRA_RESULT_ITEMS);
-                picturePath = images.get(0).path;
-                updateFile();
-            } else {
-                Toast.makeText(this, "没有数据", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    //上传图片
-    private void updateFile() {
-        //用Luban压缩图片
-        Luban.get(mContext)
-                .load(new File(picturePath))
-                .putGear(Luban.THIRD_GEAR)
-                .setCompressListener(new OnCompressListener() {
-                    @Override
-                    public void onStart() {
-
-                    }
-
-                    @Override
-                    public void onSuccess(File file) {
-                        bmobFile = new BmobFile(file);
-                        bmobFile.uploadblock(new UploadFileListener() {
-                            @Override
-                            public void done(BmobException e) {
-                                if (e == null) {
-                                    //更新数据
-                                    _User newUser = new _User();
-                                    newUser.setStudentCard(bmobFile);
-                                    BmobUser bmobUser = BmobUser.getCurrentUser();
-                                    newUser.update(bmobUser.getObjectId(), new UpdateListener() {
-                                        @Override
-                                        public void done(BmobException e) {
-                                            if (e == null) {
-                                                Toast.makeText(mContext, "学生证上传成功", Toast.LENGTH_SHORT).show();
-                                                finish();
-                                            } else {
-                                                Toast.makeText(mContext, "学生证上传失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });
-                                } else {
-                                    Toast.makeText(mContext, "学生证上传失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-                }).launch();
-
     }
 
     private void selectClass() {
@@ -230,6 +147,19 @@ public class Identification extends AppCompatActivity implements View.OnClickLis
     private void certification() {
         if (TextUtils.isEmpty(name.getText().toString())) {
             Toast.makeText(mContext, "用户名不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(gender.getText().toString())) {
+            Toast.makeText(mContext, "性别不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(school.getText().toString())) {
+            Toast.makeText(mContext, "学校不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(Class.getText().toString())) {
+            Toast.makeText(mContext, "年级不能为空", Toast.LENGTH_SHORT).show();
+            return;
         }
         //更新数据
         BmobUser bmobUser = BmobUser.getCurrentUser();

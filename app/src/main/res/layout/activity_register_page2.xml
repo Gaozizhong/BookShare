@@ -19,7 +19,7 @@
         android:layout_marginTop="20dp"
         android:layout_weight="1"
         android:layout_width="300dp"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp">
 
         <cn.a1949science.www.bookshare.widget.CircleImageView
             android:layout_width="80dp"
@@ -32,7 +32,7 @@
             android:layout_height="55dp"
             android:ems="10"
             android:id="@+id/nickname"
-            android:hint="请输入昵称"
+            android:hint="请输入昵称(默认为手机号)"
             android:selectAllOnFocus="true" />
     </LinearLayout>
     <Button

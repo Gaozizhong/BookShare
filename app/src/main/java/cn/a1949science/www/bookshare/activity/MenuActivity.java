@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -717,7 +718,7 @@ public class MenuActivity extends AppCompatActivity
     }
     //显示头像、昵称、小红点
     private void display() {
-        BmobUser bmobUser = BmobUser.getCurrentUser();
+        BmobUser bmobUser = BmobUser.getCurrentUser(_User.class);
         BmobQuery<_User> query = new BmobQuery<>();
         query.getObject(bmobUser.getObjectId(), new QueryListener<_User>() {
             @Override
@@ -730,13 +731,12 @@ public class MenuActivity extends AppCompatActivity
                             .centerCrop()
                             .into(favicon2);
                 } else {
-                    Toast.makeText(mContext, "昵称、头像显示失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, "昵称、头像显示失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
         final _User bmobUser2 = BmobUser.getCurrentUser(_User.class);
-
         //查询是否有借书人为自己的借书信息
         BmobQuery<Shared_Info> query1 = new BmobQuery<>();
         query1.addWhereEqualTo("UserNum", bmobUser2.getUserNum());

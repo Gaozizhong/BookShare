@@ -117,7 +117,8 @@
         <activity android:name=".activity.BookDetailCan" />
         <activity android:name=".activity.ForgetPassword" />
         <activity android:name=".activity.RegisterPage2" />
-        <activity android:name=".activity.Identification"></activity>
+        <activity android:name=".activity.Identification" />
+        <activity android:name=".activity.Identification2"></activity>
     </application>
 
 </manifest>

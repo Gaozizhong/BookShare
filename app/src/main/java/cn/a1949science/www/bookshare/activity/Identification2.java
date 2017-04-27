@@ -9,12 +9,9 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.lzy.imagepicker.*;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.lzy.imagepicker.view.CropImageView;
@@ -24,7 +21,6 @@ import java.util.ArrayList;
 
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean._User;
-import cn.a1949science.www.bookshare.widget.CircleImageView;
 import cn.a1949science.www.bookshare.widget.GlideImageLoader;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
@@ -34,30 +30,24 @@ import cn.bmob.v3.listener.UploadFileListener;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
-public class RegisterPage2 extends AppCompatActivity implements View.OnClickListener{
-    Context mContext = RegisterPage2.this;
+public class Identification2 extends AppCompatActivity implements View.OnClickListener{
+    Context mContext = Identification2.this;
     Toolbar toolbar;
-    TextView title;
-    CircleImageView favicon;
-    EditText nickname;
-    Button registerOk;
+    RelativeLayout update;
+    Button updateOk;
     private com.lzy.imagepicker.ImagePicker imagePicker;
     String picturePath="";
     BmobFile bmobFile;
-    BmobUser bmobUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register_page2);
+        setContentView(R.layout.activity_identification2);
         imagePicker = com.lzy.imagepicker.ImagePicker.getInstance();
         imagePicker.setImageLoader(new GlideImageLoader());
         initView();
     }
 
     private void initView() {
-        bmobUser = BmobUser.getCurrentUser();
-        title = (TextView) findViewById(R.id.title);
-        title.setText("注册");
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,57 +56,29 @@ public class RegisterPage2 extends AppCompatActivity implements View.OnClickList
                 overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
             }
         });
-        nickname = (EditText) findViewById(R.id.nickname);
-        favicon = (CircleImageView) findViewById(R.id.favicon);
-        favicon.setOnClickListener(this);
-        registerOk = (Button) findViewById(R.id.registerOk);
-        registerOk.setOnClickListener(this);
+        update = (RelativeLayout) findViewById(R.id.updateImg);
+        update.setOnClickListener(this);
+        updateOk = (Button) findViewById(R.id.updateOk);
+        updateOk.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.favicon:
-                updateFavicon();
+            case R.id.updateImg:
+                updateImg();
                 break;
-            case R.id.registerOk:
-                register();
+            case R.id.updateOk:
+                updateFile();
                 break;
         }
     }
 
-    private void register() {
-        if (TextUtils.isEmpty(nickname.getText().toString())) {
-            nickname.setText(bmobUser.getMobilePhoneNumber());
-        }if (TextUtils.isEmpty(picturePath)) {
-            Toast.makeText(mContext, "头像不能为空", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        updateFile();
-        //更新数据
-        _User newUser = new _User();
-        newUser.setNickname(nickname.getText().toString());
-        newUser.update(bmobUser.getObjectId(), new UpdateListener() {
-            @Override
-            public void done(BmobException e) {
-                if (e == null) {
-                    Intent it = new Intent(mContext,Identification.class);
-                    startActivity(it);
-                    finish();
-                    overridePendingTransition(R.anim.slide_left_out,R.anim.slide_right_in);
-                } else {
-                    Toast.makeText(mContext, "注册失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-    }
-
-    private void updateFavicon() {
+    private void updateImg() {
         imagePicker.setImageLoader(new GlideImageLoader());
         imagePicker.setMultiMode(false);
         imagePicker.setStyle(CropImageView.Style.RECTANGLE);
-        Integer width = 200;
+        Integer width = 300;
         Integer height = 200;
         width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, width, getResources().getDisplayMetrics());
         height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, getResources().getDisplayMetrics());
@@ -144,6 +106,10 @@ public class RegisterPage2 extends AppCompatActivity implements View.OnClickList
 
     //上传图片
     private void updateFile() {
+        if (TextUtils.isEmpty(picturePath)) {
+            Toast.makeText(mContext, "图片不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
         //用Luban压缩图片
         Luban.get(mContext)
                 .load(new File(picturePath))
@@ -163,21 +129,22 @@ public class RegisterPage2 extends AppCompatActivity implements View.OnClickList
                                 if (e == null) {
                                     //更新数据
                                     _User newUser = new _User();
-                                    newUser.setFavicon(bmobFile);
+                                    newUser.setStudentCard(bmobFile);
                                     BmobUser bmobUser = BmobUser.getCurrentUser();
                                     newUser.update(bmobUser.getObjectId(), new UpdateListener() {
                                         @Override
                                         public void done(BmobException e) {
                                             if (e == null) {
-                                                Toast.makeText(mContext, "头像修改成功", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(mContext, "学生证上传成功", Toast.LENGTH_SHORT).show();
                                                 finish();
+                                                overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
                                             } else {
-                                                Toast.makeText(mContext, "头像修改失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(mContext, "学生证上传失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         }
                                     });
                                 } else {
-                                    Toast.makeText(mContext, "头像上传失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, "学生证上传失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -190,4 +157,5 @@ public class RegisterPage2 extends AppCompatActivity implements View.OnClickList
                 }).launch();
 
     }
+
 }
