@@ -16,13 +16,11 @@
             android:id="@+id/refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <cn.a1949science.www.bookshare.widget.LoadMoreListView
+            <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:dividerHeight="10dp"
-                android:divider="#ebecf0"
-                android:id="@+id/booklist2">
-            </cn.a1949science.www.bookshare.widget.LoadMoreListView>
+                android:id="@+id/booklist">
+            </android.support.v7.widget.RecyclerView>
         </android.support.v4.widget.SwipeRefreshLayout>
         <Button
             android:layout_width="55dp"

@@ -89,7 +89,6 @@ public class MenuActivity extends AppCompatActivity
     ImageView favicon;
     CircleImageView favicon2;
     TextView nickname;
-    ListView listview;
     LoadMoreListView listView2;
     boolean clicked  = false;
     String picturePath="";
@@ -100,34 +99,21 @@ public class MenuActivity extends AppCompatActivity
     BmobFile bmobFile;
     private com.lzy.imagepicker.ImagePicker imagePicker;
     SwipeRefreshLayout refresh;
-    int number_of_pages=0;
+    RecyclerView recyclerView;
+    int number_of_pages=1,number_of_no=0;
     List<Book_Info> bookInfoList= null;
-    MyAdapter adapter;
+    myAdapterRecyclerView adapter;
+    private LinearLayoutManager mLayoutManager;
+    private int lastVisibleItem ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Bmob.initialize(this, "13d736220ecc496d7dcb63c7cf918ba7");
-        //只在wifi下更新
-        BmobUpdateAgent.setUpdateOnlyWifi(true);
-        BmobUpdateAgent.setUpdateListener(new BmobUpdateListener() {
-            @Override
-            public void onUpdateReturned(int i, UpdateResponse updateResponse) {
-                if (i == UpdateStatus.Yes) {
-                    //Toast.makeText(mContext, "版本有更新", Toast.LENGTH_SHORT).show();
-                    BmobUpdateAgent.update(mContext);
-                }else if(i == UpdateStatus.No){
-                    Toast.makeText(mContext, "版本无更新", Toast.LENGTH_SHORT).show();
-                }else if(i==UpdateStatus.IGNORED){
-                    Toast.makeText(mContext, "该版本已被忽略更新", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        imagePicker = ImagePicker.getInstance();
-        imagePicker.setImageLoader(new GlideImageLoader());
-
+        bmobUpdate();
         findView();
+        setListener();
         onClick();
         displayList();
         display();
@@ -158,46 +144,22 @@ public class MenuActivity extends AppCompatActivity
         favicon2 = (CircleImageView) headerLayout.findViewById(R.id.favicon2);
     }
 
-    private void loadMore() {
-        new Thread(){
+    //自动更新
+    private void bmobUpdate() {
+        //只在wifi下更新
+        BmobUpdateAgent.setUpdateOnlyWifi(true);
+        BmobUpdateAgent.setUpdateListener(new BmobUpdateListener() {
             @Override
-            public void run() {
-                super.run();
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            public void onUpdateReturned(int i, UpdateResponse updateResponse) {
+                if (i == UpdateStatus.Yes) {
+                    BmobUpdateAgent.update(mContext);
+                }else if(i == UpdateStatus.No){
+                    Toast.makeText(mContext, "版本无更新", Toast.LENGTH_SHORT).show();
+                }else if(i==UpdateStatus.IGNORED){
+                    Toast.makeText(mContext, "该版本已被忽略更新", Toast.LENGTH_SHORT).show();
                 }
-                //查找book
-                BmobQuery<Book_Info> query1 = new BmobQuery<>();
-                //查找出有ownerNum的信息
-                query1.addWhereEqualTo("BeShared", false);
-                //列表中不显示自己分享的书
-                _User bmobUser = BmobUser.getCurrentUser(_User.class);
-                String username = bmobUser.getUsername();
-                query1.addWhereNotEqualTo("ownerName", username);
-                query1.setSkip(10 * number_of_pages);
-                query1.setLimit(10);
-                number_of_pages=number_of_pages+1;
-                query1.findObjects(new FindListener<Book_Info>() {
-                    @Override
-                    public void done(final List<Book_Info> list, BmobException e) {
-                        if (e == null) {
-                            bookInfoList.addAll(list);
-                        } else {
-                            Toast.makeText(mContext, "查询失败。"+e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.notifyDataSetChanged();
-                        listView2.setLoadCompleted();
-                    }
-                });
             }
-        }.start();
+        });
     }
 
     @Override
@@ -282,31 +244,96 @@ public class MenuActivity extends AppCompatActivity
     }
     //查找地址
     private void findView() {
+        imagePicker = ImagePicker.getInstance();
+        imagePicker.setImageLoader(new GlideImageLoader());
         //下拉刷新
         refresh = (SwipeRefreshLayout) findViewById(R.id.refresh);
-        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshBookList();
-            }
-        });
+        recyclerView = (RecyclerView) findViewById(R.id.booklist);
+        mLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(mLayoutManager);
         RedPoint= (ImageButton) findViewById(R.id.RedPoint);
         shortCut = (ImageButton) findViewById(R.id.shortcut);
-        //listview = (ListView) findViewById(R.id.booklist);
         borrowBtn = (Button) findViewById(R.id.borrowBtn);
         loanBtn = (Button) findViewById(R.id.loanBtn);
         shareBtn = (Button) findViewById(R.id.shareBtn);
         returnBtn = (Button) findViewById(R.id.returnBtn);
         receiveBtn = (Button) findViewById(R.id.receiveBtn);
         mine = findViewById(R.id.mine);
-        listView2 = (LoadMoreListView) findViewById(R.id.booklist2);
-        listView2.setOnLoadMoreListener(new LoadMoreListView.OnLoadMoreListener() {
+    }
+
+    private void setListener() {
+        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onloadMore() {
-                loadMore();
+            public void onRefresh() {
+                number_of_pages = 1;
+                refreshBookList();
+            }
+        });
+
+        //recyclerview滚动监听来实现加载更多
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                //0：当前屏幕停止滚动；1时：屏幕在滚动 且 用户仍在触碰或手指还在屏幕上；2时：随用户的操作，屏幕上产生的惯性滑动；
+                // 滑动状态停止并且剩余两个item时自动加载
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem +2>=mLayoutManager.getItemCount()) {
+                    loadBookList();
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                //获取加载的最后一个可见视图在适配器的位置。
+                lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
             }
         });
     }
+
+    private void loadBookList() {
+        refresh.setRefreshing(true);
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //查找book
+                BmobQuery<Book_Info> query1 = new BmobQuery<>();
+                //查找出有ownerNum的信息
+                query1.addWhereEqualTo("BeShared", false);
+                //列表中不显示自己分享的书
+                _User bmobUser = BmobUser.getCurrentUser(_User.class);
+                String username = bmobUser.getUsername();
+                query1.addWhereNotEqualTo("ownerName", username);
+                query1.setSkip(10 * number_of_pages);
+                query1.setLimit(10);
+                number_of_pages=number_of_pages+1;
+                query1.findObjects(new FindListener<Book_Info>() {
+                    @Override
+                    public void done(final List<Book_Info> list, BmobException e) {
+                        if (e == null) {
+                            bookInfoList.addAll(list);
+                        } else {
+                            Toast.makeText(mContext, "查询失败。" + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                        refresh.setRefreshing(false);
+                    }
+                });
+            }
+        }.start();
+    }
+
     //下拉刷新
     private void refreshBookList() {
         new Thread(new Runnable() {
@@ -837,31 +864,10 @@ public class MenuActivity extends AppCompatActivity
             @Override
             public void done(final List<Book_Info> list, BmobException e) {
                 if (e == null) {
-                    final int[] bookNum = new int[list.size()];
-                    for (int i=0;i<list.size();i++) {
-                        bookNum[i] = list.get(i).getBookNum();
-                    }
                     bookInfoList = list;
-                    adapter = new MyAdapter(mContext, bookInfoList);
-                    listView2.setAdapter(adapter);
+                    adapter = new myAdapterRecyclerView(mContext, bookInfoList);
+                    recyclerView.setAdapter(adapter);
 
-                    listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            if (clicked ) {
-                                fold();
-                            }
-                            Bundle data = new Bundle();
-                            //利用Intent传递数据
-                            //data.putString("imageid", list.get(i).getBookPicture().getFileUrl());
-                            data.putInt("booknum",bookNum[i]);
-                            data.putString("objectId",list.get(i).getObjectId());
-                            Intent intent = new Intent(mContext, Book_detail.class);
-                            intent.putExtras(data);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
-                        }
-                    });
                 } else {
                     Toast.makeText(mContext, "查询失败。"+e.getMessage(), Toast.LENGTH_LONG).show();
                 }
