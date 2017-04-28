@@ -54,6 +54,7 @@ import cn.a1949science.www.bookshare.bean.Shared_Info;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.a1949science.www.bookshare.widget.CircleImageView;
 import cn.a1949science.www.bookshare.widget.GlideImageLoader;
+import cn.a1949science.www.bookshare.widget.LoadMoreListView;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -89,6 +90,7 @@ public class MenuActivity extends AppCompatActivity
     CircleImageView favicon2;
     TextView nickname;
     ListView listview;
+    LoadMoreListView listView2;
     boolean clicked  = false;
     String picturePath="";
     private long exitTime = 0;
@@ -98,6 +100,9 @@ public class MenuActivity extends AppCompatActivity
     BmobFile bmobFile;
     private com.lzy.imagepicker.ImagePicker imagePicker;
     SwipeRefreshLayout refresh;
+    int number_of_pages=0;
+    List<Book_Info> bookInfoList= null;
+    MyAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +156,48 @@ public class MenuActivity extends AppCompatActivity
         nickname = (TextView) headerLayout.findViewById(R.id.nickname);
         favicon = (ImageView) headerLayout.findViewById(R.id.favicon);
         favicon2 = (CircleImageView) headerLayout.findViewById(R.id.favicon2);
+    }
+
+    private void loadMore() {
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //查找book
+                BmobQuery<Book_Info> query1 = new BmobQuery<>();
+                //查找出有ownerNum的信息
+                query1.addWhereEqualTo("BeShared", false);
+                //列表中不显示自己分享的书
+                _User bmobUser = BmobUser.getCurrentUser(_User.class);
+                String username = bmobUser.getUsername();
+                query1.addWhereNotEqualTo("ownerName", username);
+                query1.setSkip(10 * number_of_pages);
+                query1.setLimit(10);
+                number_of_pages=number_of_pages+1;
+                query1.findObjects(new FindListener<Book_Info>() {
+                    @Override
+                    public void done(final List<Book_Info> list, BmobException e) {
+                        if (e == null) {
+                            bookInfoList.addAll(list);
+                        } else {
+                            Toast.makeText(mContext, "查询失败。"+e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                        listView2.setLoadCompleted();
+                    }
+                });
+            }
+        }.start();
     }
 
     @Override
@@ -245,13 +292,20 @@ public class MenuActivity extends AppCompatActivity
         });
         RedPoint= (ImageButton) findViewById(R.id.RedPoint);
         shortCut = (ImageButton) findViewById(R.id.shortcut);
-        listview = (ListView) findViewById(R.id.booklist);
+        //listview = (ListView) findViewById(R.id.booklist);
         borrowBtn = (Button) findViewById(R.id.borrowBtn);
         loanBtn = (Button) findViewById(R.id.loanBtn);
         shareBtn = (Button) findViewById(R.id.shareBtn);
         returnBtn = (Button) findViewById(R.id.returnBtn);
         receiveBtn = (Button) findViewById(R.id.receiveBtn);
         mine = findViewById(R.id.mine);
+        listView2 = (LoadMoreListView) findViewById(R.id.booklist2);
+        listView2.setOnLoadMoreListener(new LoadMoreListView.OnLoadMoreListener() {
+            @Override
+            public void onloadMore() {
+                loadMore();
+            }
+        });
     }
     //下拉刷新
     private void refreshBookList() {
@@ -778,7 +832,7 @@ public class MenuActivity extends AppCompatActivity
         _User bmobUser = BmobUser.getCurrentUser(_User.class);
         String username = bmobUser.getUsername();
         query1.addWhereNotEqualTo("ownerName", username);
-        query1.setLimit(50);
+        query1.setLimit(10);
         query1.findObjects(new FindListener<Book_Info>() {
             @Override
             public void done(final List<Book_Info> list, BmobException e) {
@@ -787,9 +841,11 @@ public class MenuActivity extends AppCompatActivity
                     for (int i=0;i<list.size();i++) {
                         bookNum[i] = list.get(i).getBookNum();
                     }
-                    listview.setAdapter(new MyAdapter(mContext,list));
+                    bookInfoList = list;
+                    adapter = new MyAdapter(mContext, bookInfoList);
+                    listView2.setAdapter(adapter);
 
-                    listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                             if (clicked ) {
@@ -806,9 +862,8 @@ public class MenuActivity extends AppCompatActivity
                             overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
                         }
                     });
-                    //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "查询失败。"+e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
