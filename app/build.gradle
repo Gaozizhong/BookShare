@@ -34,7 +34,7 @@ dependencies {
     //图片压缩工具
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
-    compile'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'cn.bmob.android:bmob-sdk:3.5.3'
     compile 'cn.bmob.android:bmob-sms:1.0.1'
     compile 'cn.bmob.android:bmob-im:2.0.5@aar'

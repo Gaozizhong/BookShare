@@ -16,8 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,13 +24,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,14 +42,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.a1949science.www.bookshare.R;
-import cn.a1949science.www.bookshare.adapter.MyAdapter;
 import cn.a1949science.www.bookshare.adapter.myAdapterRecyclerView;
 import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean.Shared_Info;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.a1949science.www.bookshare.widget.CircleImageView;
 import cn.a1949science.www.bookshare.widget.GlideImageLoader;
-import cn.a1949science.www.bookshare.widget.LoadMoreListView;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -83,13 +76,14 @@ public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
     Context mContext = MenuActivity.this;
+    Toolbar toolbar;
+    DrawerLayout drawer;
     Button borrowBtn,loanBtn,shareBtn,returnBtn,receiveBtn;
     Animation animation = null;
     ImageButton shortCut,RedPoint;
     ImageView favicon;
     CircleImageView favicon2;
     TextView nickname;
-    LoadMoreListView listView2;
     boolean clicked  = false;
     String picturePath="";
     private long exitTime = 0;
@@ -119,10 +113,6 @@ public class MenuActivity extends AppCompatActivity
         display();
         ifNeedReturn();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -187,8 +177,10 @@ public class MenuActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-
+        if (id == R.id.action_search) {
+            Intent intent = new Intent(mContext, SearchPage.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -244,6 +236,9 @@ public class MenuActivity extends AppCompatActivity
     }
     //查找地址
     private void findView() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         imagePicker = ImagePicker.getInstance();
         imagePicker.setImageLoader(new GlideImageLoader());
         //下拉刷新
