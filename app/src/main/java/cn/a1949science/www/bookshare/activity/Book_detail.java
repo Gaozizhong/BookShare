@@ -208,90 +208,6 @@ public class Book_detail extends AppCompatActivity {
             public void onClick(View view) {
                 _User bmobUser = BmobUser.getCurrentUser(_User.class);
 
-               /* if (!bmobUser.getNeedReturn()) {
-                    AlertDialog dlg = new AlertDialog.Builder(mContext)
-                            .setTitle("确认借此书？")
-                            .setMessage("确定后请关注书主同意情况，若同意，请电话联系书主。")
-                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                }
-                            })
-                            .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    final ProgressDialog progress = new ProgressDialog(mContext);
-                                    progress.setMessage("操作中...");
-                                    progress.setCanceledOnTouchOutside(false);
-                                    progress.show();
-                                    //更新此书的状态
-                                    Book_Info newBook = new Book_Info();
-                                    newBook.setBeShared(true);
-                                    newBook.update(objectId, new UpdateListener() {
-                                        @Override
-                                        public void done(BmobException e) {
-                                            if (e == null) {
-                                                //Toast.makeText(mContext, "更新信息成功", Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                Toast.makeText(mContext, "更新信息失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });
-                                    //更新用户借书状态
-                                    _User newUser = new _User();
-                                    newUser.setNeedReturn(true);
-                                    BmobUser bmobUser = BmobUser.getCurrentUser();
-                                    newUser.update(bmobUser.getObjectId(), new UpdateListener() {
-                                        @Override
-                                        public void done(BmobException e) {
-                                            if (e == null) {
-                                                //Toast.makeText(mContext, "更新用户信息成功", Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                Toast.makeText(mContext, "更新用户信息失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });
-
-                                    Shared_Info sharedInfo = new Shared_Info();
-                                    _User bmobUser1 = BmobUser.getCurrentUser(_User.class);
-                                    Integer userNum = bmobUser1.getUserNum();
-                                    sharedInfo.setBookNum(booknum1);
-                                    sharedInfo.setUserNum(userNum);
-                                    sharedInfo.setOwnerName(OwnerName1);
-                                    sharedInfo.setIfAgree(false);
-                                    sharedInfo.setIfLoan(false);
-                                    sharedInfo.setIfFinish(false);
-                                    sharedInfo.setIfAffirm(false);
-                                    sharedInfo.setIfReturn(false);
-                                    sharedInfo.setIfRefuse(false);
-                                    sharedInfo.save(new SaveListener<String>() {
-                                        @Override
-                                        public void done(String s, BmobException e) {
-                                            if (e == null) {
-                                                progress.dismiss();
-                                                borrowBtn.setText("等待书主响应");
-                                                borrowBtn.setClickable(false);
-                                                borrowBtn.setBackgroundColor(getResources().getColor(black));
-                                                //Toast.makeText(mContext, "借书信息创建成功", Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                Toast.makeText(mContext, "借书信息创建失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });
-                                }
-                            })
-                            .create();
-                    dlg.show();
-                } else {
-                    AlertDialog dlg = new AlertDialog.Builder(mContext)
-                            .setTitle("你已经借过一本书了，请看完、归还后再借书吧！(可以点击左下角喜欢按钮，以便下次更快借书)")
-                            .create();
-                    dlg.show();
-                }*/
-
-
-
                 if (bmobUser.getCertificationOk()) {
                     if (!bmobUser.getNeedReturn()) {
                         AlertDialog dlg = new AlertDialog.Builder(mContext)
@@ -364,6 +280,9 @@ public class Book_detail extends AppCompatActivity {
                                                 }
                                             }
                                         });
+
+                                        ifNeedReturn();
+
                                     }
                                 })
                                 .create();
@@ -400,6 +319,53 @@ public class Book_detail extends AppCompatActivity {
         });
 
 
+    }
+
+    //看自己是否可以借书
+    private void ifNeedReturn() {
+        final _User bmobUser = BmobUser.getCurrentUser(_User.class);
+
+        //查询是否有借书人为自己的借书信息
+        BmobQuery<Shared_Info> query1 = new BmobQuery<>();
+        query1.addWhereEqualTo("UserNum", bmobUser.getUserNum());
+        query1.addWhereEqualTo("ifReturn", false);
+        query1.addWhereEqualTo("ifRefuse", false);
+        query1.findObjects(new FindListener<Shared_Info>() {
+            @Override
+            public void done(final List<Shared_Info> list, BmobException e) {
+                if (e == null && list.size()==0) {
+                    //更新用户借书状态
+                    _User newUser = new _User();
+                    newUser.setNeedReturn(false);
+                    BmobUser bmobUser = BmobUser.getCurrentUser();
+                    newUser.update(bmobUser.getObjectId(), new UpdateListener() {
+                        @Override
+                        public void done(BmobException e1) {
+                            if (e1 == null) {
+                                Toast.makeText(mContext, "修改状态成功", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(mContext, "修改状态失败:" + e1.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                } else if (e == null && list.size()!=0){
+                    //更新用户借书状态
+                    _User newUser = new _User();
+                    newUser.setNeedReturn(true);
+                    BmobUser bmobUser = BmobUser.getCurrentUser();
+                    newUser.update(bmobUser.getObjectId(), new UpdateListener() {
+                        @Override
+                        public void done(BmobException e1) {
+                            if (e1 == null) {
+                                Toast.makeText(mContext, "修改状态成功", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(mContext, "修改状态失败:" + e1.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
 
 }

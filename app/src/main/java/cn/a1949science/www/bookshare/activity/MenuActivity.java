@@ -94,7 +94,7 @@ public class MenuActivity extends AppCompatActivity
     private com.lzy.imagepicker.ImagePicker imagePicker;
     SwipeRefreshLayout refresh;
     RecyclerView recyclerView;
-    int number_of_pages=1,number_of_no=0;
+    int number_of_pages=1;
     List<Book_Info> bookInfoList= null;
     myAdapterRecyclerView adapter;
     private LinearLayoutManager mLayoutManager;
@@ -338,7 +338,6 @@ public class MenuActivity extends AppCompatActivity
                     @Override
                     public void run() {
                         display();
-                        ifNeedReturn();
                         displayList();
                         refresh.setRefreshing(false);
                     }
@@ -807,7 +806,7 @@ public class MenuActivity extends AppCompatActivity
                             .centerCrop()
                             .into(favicon2);
                 } else {
-                    //Toast.makeText(mContext, "昵称、头像显示失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "请补充昵称、头像", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -891,7 +890,7 @@ public class MenuActivity extends AppCompatActivity
                         @Override
                         public void done(BmobException e1) {
                             if (e1 == null) {
-                                Toast.makeText(mContext, "修改状态成功", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(mContext, "修改状态成功", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(mContext, "修改状态失败:" + e1.getMessage(), Toast.LENGTH_SHORT).show();
                             }
@@ -906,7 +905,7 @@ public class MenuActivity extends AppCompatActivity
                         @Override
                         public void done(BmobException e1) {
                             if (e1 == null) {
-                                Toast.makeText(mContext, "修改状态成功", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(mContext, "修改状态成功", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(mContext, "修改状态失败:" + e1.getMessage(), Toast.LENGTH_SHORT).show();
                             }

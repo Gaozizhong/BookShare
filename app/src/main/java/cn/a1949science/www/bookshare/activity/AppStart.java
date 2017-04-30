@@ -10,6 +10,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
 import cn.a1949science.www.bookshare.R;
+import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.push.BmobPush;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobInstallation;
@@ -55,8 +56,9 @@ public class AppStart extends AppCompatActivity {
     }
 
         private void redirectTo(){
-            BmobUser bmobUser = BmobUser.getCurrentUser();
-            if (bmobUser != null) {
+            //BmobUser bmobUser = BmobUser.getCurrentUser();
+            final _User bmobUser = BmobUser.getCurrentUser(_User.class);
+            if ( bmobUser.getCertificationOk()) {
                 Intent intent = new Intent(this, MenuActivity.class);
                 startActivity(intent);
                 finish();

@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#ffffff</item>
         <item name="colorPrimaryDark">#ffffff</item>
-        <item name="colorAccent">#000000</item>
+        <item name="colorAccent">#000</item>
     </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
