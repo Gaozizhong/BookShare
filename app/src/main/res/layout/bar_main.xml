@@ -10,6 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#fff"
-        app:navigationIcon="@mipmap/left" />
-
+        app:navigationIcon="@mipmap/left">
+    </android.support.v7.widget.Toolbar>
 </LinearLayout>

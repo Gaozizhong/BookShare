@@ -40,7 +40,7 @@ public class Book_detail extends AppCompatActivity {
     ImageView image;
     TextView introduce,bookName,writename,time,bookOwner;
     ImageButton likeBtn,readBtn;
-    String objectId,introduce1,bookname1,writername1,OwnerName1,time1,phone;
+    String objectId,introduce1,bookname1,writername1,OwnerName1,time1;
     int booknum1;
     boolean ifLike=false,ifRead=false;
     Button borrowBtn;

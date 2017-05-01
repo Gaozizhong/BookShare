@@ -10,7 +10,7 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <cn.a1949science.www.bookshare.widget.CircleImageView
-        android:id="@+id/favicon2"
+        android:id="@+id/favicon"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:src="@drawable/favicon" />

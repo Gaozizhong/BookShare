@@ -81,8 +81,7 @@ public class MenuActivity extends AppCompatActivity
     Button borrowBtn,loanBtn,shareBtn,returnBtn,receiveBtn;
     Animation animation = null;
     ImageButton shortCut,RedPoint;
-    ImageView favicon;
-    CircleImageView favicon2;
+    CircleImageView favicon;
     TextView nickname;
     boolean clicked  = false;
     String picturePath="";
@@ -130,8 +129,7 @@ public class MenuActivity extends AppCompatActivity
             }
         });
         nickname = (TextView) headerLayout.findViewById(R.id.nickname);
-        favicon = (ImageView) headerLayout.findViewById(R.id.favicon);
-        favicon2 = (CircleImageView) headerLayout.findViewById(R.id.favicon2);
+        favicon = (CircleImageView) headerLayout.findViewById(R.id.favicon);
     }
 
     //自动更新
@@ -804,7 +802,7 @@ public class MenuActivity extends AppCompatActivity
                             .load(user.getFavicon().getFileUrl())
                             .override((int)(mContext.getResources().getDisplayMetrics().density*60+0.5f),(int)(mContext.getResources().getDisplayMetrics().density*60+0.5f))
                             .centerCrop()
-                            .into(favicon2);
+                            .into(favicon);
                 } else {
                     Toast.makeText(mContext, "请补充昵称、头像", Toast.LENGTH_SHORT).show();
                 }
