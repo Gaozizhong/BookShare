@@ -846,7 +846,7 @@ public class MenuActivity extends AppCompatActivity
         //查找book
         BmobQuery<Book_Info> query1 = new BmobQuery<>();
         //查找出有ownerNum的信息
-        query1.addWhereEqualTo("BeShared", false);
+        //query1.addWhereEqualTo("BeShared", false);
         //列表中不显示自己分享的书
         _User bmobUser = BmobUser.getCurrentUser(_User.class);
         String username = bmobUser.getUsername();

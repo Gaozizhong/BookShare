@@ -36,6 +36,17 @@
             android:textSize="14sp"
             android:textColor="#555252"
             android:layout_marginTop="30dp"
-            android:layout_gravity="bottom|center_horizontal" />
+            android:layout_gravity="center_horizontal" />
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已借"
+            android:textSize="10sp"
+            android:visibility="gone"
+            android:textColor="#555252"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="bottom|end" />
     </LinearLayout>
 </LinearLayout>

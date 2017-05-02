@@ -3,6 +3,7 @@ package cn.a1949science.www.bookshare.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -38,6 +39,7 @@ public class myAdapterRecyclerView extends RecyclerView.Adapter<myAdapterRecycle
         ImageView image;
         TextView book;
         TextView writer;
+        TextView status;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -45,6 +47,7 @@ public class myAdapterRecyclerView extends RecyclerView.Adapter<myAdapterRecycle
             image = (ImageView) itemView.findViewById(R.id.image);
             book = (TextView) itemView.findViewById(R.id.book);
             writer = (TextView) itemView.findViewById(R.id.writer);
+            status = (TextView) itemView.findViewById(R.id.status);
         }
     }
 
@@ -78,6 +81,9 @@ public class myAdapterRecyclerView extends RecyclerView.Adapter<myAdapterRecycle
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Book_Info book_info = list.get(position);
+        /*if (book_info.getBeShared()) {
+            holder.status.setVisibility(View.VISIBLE);
+        }*/
         String bookName = book_info.getBookName();
         String bookWriter = book_info.getBookWriter();
         Glide.with(context)

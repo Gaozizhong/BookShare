@@ -79,6 +79,11 @@ public class Book_detail extends AppCompatActivity {
                             .load(book_info.getBookPicture().getFileUrl())
                             .placeholder(R.drawable.wait)
                             .into(image);
+                    if (book_info.getBeShared()) {
+                        borrowBtn.setText("已被借出");
+                        borrowBtn.setClickable(false);
+                        borrowBtn.setBackgroundColor(getResources().getColor(black));
+                    }
                 } else {
                     Toast.makeText(Book_detail.this, "查询失败。"+ e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
