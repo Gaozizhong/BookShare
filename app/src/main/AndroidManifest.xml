@@ -121,7 +121,12 @@
         <activity android:name=".activity.RegisterPage2" />
         <activity android:name=".activity.Identification" />
         <activity android:name=".activity.Identification2" />
-        <activity android:name=".activity.SearchPage"></activity>
+        <activity android:name=".activity.SearchPage"
+            android:windowSoftInputMode = "adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
