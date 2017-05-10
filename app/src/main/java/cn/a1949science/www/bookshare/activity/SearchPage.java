@@ -1,18 +1,31 @@
 package cn.a1949science.www.bookshare.activity;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.SearchView;
 import android.widget.Toast;
+
+import com.lzy.imagepicker.ui.ImageGridActivity;
+import com.uuzuche.lib_zxing.activity.CaptureActivity;
+import com.uuzuche.lib_zxing.activity.CodeUtils;
+import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 import java.util.List;
 
@@ -37,6 +50,8 @@ public class SearchPage extends AppCompatActivity {
     List<Book_Info> bookInfoList= null;
     myAdapterRecyclerView adapter;
     int number_of_pages;//页数
+    int REQUEST_CODE = 5;
+    int REQUEST_CAMERA_PERMISSION = 0;
     Boolean ifSearch = false;
     private int lastVisibleItem ;
     String searchText;
@@ -44,6 +59,7 @@ public class SearchPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_page);
+        ZXingLibrary.initDisplayOpinion(this);
         initView();
         setListener();
         displayList();
@@ -56,6 +72,24 @@ public class SearchPage extends AppCompatActivity {
             public void onClick(View view) {
                 finish();
                 overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
+            }
+        });
+        toolbar.inflateMenu(R.menu.scan);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int menuItemId = item.getItemId();
+                if (menuItemId == R.id.action_scan) {
+                    //如果有权限
+                    if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                        Intent it = new Intent(mContext, CaptureActivity.class);
+                        startActivityForResult(it, REQUEST_CODE);
+                    } else {//没有权限
+                        ActivityCompat.requestPermissions(SearchPage.this,new String[]{Manifest.permission.CAMERA},REQUEST_CAMERA_PERMISSION);
+                    }
+
+                }
+                return true;
             }
         });
         search = (SearchView) findViewById(R.id.search);
@@ -269,5 +303,37 @@ public class SearchPage extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE) {
+            if (null != data) {
+                Bundle bundle = data.getExtras();
+                if (bundle == null) {
+                    return;
+                }
+                if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
+                    String result = bundle.getString(CodeUtils.RESULT_STRING);
+                    Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
+                } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
+                    Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_CAMERA_PERMISSION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent it = new Intent(mContext, CaptureActivity.class);
+                startActivityForResult(it, REQUEST_CODE);
+            } else {
+                Toast.makeText(mContext, "权限已被拒绝", Toast.LENGTH_SHORT).show();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }
