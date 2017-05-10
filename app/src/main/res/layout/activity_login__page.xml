@@ -76,7 +76,8 @@
         android:id="@+id/login"
         android:textSize="20sp"
         android:background="@drawable/rs_select_btn_blue"
-        android:textColor="#FFFFFF"/>
+        android:textColor="#FFFFFF"
+        style="@style/Widget.AppCompat.Button"/>
 
     <Button
         android:layout_marginTop="5dp"
@@ -86,6 +87,7 @@
         android:id="@+id/register"
         android:textSize="20sp"
         android:background="@drawable/rs_select_btn_blue"
-        android:textColor="#FFFFFF"/>
+        android:textColor="#FFFFFF"
+        style="@style/Widget.AppCompat.Button"/>
 
 </LinearLayout>
