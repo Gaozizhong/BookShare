@@ -31,10 +31,7 @@ public class AppStart extends AppCompatActivity {
         }
 
         Bmob.initialize(this, "13d736220ecc496d7dcb63c7cf918ba7");
-        // 使用推送服务时的初始化操作
-        BmobInstallation.getCurrentInstallation().save();
-        // 启动推送服务
-        BmobPush.startWork(this);
+
 
         AlphaAnimation aa = new AlphaAnimation(0.3f,1.0f);
         //设置持续时间
