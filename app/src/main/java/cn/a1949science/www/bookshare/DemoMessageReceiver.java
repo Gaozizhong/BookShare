@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.xiaomi.mipush.sdk.ErrorCode;
 import com.xiaomi.mipush.sdk.MiPushClient;
@@ -94,6 +95,7 @@ public class DemoMessageReceiver extends PushMessageReceiver {
         MyApplication.getHandler().sendMessage(msg);
     }
 
+    //用来接收客户端向服务器发送命令后的响应结果。
     @Override
     public void onCommandResult(Context context, MiPushCommandMessage message) {
         Log.v(MyApplication.TAG,
@@ -102,13 +104,12 @@ public class DemoMessageReceiver extends PushMessageReceiver {
         List<String> arguments = message.getCommandArguments();
         String cmdArg1 = ((arguments != null && arguments.size() > 0) ? arguments.get(0) : null);
         String cmdArg2 = ((arguments != null && arguments.size() > 1) ? arguments.get(1) : null);
-        String log;
+        String log="";
         if (MiPushClient.COMMAND_REGISTER.equals(command)) {
             if (message.getResultCode() == ErrorCode.SUCCESS) {
-                mRegId = cmdArg1;
-                log = context.getString(R.string.register_success);
+                System.out.println("注册成功");
             } else {
-                log = context.getString(R.string.register_fail);
+                System.out.println("注册失败");
             }
         } else if (MiPushClient.COMMAND_SET_ALIAS.equals(command)) {
             if (message.getResultCode() == ErrorCode.SUCCESS) {
@@ -169,33 +170,21 @@ public class DemoMessageReceiver extends PushMessageReceiver {
         MyApplication.getHandler().sendMessage(msg);
     }
 
+    //用于接收客户端向服务器发送注册命令后的响应结果。
     @Override
     public void onReceiveRegisterResult(Context context, MiPushCommandMessage message) {
-        Log.v(MyApplication.TAG,
-                "onReceiveRegisterResult is called. " + message.toString());
         String command = message.getCommand();
-        List<String> arguments = message.getCommandArguments();
-        String cmdArg1 = ((arguments != null && arguments.size() > 0) ? arguments.get(0) : null);
-        String log;
+        System.out.println(command );
+
         if (MiPushClient.COMMAND_REGISTER.equals(command)) {
             if (message.getResultCode() == ErrorCode.SUCCESS) {
-                mRegId = cmdArg1;
-                log = context.getString(R.string.register_success);
+                System.out.println("注册成功");
             } else {
-                log = context.getString(R.string.register_fail);
+                System.out.println("注册失败");
             }
         } else {
-            log = message.getReason();
+            System.out.println("其他情况"+message.getReason());
         }
-
-        Message msg = Message.obtain();
-        msg.obj = log;
-        MyApplication.getHandler().sendMessage(msg);
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    private static String getSimpleDate() {
-        return new SimpleDateFormat("MM-dd hh:mm:ss").format(new Date());
     }
 
 }
