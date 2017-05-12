@@ -1,13 +1,27 @@
 package cn.a1949science.www.bookshare.activity;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Process;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.widget.Toast;
+
+import com.xiaomi.channel.commonutils.logger.LoggerInterface;
+import com.xiaomi.mipush.sdk.Logger;
+import com.xiaomi.mipush.sdk.MiPushClient;
+
+import java.util.List;
 
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean._User;
@@ -32,7 +46,6 @@ public class AppStart extends AppCompatActivity {
 
         Bmob.initialize(this, "13d736220ecc496d7dcb63c7cf918ba7");
 
-
         AlphaAnimation aa = new AlphaAnimation(0.3f,1.0f);
         //设置持续时间
         aa.setDuration(2000);
@@ -52,7 +65,7 @@ public class AppStart extends AppCompatActivity {
         });
     }
 
-        private void redirectTo(){
+    private void redirectTo(){
             //BmobUser bmobUser = BmobUser.getCurrentUser();
             final _User bmobUser = BmobUser.getCurrentUser(_User.class);
             if (bmobUser!=null&&bmobUser.getCertificationOk()) {
@@ -64,6 +77,7 @@ public class AppStart extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }
+    }
+
 
 }

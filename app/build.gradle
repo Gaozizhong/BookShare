@@ -22,7 +22,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     //bmob-sdk：Bmob的android sdk包，包含了Bmob的数据存储、文件等服务，以下是最新的bmob-sdk:
     //bmob-sms ：Bmob单独为短信服务提供的包
     //bmob-im：Bmob的即时通讯包，注意每个版本的im依赖特定版本的bmob-sdk，具体的依赖关系可查看下面注释[2]
@@ -47,4 +47,5 @@ dependencies {
     compile 'top.zibin:Luban:1.0.9'
     testCompile 'junit:junit:4.12'
     compile 'cn.yipianfengye.android:zxing-library:2.1'
+    compile files('src/main/libs/MiPush_SDK_Client_3_2_3.jar')
 }

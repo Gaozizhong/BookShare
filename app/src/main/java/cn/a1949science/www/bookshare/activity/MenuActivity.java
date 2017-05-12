@@ -36,11 +36,13 @@ import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.lzy.imagepicker.view.CropImageView;
+import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.a1949science.www.bookshare.MyApplication;
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.adapter.myAdapterRecyclerView;
 import cn.a1949science.www.bookshare.bean.Book_Info;
@@ -104,6 +106,20 @@ public class MenuActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Bmob.initialize(this, "13d736220ecc496d7dcb63c7cf918ba7");
+        MyApplication.setMenuActivity(this);
+        //设置别名，撤销别名（alias）
+        //MiPushClient.setAlias(MenuActivity.this, "demo1", null);
+        //MiPushClient.unsetAlias(MainActivity.this, "demo1", null);
+        //设置账号，撤销账号（account）
+        //MiPushClient.setUserAccount(MenuActivity.this, "user1", null);
+        //MiPushClient.unsetUserAccount(MainActivity.this, "user1", null);
+        //设置标签，撤销标签（topic：话题、主题）
+        //MiPushClient.subscribe(MenuActivity.this, "IT", null);
+        //MiPushClient.unsubscribe(MainActivity.this, "IT", null);
+        //设置接收时间（startHour, startMin, endHour, endMin）
+        //MiPushClient.setAcceptTime(MenuActivity.this, 7, 0, 23, 0, null);
+        //暂停和恢复推送 //MiPushClient.pausePush(MainActivity.this, null);
+        //MiPushClient.resumePush(MainActivity.this, null);
         bmobUpdate();
         findView();
         setListener();
@@ -912,5 +928,11 @@ public class MenuActivity extends AppCompatActivity
                 }
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MyApplication.setMenuActivity(null);
     }
 }
