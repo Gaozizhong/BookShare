@@ -48,4 +48,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'cn.yipianfengye.android:zxing-library:2.1'
     compile files('src/main/libs/MiPush_SDK_Client_3_2_3.jar')
+    compile 'mi-appstore:xiaomi-update-sdk:2.6+'
 }

@@ -36,6 +36,7 @@ import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.lzy.imagepicker.view.CropImageView;
+import com.xiaomi.market.sdk.XiaomiUpdateAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.io.File;
@@ -104,6 +105,8 @@ public class MenuActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        XiaomiUpdateAgent.setCheckUpdateOnlyWifi(true);
+        XiaomiUpdateAgent.update(this);
         setContentView(R.layout.activity_main);
         Bmob.initialize(this, "13d736220ecc496d7dcb63c7cf918ba7");
         MyApplication.setMenuActivity(this);
@@ -120,7 +123,6 @@ public class MenuActivity extends AppCompatActivity
         //MiPushClient.setAcceptTime(MenuActivity.this, 7, 0, 23, 0, null);
         //暂停和恢复推送 //MiPushClient.pausePush(MainActivity.this, null);
         //MiPushClient.resumePush(MainActivity.this, null);
-        bmobUpdate();
         findView();
         setListener();
         onClick();
