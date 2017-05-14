@@ -150,23 +150,6 @@ public class MenuActivity extends AppCompatActivity
         favicon = (CircleImageView) headerLayout.findViewById(R.id.favicon);
     }
 
-    //自动更新
-    private void bmobUpdate() {
-        //只在wifi下更新
-        BmobUpdateAgent.setUpdateOnlyWifi(true);
-        BmobUpdateAgent.setUpdateListener(new BmobUpdateListener() {
-            @Override
-            public void onUpdateReturned(int i, UpdateResponse updateResponse) {
-                if (i == UpdateStatus.Yes) {
-                    BmobUpdateAgent.update(mContext);
-                }else if(i == UpdateStatus.No){
-                    Toast.makeText(mContext, "版本无更新", Toast.LENGTH_SHORT).show();
-                }else if(i==UpdateStatus.IGNORED){
-                    Toast.makeText(mContext, "该版本已被忽略更新", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
 
     @Override
     public void onBackPressed() {
@@ -222,7 +205,7 @@ public class MenuActivity extends AppCompatActivity
             startActivity(it);
             overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
         } else if (id == R.id.refrush) {
-            BmobUpdateAgent.forceUpdate(mContext);
+            //BmobUpdateAgent.forceUpdate(mContext);
         } else if (id == R.id.quit) {
             AlertDialog dlg = new AlertDialog.Builder(mContext)
                     .setTitle("确认退出？")
