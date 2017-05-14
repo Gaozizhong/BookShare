@@ -20,10 +20,12 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import cn.a1949science.www.bookshare.R;
+import cn.a1949science.www.bookshare.bean.BookInfo;
 import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean.Like_Book;
 import cn.a1949science.www.bookshare.bean.Read_Book;
 import cn.a1949science.www.bookshare.bean.Shared_Info;
+import cn.a1949science.www.bookshare.bean.SharingBook;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -38,10 +40,10 @@ import static android.R.color.black;
 public class Book_detail extends AppCompatActivity {
     Context mContext = Book_detail.this;
     ImageView image;
-    TextView introduce,bookName,writename,time,bookOwner;
+    TextView introduce,bookName,writename,bookPress,publishedDate,ISBN,time,bookOwner;
     ImageButton likeBtn,readBtn;
-    String objectId,introduce1,bookname1,writername1,OwnerName1,time1;
-    int booknum1;
+    String objectId,introduce1,bookname1,writername1,bookPress1,publishedDate1,ISBN1,OwnerName1,time1;
+    int booknum1,shareNum,OwnerNum;
     boolean ifLike=false,ifRead=false;
     Button borrowBtn;
     Toolbar toolbar;
@@ -58,34 +60,54 @@ public class Book_detail extends AppCompatActivity {
 
     private void detail() {
         Bundle bundle = this.getIntent().getExtras();
+        shareNum = bundle.getInt("shareNum");
         booknum1 = bundle.getInt("booknum");
         objectId = bundle.getString("objectId");
-        final BmobQuery<Book_Info> query = new BmobQuery<>();
-        query.getObject(objectId, new QueryListener<Book_Info>() {
+        //显示图书信息
+        BmobQuery<BookInfo> query = new BmobQuery<>();
+        query.getObject(objectId, new QueryListener<BookInfo>() {
             @Override
-            public void done(Book_Info book_info, BmobException e) {
+            public void done(BookInfo BookInfo, BmobException e) {
                 if (e == null) {
-                    introduce1 = book_info.getBookDescribe();
-                    bookname1 = book_info.getBookName();
-                    writername1 = book_info.getBookWriter();
-                    time1 = book_info.getkeepTime().toString();
-                    OwnerName1 = book_info.getOwnerName();
+                    introduce1 = BookInfo.getIntroduction();
+                    bookname1 = BookInfo.getBookName();
+                    writername1 = BookInfo.getBookWriter();
+                    bookPress1 = BookInfo.getBookPress();
+                    publishedDate1 = BookInfo.getPublishedDate();
+                    ISBN1 = BookInfo.getISBN();
                     introduce.setText(introduce1);
                     bookName.setText(bookname1);
                     writename.setText(writername1);
-                    time.setText(time1+"天");
-                    bookOwner.setText(OwnerName1);
+                    bookPress.setText(bookPress1);
+                    publishedDate.setText(publishedDate1);
+                    ISBN.setText(ISBN1);
                     Glide.with(mContext)
-                            .load(book_info.getBookPicture().getFileUrl())
+                            .load(BookInfo.getBookImage().getFileUrl())
                             .placeholder(R.drawable.wait)
                             .into(image);
-                    if (book_info.getBeShared()) {
+                } else {
+                    Toast.makeText(Book_detail.this, "查询失败。"+ e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        //显示借书信息
+        BmobQuery<SharingBook> query1 = new BmobQuery<>();
+        query1.addWhereEqualTo("shareNum", shareNum);
+        query1.findObjects(new FindListener<SharingBook>() {
+            @Override
+            public void done(List<SharingBook> list, BmobException e) {
+                if (e == null) {
+                    time1 = list.get(0).getkeepTime().toString();
+                    OwnerNum = list.get(0).getOwnerNum();
+                    time.setText(time1+"天");
+                    bookOwner.setText(String.valueOf(OwnerNum));
+                    if (list.get(0).getBeShared()) {
                         borrowBtn.setText("已被借出");
                         borrowBtn.setClickable(false);
                         borrowBtn.setBackgroundColor(getResources().getColor(black));
                     }
-                } else {
-                    Toast.makeText(Book_detail.this, "查询失败。"+ e.getMessage(), Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(Book_detail.this, "查询失败1。"+ e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -141,6 +163,9 @@ public class Book_detail extends AppCompatActivity {
         introduce = (TextView) findViewById(R.id.introduce);
         bookName = (TextView) findViewById(R.id.bookName);
         writename = (TextView) findViewById(R.id.writename);
+        bookPress = (TextView) findViewById(R.id.publishedDate);
+        publishedDate = (TextView) findViewById(R.id.bookPress);
+        ISBN = (TextView) findViewById(R.id.ISBN);
         time = (TextView) findViewById(R.id.time);
         bookOwner = (TextView) findViewById(R.id.bookOwner);
         likeBtn = (ImageButton)findViewById(R.id.likeBtn);

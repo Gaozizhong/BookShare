@@ -42,13 +42,16 @@ import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cn.a1949science.www.bookshare.MyApplication;
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.adapter.myAdapterRecyclerView;
+import cn.a1949science.www.bookshare.bean.BookInfo;
 import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean.Shared_Info;
+import cn.a1949science.www.bookshare.bean.SharingBook;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.a1949science.www.bookshare.widget.CircleImageView;
 import cn.a1949science.www.bookshare.widget.GlideImageLoader;
@@ -98,7 +101,7 @@ public class MenuActivity extends AppCompatActivity
     SwipeRefreshLayout refresh;
     RecyclerView recyclerView;
     int number_of_pages=1;
-    List<Book_Info> bookInfoList= null;
+    List<BookInfo> bookInfoList= null;
     myAdapterRecyclerView adapter;
     private LinearLayoutManager mLayoutManager;
     private int lastVisibleItem ;
@@ -329,26 +332,42 @@ public class MenuActivity extends AppCompatActivity
                     e.printStackTrace();
                 }
                 //查找book
-                BmobQuery<Book_Info> query1 = new BmobQuery<>();
-                //查找出有ownerNum的信息
-                //query1.addWhereEqualTo("BeShared", false);
+                BmobQuery<SharingBook> query = new BmobQuery<>();
                 //列表中不显示自己分享的书
                 _User bmobUser = BmobUser.getCurrentUser(_User.class);
-                String username = bmobUser.getUsername();
-                query1.addWhereNotEqualTo("ownerName", username);
-                query1.setSkip(10 * number_of_pages);
-                query1.setLimit(10);
-                number_of_pages=number_of_pages+1;
-                query1.findObjects(new FindListener<Book_Info>() {
+                Integer userNum = bmobUser.getUserNum();
+                query.addWhereNotEqualTo("ownerNum", userNum);
+                query.findObjects(new FindListener<SharingBook>() {
                     @Override
-                    public void done(final List<Book_Info> list, BmobException e) {
+                    public void done(List<SharingBook> list, BmobException e) {
                         if (e == null) {
-                            bookInfoList.addAll(list);
+                            final Integer[] bookNum = new Integer[list.size()];
+                            for (int i=0;i<list.size();i++) {
+                                bookNum[i] = list.get(i).getBookNum();
+                            }
+                            BmobQuery<BookInfo> query1 = new BmobQuery<BookInfo>();
+                            query1.addWhereContainedIn("bookNum", Arrays.asList(bookNum));
+                            query1.setSkip(10 * number_of_pages);
+                            query1.setLimit(10);
+                            number_of_pages=number_of_pages+1;
+                            query1.findObjects(new FindListener<BookInfo>() {
+                                @Override
+                                public void done(List<BookInfo> list2, BmobException e) {
+                                    if (e == null) {
+                                        bookInfoList.addAll(list2);
+
+                                    } else {
+                                        Toast.makeText(mContext, "查询失败。"+e.getMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+
                         } else {
-                            Toast.makeText(mContext, "查询失败。" + e.getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(mContext, "查询失败。"+e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
                 });
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -877,24 +896,39 @@ public class MenuActivity extends AppCompatActivity
     //显示列表
     private void displayList() {
         //查找book
-        BmobQuery<Book_Info> query1 = new BmobQuery<>();
-        //查找出有ownerNum的信息
-        //query1.addWhereEqualTo("BeShared", false);
+        BmobQuery<SharingBook> query = new BmobQuery<>();
         //列表中不显示自己分享的书
         _User bmobUser = BmobUser.getCurrentUser(_User.class);
-        String username = bmobUser.getUsername();
-        query1.addWhereNotEqualTo("ownerName", username);
-        query1.setLimit(10);
-        query1.findObjects(new FindListener<Book_Info>() {
+        Integer userNum = bmobUser.getUserNum();
+        query.addWhereNotEqualTo("ownerNum", userNum);
+        query.findObjects(new FindListener<SharingBook>() {
             @Override
-            public void done(final List<Book_Info> list, BmobException e) {
+            public void done(List<SharingBook> list, BmobException e) {
                 if (e == null) {
-                    bookInfoList = list;
-                    adapter = new myAdapterRecyclerView(mContext, bookInfoList);
-                    recyclerView.setAdapter(adapter);
+                    final Integer[] bookNum = new Integer[list.size()];
+                    for (int i=0;i<list.size();i++) {
+                        bookNum[i] = list.get(i).getBookNum();
+                    }
+
+                    BmobQuery<BookInfo> query1 = new BmobQuery<>();
+                    query1.addWhereContainedIn("bookNum", Arrays.asList(bookNum));
+                    query1.setLimit(10);
+                    query1.findObjects(new FindListener<BookInfo>() {
+                        @Override
+                        public void done(List<BookInfo> list2, BmobException e) {
+                            if (e == null) {
+                                bookInfoList = list2;
+                                adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNum);
+                                recyclerView.setAdapter(adapter);
+
+                            } else {
+                                Toast.makeText(mContext, "查询失败2。"+e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
 
                 } else {
-                    Toast.makeText(mContext, "查询失败。"+e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "查询失败1。"+e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });

@@ -19,6 +19,7 @@ import java.util.List;
 
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.activity.Book_detail;
+import cn.a1949science.www.bookshare.bean.BookInfo;
 import cn.a1949science.www.bookshare.bean.Book_Info;
 
 /**
@@ -27,7 +28,8 @@ import cn.a1949science.www.bookshare.bean.Book_Info;
 
 public class myAdapterRecyclerView extends RecyclerView.Adapter<myAdapterRecyclerView.ViewHolder> implements View.OnClickListener{
     private Context context;
-    private List<Book_Info> list;
+    private List<BookInfo> list;
+    private Integer[] bookNum;
 
     @Override
     public void onClick(View view) {
@@ -51,9 +53,10 @@ public class myAdapterRecyclerView extends RecyclerView.Adapter<myAdapterRecycle
         }
     }
 
-    public myAdapterRecyclerView(Context context,List<Book_Info> list) {
+    public myAdapterRecyclerView(Context context,List<BookInfo> list,Integer[] bookNum) {
         this.context = context;
         this.list = list;
+        this.bookNum = bookNum;
     }
 
     @Override
@@ -64,9 +67,10 @@ public class myAdapterRecyclerView extends RecyclerView.Adapter<myAdapterRecycle
             @Override
             public void onClick(View view) {
                 int position = holder.getAdapterPosition();
-                Book_Info book_info = list.get(position);
+                BookInfo book_info = list.get(position);
                 Bundle data = new Bundle();
                 //利用Intent传递数据
+                data.putInt("shareNum",bookNum[position]);
                 data.putInt("booknum",book_info.getBookNum());
                 data.putString("objectId",book_info.getObjectId());
                 Intent intent = new Intent(context, Book_detail.class);
@@ -80,14 +84,11 @@ public class myAdapterRecyclerView extends RecyclerView.Adapter<myAdapterRecycle
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Book_Info book_info = list.get(position);
-        /*if (book_info.getBeShared()) {
-            holder.status.setVisibility(View.VISIBLE);
-        }*/
+        BookInfo book_info = list.get(position);
         String bookName = book_info.getBookName();
         String bookWriter = book_info.getBookWriter();
         Glide.with(context)
-                .load(book_info.getBookPicture().getFileUrl())
+                .load(book_info.getBookImage().getFileUrl())
                 .thumbnail(0.5f)
                 .override((int)(context.getResources().getDisplayMetrics().density*120+0.5f),(int)(context.getResources().getDisplayMetrics().density*120+0.5f))
                 .into(holder.image);

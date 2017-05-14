@@ -1,12 +1,13 @@
 package cn.a1949science.www.bookshare.bean;
 
+import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobFile;
 
 /**
  * Created by 高子忠 on 2017/4/30.
  */
 
-public class BookInfo {
+public class BookInfo extends BmobObject {
     private Integer bookNum;//图书序号
     private String bookName;//书名
     private String bookWriter;//作者
@@ -14,7 +15,7 @@ public class BookInfo {
     private String introduction;//图书介绍
     private BmobFile bookImage;//图书照片
     private String bookSort;//图书分类
-    private Integer ISBN;//图书ISBN
+    private String ISBN;//图书ISBN
     private String bookPress;//图书出版社
     private String publishedDate;//图书出版时间
     private Integer bookVeision;//图书版本
@@ -60,8 +61,8 @@ public class BookInfo {
         this.bookSort = bookSort;
     }
 
-    public Integer getISBN(){return ISBN;}
-    public void setISBN(Integer ISBN){this.ISBN =  ISBN;}
+    public String getISBN(){return ISBN;}
+    public void setISBN(String ISBN){this.ISBN =  ISBN;}
 
     public String getBookPress() {
         return bookPress;

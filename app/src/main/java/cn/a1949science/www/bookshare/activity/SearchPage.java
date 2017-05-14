@@ -1,6 +1,7 @@
 package cn.a1949science.www.bookshare.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -31,6 +32,7 @@ import java.util.List;
 
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.adapter.myAdapterRecyclerView;
+import cn.a1949science.www.bookshare.bean.BookInfo;
 import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.v3.BmobQuery;
@@ -116,7 +118,7 @@ public class SearchPage extends AppCompatActivity {
                         if (e == null) {
                             if (list != null && list.size() > 0) {
                                 bookInfoList = list;
-                                adapter = new myAdapterRecyclerView(mContext, bookInfoList);
+                                //adapter = new myAdapterRecyclerView(mContext, bookInfoList);
                                 recyclerView.setAdapter(adapter);
                             } else {
                                 bookInfoList.clear();
@@ -216,7 +218,7 @@ public class SearchPage extends AppCompatActivity {
                             if (e == null) {
                                 if (list != null && list.size() > 0) {
                                     bookInfoList = list;
-                                    adapter = new myAdapterRecyclerView(mContext, bookInfoList);
+                                    //adapter = new myAdapterRecyclerView(mContext, bookInfoList);
                                     recyclerView.setAdapter(adapter);
                                 } else {
                                     bookInfoList.clear();
@@ -294,7 +296,7 @@ public class SearchPage extends AppCompatActivity {
             public void done(final List<Book_Info> list, BmobException e) {
                 if (e == null) {
                     bookInfoList = list;
-                    adapter = new myAdapterRecyclerView(mContext, bookInfoList);
+                    //adapter = new myAdapterRecyclerView(mContext, bookInfoList);
                     recyclerView.setAdapter(adapter);
 
                 } else {
@@ -317,6 +319,27 @@ public class SearchPage extends AppCompatActivity {
                 if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
                     String result = bundle.getString(CodeUtils.RESULT_STRING);
                     Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
+                    //查询扫描的书
+                    BmobQuery<BookInfo> query = new BmobQuery<>();
+                    query.addWhereEqualTo("ISBN", Integer.valueOf(result));
+                    query.findObjects(new FindListener<BookInfo>() {
+                        @Override
+                        public void done(List<BookInfo> list, BmobException e) {
+                            if (e == null) {
+                                Bundle data = new Bundle();
+                                //利用Intent传递数据
+                                data.putInt("booknum",list.get(0).getBookNum());
+                                data.putString("objectId",list.get(0).getObjectId());
+                                Intent intent = new Intent(mContext, Book_detail.class);
+                                intent.putExtras(data);
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
+                            } else {
+                                Toast.makeText(mContext, "暂时没有这本书", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
                 } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
                     Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
                 }
