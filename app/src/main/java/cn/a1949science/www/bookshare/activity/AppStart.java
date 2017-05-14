@@ -18,6 +18,10 @@ import android.view.animation.Animation;
 import android.widget.Toast;
 
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
+import com.xiaomi.market.sdk.UpdateResponse;
+import com.xiaomi.market.sdk.UpdateStatus;
+import com.xiaomi.market.sdk.XiaomiUpdateAgent;
+import com.xiaomi.market.sdk.XiaomiUpdateListener;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
