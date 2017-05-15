@@ -28,12 +28,14 @@ import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
+import java.util.Arrays;
 import java.util.List;
 
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.adapter.myAdapterRecyclerView;
 import cn.a1949science.www.bookshare.bean.BookInfo;
 import cn.a1949science.www.bookshare.bean.Book_Info;
+import cn.a1949science.www.bookshare.bean.SharingBook;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -49,7 +51,7 @@ public class SearchPage extends AppCompatActivity {
     SwipeRefreshLayout refresh;
     RecyclerView recyclerView;
     private LinearLayoutManager mLayoutManager;
-    List<Book_Info> bookInfoList= null;
+    List<BookInfo> bookInfoList= null;
     myAdapterRecyclerView adapter;
     int number_of_pages;//页数
     int REQUEST_CODE = 5;
@@ -57,6 +59,7 @@ public class SearchPage extends AppCompatActivity {
     Boolean ifSearch = false;
     private int lastVisibleItem ;
     String searchText;
+    Integer[] bookNum;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,19 +110,20 @@ public class SearchPage extends AppCompatActivity {
                 if (imm != null) {
                     imm.hideSoftInputFromWindow(recyclerView.getWindowToken(), 0);
                 }
-                String bql ="select * from Book_Info where BookWriter='"+s+ "' or BookName ='" +s+"'";
-                BmobQuery<Book_Info> query = new BmobQuery<>();
+                String bql ="select * from BookInfo where bookWriter='"+s+ "' or bookName ='" +s+"'";
+                final BmobQuery<BookInfo> query = new BmobQuery<>();
                 query.setSQL(bql);
                 query.setLimit(10);
-                query.doSQLQuery(new SQLQueryListener<Book_Info>() {
+                query.doSQLQuery(new SQLQueryListener<BookInfo>() {
                     @Override
-                    public void done(BmobQueryResult<Book_Info> bmobQueryResult, BmobException e) {
-                        List<Book_Info> list = bmobQueryResult.getResults();
+                    public void done(BmobQueryResult<BookInfo> bmobQueryResult, BmobException e) {
+                        List<BookInfo> list = bmobQueryResult.getResults();
                         if (e == null) {
                             if (list != null && list.size() > 0) {
-                                bookInfoList = list;
-                                //adapter = new myAdapterRecyclerView(mContext, bookInfoList);
-                                recyclerView.setAdapter(adapter);
+                                bookNum = new Integer[list.size()];
+                                for (int i=0;i<list.size();i++) {
+                                    bookNum[i] = list.get(i).getBookNum();
+                                }
                             } else {
                                 bookInfoList.clear();
                                 adapter.notifyDataSetChanged();
@@ -131,6 +135,41 @@ public class SearchPage extends AppCompatActivity {
                         }
                     }
                 });
+                //查找book
+                BmobQuery<SharingBook> query2 = new BmobQuery<>();
+                query2.addWhereContainedIn("bookNum", Arrays.asList(bookNum));
+                query2.findObjects(new FindListener<SharingBook>() {
+                    @Override
+                    public void done(List<SharingBook> list, BmobException e) {
+                        if (e == null) {
+                            final Integer[] shareNum = new Integer[list.size()];
+                            for (int i=0;i<list.size();i++) {
+                                shareNum[i] = list.get(i).getBookNum();
+                            }
+
+                            BmobQuery<BookInfo> query1 = new BmobQuery<>();
+                            query1.addWhereContainedIn("bookNum", Arrays.asList(shareNum));
+                            query1.setLimit(10);
+                            query1.findObjects(new FindListener<BookInfo>() {
+                                @Override
+                                public void done(List<BookInfo> list2, BmobException e) {
+                                    if (e == null) {
+                                        bookInfoList = list2;
+                                        adapter = new myAdapterRecyclerView(mContext, bookInfoList,shareNum);
+                                        recyclerView.setAdapter(adapter);
+
+                                    } else {
+                                        Toast.makeText(mContext, "查询失败2。"+e.getMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+
+                        } else {
+                            Toast.makeText(mContext, "查询失败1。"+e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
                 return true;
             }
             // 当搜索内容改变时触发该方法
@@ -205,20 +244,20 @@ public class SearchPage extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 if (ifSearch) {
-                    String bql ="select * from Book_Info where BookWriter='"+searchText+ "' or BookName ='" +searchText+"'";
-                    BmobQuery<Book_Info> query = new BmobQuery<>();
+                    /*String bql ="select * from BookInfo where bookWriter='"+searchText+ "' or bookName ='" +searchText+"'";
+                    BmobQuery<BookInfo> query = new BmobQuery<>();
                     query.setSQL(bql);
                     query.setSkip(10 * number_of_pages);
                     query.setLimit(10);
                     number_of_pages=number_of_pages+1;
-                    query.doSQLQuery(new SQLQueryListener<Book_Info>() {
+                    query.doSQLQuery(new SQLQueryListener<BookInfo>() {
                         @Override
-                        public void done(BmobQueryResult<Book_Info> bmobQueryResult, BmobException e) {
-                            List<Book_Info> list = bmobQueryResult.getResults();
+                        public void done(BmobQueryResult<BookInfo> bmobQueryResult, BmobException e) {
+                            List<BookInfo> list = bmobQueryResult.getResults();
                             if (e == null) {
                                 if (list != null && list.size() > 0) {
                                     bookInfoList = list;
-                                    //adapter = new myAdapterRecyclerView(mContext, bookInfoList);
+                                    adapter = new myAdapterRecyclerView(mContext, bookInfoList);
                                     recyclerView.setAdapter(adapter);
                                 } else {
                                     bookInfoList.clear();
@@ -231,26 +270,41 @@ public class SearchPage extends AppCompatActivity {
                             }
 
                         }
-                    });
+                    });*/
                 } else {
                     //查找book
-                    BmobQuery<Book_Info> query1 = new BmobQuery<>();
-                    //查找出有ownerNum的信息
-                    query1.addWhereEqualTo("BeShared", false);
+                    BmobQuery<SharingBook> query = new BmobQuery<>();
                     //列表中不显示自己分享的书
                     _User bmobUser = BmobUser.getCurrentUser(_User.class);
-                    String username = bmobUser.getUsername();
-                    query1.addWhereNotEqualTo("ownerName", username);
-                    query1.setSkip(10 * number_of_pages);
-                    query1.setLimit(10);
-                    number_of_pages=number_of_pages+1;
-                    query1.findObjects(new FindListener<Book_Info>() {
+                    Integer userNum = bmobUser.getUserNum();
+                    query.addWhereNotEqualTo("ownerNum", userNum);
+                    query.findObjects(new FindListener<SharingBook>() {
                         @Override
-                        public void done(final List<Book_Info> list, BmobException e) {
+                        public void done(List<SharingBook> list, BmobException e) {
                             if (e == null) {
-                                bookInfoList.addAll(list);
+                                final Integer[] bookNum = new Integer[list.size()];
+                                for (int i=0;i<list.size();i++) {
+                                    bookNum[i] = list.get(i).getBookNum();
+                                }
+                                BmobQuery<BookInfo> query1 = new BmobQuery<BookInfo>();
+                                query1.addWhereContainedIn("bookNum", Arrays.asList(bookNum));
+                                query1.setSkip(10 * number_of_pages);
+                                query1.setLimit(10);
+                                number_of_pages=number_of_pages+1;
+                                query1.findObjects(new FindListener<BookInfo>() {
+                                    @Override
+                                    public void done(List<BookInfo> list2, BmobException e) {
+                                        if (e == null) {
+                                            bookInfoList.addAll(list2);
+
+                                        } else {
+                                            Toast.makeText(mContext, "查询失败。"+e.getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
+
                             } else {
-                                Toast.makeText(mContext, "查询失败。" + e.getMessage(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(mContext, "查询失败。"+e.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         }
                     });
@@ -285,22 +339,39 @@ public class SearchPage extends AppCompatActivity {
     //显示列表
     private void displayList() {
         //查找book
-        BmobQuery<Book_Info> query1 = new BmobQuery<>();
+        BmobQuery<SharingBook> query = new BmobQuery<>();
         //列表中不显示自己分享的书
         _User bmobUser = BmobUser.getCurrentUser(_User.class);
-        String username = bmobUser.getUsername();
-        query1.addWhereNotEqualTo("ownerName", username);
-        query1.setLimit(10);
-        query1.findObjects(new FindListener<Book_Info>() {
+        Integer userNum = bmobUser.getUserNum();
+        query.addWhereNotEqualTo("ownerNum", userNum);
+        query.findObjects(new FindListener<SharingBook>() {
             @Override
-            public void done(final List<Book_Info> list, BmobException e) {
+            public void done(List<SharingBook> list, BmobException e) {
                 if (e == null) {
-                    bookInfoList = list;
-                    //adapter = new myAdapterRecyclerView(mContext, bookInfoList);
-                    recyclerView.setAdapter(adapter);
+                    final Integer[] bookNum = new Integer[list.size()];
+                    for (int i=0;i<list.size();i++) {
+                        bookNum[i] = list.get(i).getBookNum();
+                    }
+
+                    BmobQuery<BookInfo> query1 = new BmobQuery<>();
+                    query1.addWhereContainedIn("bookNum", Arrays.asList(bookNum));
+                    query1.setLimit(10);
+                    query1.findObjects(new FindListener<BookInfo>() {
+                        @Override
+                        public void done(List<BookInfo> list2, BmobException e) {
+                            if (e == null) {
+                                bookInfoList = list2;
+                                adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNum);
+                                recyclerView.setAdapter(adapter);
+
+                            } else {
+                                Toast.makeText(mContext, "查询失败。"+e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
 
                 } else {
-                    Toast.makeText(mContext, "查询失败。"+e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "查询失败1。"+e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -321,7 +392,7 @@ public class SearchPage extends AppCompatActivity {
                     Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
                     //查询扫描的书
                     BmobQuery<BookInfo> query = new BmobQuery<>();
-                    query.addWhereEqualTo("ISBN", Integer.valueOf(result));
+                    query.addWhereEqualTo("ISBN", result);
                     query.findObjects(new FindListener<BookInfo>() {
                         @Override
                         public void done(List<BookInfo> list, BmobException e) {

@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -37,14 +40,15 @@ import cn.bmob.v3.listener.UpdateListener;
 
 import static android.R.color.black;
 
-public class Book_detail extends AppCompatActivity {
+public class Book_detail extends AppCompatActivity implements View.OnClickListener{
     Context mContext = Book_detail.this;
     ImageView image;
+    View introduce_layout, expandView;
     TextView introduce,bookName,writename,bookPress,publishedDate,ISBN,time,bookOwner;
     ImageButton likeBtn,readBtn;
     String objectId,introduce1,bookname1,writername1,bookPress1,publishedDate1,ISBN1,OwnerName1,time1;
     int booknum1,shareNum,OwnerNum;
-    boolean ifLike=false,ifRead=false;
+    boolean ifLike=false,ifRead=false,isExpand;
     Button borrowBtn;
     Toolbar toolbar;
     @Override
@@ -76,6 +80,16 @@ public class Book_detail extends AppCompatActivity {
                     publishedDate1 = BookInfo.getPublishedDate();
                     ISBN1 = BookInfo.getISBN();
                     introduce.setText(introduce1);
+                    //descriptionView设置默认显示高度
+                    introduce.setHeight(introduce.getLineHeight() * 3);
+                    //根据高度来判断是否需要再点击展开
+                    isExpand = introduce.getLineCount() <= 3;
+                    introduce_layout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            expandView.setVisibility(introduce.getLineCount() > 3 ? View.VISIBLE : View.GONE);
+                        }
+                    });
                     bookName.setText(bookname1);
                     writename.setText(writername1);
                     bookPress.setText(bookPress1);
@@ -101,11 +115,11 @@ public class Book_detail extends AppCompatActivity {
                     OwnerNum = list.get(0).getOwnerNum();
                     time.setText(time1+"天");
                     bookOwner.setText(String.valueOf(OwnerNum));
-                    if (list.get(0).getBeShared()) {
+                    /*if (list.get(0).getBeShared()) {
                         borrowBtn.setText("已被借出");
                         borrowBtn.setClickable(false);
                         borrowBtn.setBackgroundColor(getResources().getColor(black));
-                    }
+                    }*/
                 }else {
                     Toast.makeText(Book_detail.this, "查询失败1。"+ e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -160,9 +174,12 @@ public class Book_detail extends AppCompatActivity {
             }
         });
         image = (ImageView) findViewById(R.id.image);
+        introduce_layout = findViewById(R.id.introduce_layout);
+        introduce_layout.setOnClickListener(this);
+        expandView = findViewById(R.id.expand_view);
         introduce = (TextView) findViewById(R.id.introduce);
         bookName = (TextView) findViewById(R.id.bookName);
-        writename = (TextView) findViewById(R.id.writename);
+        writename = (TextView) findViewById(R.id.writername);
         bookPress = (TextView) findViewById(R.id.publishedDate);
         publishedDate = (TextView) findViewById(R.id.bookPress);
         ISBN = (TextView) findViewById(R.id.ISBN);
@@ -398,4 +415,41 @@ public class Book_detail extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.introduce_layout:
+                expand();
+                break;
+        }
+    }
+
+    private void expand() {
+        isExpand = !isExpand;
+        introduce.clearAnimation();//清楚动画效果
+        final int deltaValue;//默认高度，即前边由maxLine确定的高度
+        final int startValue = introduce.getHeight();//起始高度
+        int durationMillis = 350;//动画持续时间
+        if (isExpand) {
+            deltaValue = introduce.getLineHeight() * introduce.getLineCount() - startValue;
+            RotateAnimation animation = new RotateAnimation(0, 180, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            animation.setDuration(durationMillis);
+            animation.setFillAfter(true);
+            expandView.startAnimation(animation);
+        } else {
+            deltaValue = introduce.getLineHeight() * 3 - startValue;
+            RotateAnimation animation = new RotateAnimation(180, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            animation.setDuration(durationMillis);
+            animation.setFillAfter(true);
+            expandView.startAnimation(animation);
+        }
+        Animation animation = new Animation() {
+            protected void applyTransformation(float interpolatedTime, Transformation t) { //根据ImageView旋转动画的百分比来显示textview高度，达到动画效果
+                introduce.setHeight((int) (startValue + deltaValue * interpolatedTime));
+            }
+        };
+        animation.setDuration(durationMillis);
+        introduce.startAnimation(animation);
+    }
 }
+

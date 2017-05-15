@@ -8,8 +8,8 @@ import cn.bmob.v3.datatype.BmobFile;
  */
 
 public class SharingBook extends BmobObject {
-    private Integer shareNum;//图书序号
-    private Integer ownerNum;//图书序号
+    private Integer shareNum;//序号
+    private Integer ownerNum;//书主序号
     private Integer bookNum;//图书序号
     private Boolean beShared;//是否借出
     private Integer keepTime;//可借时间

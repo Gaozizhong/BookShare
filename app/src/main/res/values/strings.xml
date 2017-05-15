@@ -28,5 +28,18 @@
     <string name="unsubscribe_topic_fail"> Unsubscribe topic fail for %1$s.</string>
     <string name="set_accept_time_success"> Set accept time %1$s - %2$s success.</string>
     <string name="set_accept_time_fail"> Set accept time fail for %1$s.</string>
+    <string name="bookImage">图书图片</string>
+    <string name="introduce">图书简介:</string>
+    <string name="expand_introduce">展开</string>
+    <string name="bookName">书名:</string>
+    <string name="bookWriter">作者:</string>
+    <string name="bookPress">出版社:</string>
+    <string name="publishedDate">出版日期:</string>
+    <string name="isbn">ISBN:</string>
+    <string name="time">时间:</string>
+    <string name="bookowner">书主:</string>
+    <string name="likeBtn">喜爱按钮</string>
+    <string name="readBtn">读过按钮</string>
+    <string name="borrowBtn">我想借书</string>
 </resources>
 

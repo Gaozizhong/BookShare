@@ -105,6 +105,7 @@ public class MenuActivity extends AppCompatActivity
     myAdapterRecyclerView adapter;
     private LinearLayoutManager mLayoutManager;
     private int lastVisibleItem ;
+    Integer[] bookNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -905,7 +906,7 @@ public class MenuActivity extends AppCompatActivity
             @Override
             public void done(List<SharingBook> list, BmobException e) {
                 if (e == null) {
-                    final Integer[] bookNum = new Integer[list.size()];
+                    bookNum = new Integer[list.size()];
                     for (int i=0;i<list.size();i++) {
                         bookNum[i] = list.get(i).getBookNum();
                     }
