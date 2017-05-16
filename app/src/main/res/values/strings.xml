@@ -41,5 +41,6 @@
     <string name="likeBtn">喜爱按钮</string>
     <string name="readBtn">读过按钮</string>
     <string name="borrowBtn">我想借书</string>
+    <string name="writerIntroduce">作者简介：</string>
 </resources>
 

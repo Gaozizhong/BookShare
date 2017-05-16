@@ -1,12 +1,13 @@
 package cn.a1949science.www.bookshare.bean;
 
+import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobFile;
 
 /**
  * Created by 高子忠 on 2017/4/30.
  */
 
-public class WriterInfo {
+public class WriterInfo extends BmobObject {
     private Integer writerNum;//作者序号
     private String writerName;//作者姓名
     private String writerNation;//作者国籍

@@ -1,9 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="cn.a1949science.www.bookshare.activity.WriterInfoPage">
 
-</android.support.constraint.ConstraintLayout>
+    <include layout="@layout/bar_main" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:id="@+id/introduce_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:orientation="vertical"
+                android:background="@color/white">
+
+                <TextView
+                    android:id="@+id/writername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/writerIntroduce"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:gravity="center_horizontal" />
+
+                <TextView
+                    android:ellipsize="end"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:id="@+id/introduce"
+                    android:textIsSelectable="false"
+                    android:background="#ffffff"
+                    android:textSize="15sp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp" />
+
+                <ImageView
+                    android:id="@+id/expand_view"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right"
+                    android:paddingBottom="5dip"
+                    android:paddingLeft="5dip"
+                    android:paddingRight="5dip"
+                    android:paddingTop="5dip"
+                    android:src="@mipmap/expand"
+                    android:visibility="gone"
+                    android:contentDescription="@string/expand_introduce" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

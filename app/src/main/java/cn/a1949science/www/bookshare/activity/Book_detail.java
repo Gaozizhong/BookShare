@@ -417,7 +417,11 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
                 expand();
                 break;
             case R.id.writername:
+                Bundle data = new Bundle();
+                //利用Intent传递数据
+                data.putString("writername",writername1);
                 Intent it = new Intent(mContext, WriterInfoPage.class);
+                it.putExtras(data);
                 startActivity(it);
                 overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
                 break;
