@@ -23,13 +23,7 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import cn.a1949science.www.bookshare.R;
-import cn.a1949science.www.bookshare.bean.BookInfo;
-import cn.a1949science.www.bookshare.bean.Book_Info;
-import cn.a1949science.www.bookshare.bean.Like_Book;
-import cn.a1949science.www.bookshare.bean.Read_Book;
-import cn.a1949science.www.bookshare.bean.Shared_Info;
-import cn.a1949science.www.bookshare.bean.SharingBook;
-import cn.a1949science.www.bookshare.bean._User;
+import cn.a1949science.www.bookshare.bean.*;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
@@ -180,6 +174,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
         introduce = (TextView) findViewById(R.id.introduce);
         bookName = (TextView) findViewById(R.id.bookName);
         writename = (TextView) findViewById(R.id.writername);
+        writename.setOnClickListener(this);
         bookPress = (TextView) findViewById(R.id.publishedDate);
         publishedDate = (TextView) findViewById(R.id.bookPress);
         ISBN = (TextView) findViewById(R.id.ISBN);
@@ -421,9 +416,14 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
             case R.id.introduce_layout:
                 expand();
                 break;
+            case R.id.writername:
+                Intent it = new Intent(mContext, WriterInfoPage.class);
+                startActivity(it);
+                overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
+                break;
         }
     }
-
+    //图书介绍的展开
     private void expand() {
         isExpand = !isExpand;
         introduce.clearAnimation();//清楚动画效果

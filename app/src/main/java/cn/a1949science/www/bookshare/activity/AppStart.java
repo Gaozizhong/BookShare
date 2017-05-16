@@ -1,37 +1,17 @@
 package cn.a1949science.www.bookshare.activity;
 
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Process;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.widget.Toast;
-
-import com.xiaomi.channel.commonutils.logger.LoggerInterface;
-import com.xiaomi.market.sdk.UpdateResponse;
-import com.xiaomi.market.sdk.UpdateStatus;
-import com.xiaomi.market.sdk.XiaomiUpdateAgent;
-import com.xiaomi.market.sdk.XiaomiUpdateListener;
-import com.xiaomi.mipush.sdk.Logger;
-import com.xiaomi.mipush.sdk.MiPushClient;
-
-import java.util.List;
 
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean._User;
-import cn.bmob.push.BmobPush;
 import cn.bmob.v3.Bmob;
-import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.BmobUser;
 
 public class AppStart extends AppCompatActivity {

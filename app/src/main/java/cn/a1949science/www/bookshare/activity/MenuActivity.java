@@ -27,7 +27,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,9 +35,6 @@ import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.lzy.imagepicker.view.CropImageView;
-import com.xiaomi.market.sdk.XiaomiUpdateAgent;
-import com.xiaomi.market.sdk.XiaomiUpdateListener;
-import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -60,15 +56,11 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.BmobUpdateListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
-import cn.bmob.v3.update.BmobUpdateAgent;
-import cn.bmob.v3.update.UpdateResponse;
-import cn.bmob.v3.update.UpdateStatus;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
@@ -110,7 +102,7 @@ public class MenuActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        XiaomiUpdateAgent.setCheckUpdateOnlyWifi(true);
+        /*XiaomiUpdateAgent.setCheckUpdateOnlyWifi(true);
         XiaomiUpdateAgent.setUpdateAutoPopup(false);
         XiaomiUpdateAgent.setUpdateListener(new XiaomiUpdateListener() {
 
@@ -143,7 +135,7 @@ public class MenuActivity extends AppCompatActivity
                 }
             }
         });
-        XiaomiUpdateAgent.update(this);
+        XiaomiUpdateAgent.update(this);*/
         setContentView(R.layout.activity_main);
         Bmob.initialize(this, "13d736220ecc496d7dcb63c7cf918ba7");
         MyApplication.setMenuActivity(this);
