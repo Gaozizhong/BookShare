@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,88 +14,25 @@
         android:layout_marginTop="4dp"
         android:background="#ffffff"
         android:gravity="center_vertical|center_horizontal"
-        android:id="@+id/linearLayout9"
+        android:id="@+id/linearLayout"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:nestedScrollingEnabled="true" >
-
-
-
+        android:nestedScrollingEnabled="true"
+        tools:targetApi="lollipop">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="书名"
-            android:id="@+id/bookName_sharing"
+            android:text="@string/book"
             android:textSize="14sp"
             android:gravity="left|center_horizontal" />
-
-        <EditText
+        <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/bookName"
+            android:id="@+id/book"
             android:layout_weight="1"
-            android:gravity="center" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:background="#ffffff"
-        android:gravity="center_vertical|center_horizontal"
-        android:id="@+id/linearLayout12"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:nestedScrollingEnabled="true" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="图书介绍"
-            android:id="@+id/textView22"
-            android:textSize="14sp"
-            android:gravity="left|center_horizontal" />
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/describe"
-            android:gravity="center"
-            android:layout_weight="1" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:background="#ffffff"
-        android:gravity="center_vertical|center_horizontal"
-        android:id="@+id/linearLayout10"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:nestedScrollingEnabled="true" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="作者"
-            android:id="@+id/textView18"
-            android:textSize="14sp"
-            android:gravity="left|center_horizontal" />
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/bookWriter"
-            android:layout_weight="1"
-            android:gravity="center" />
-
+            android:text="@string/select_book"
+            android:gravity="center"/>
     </LinearLayout>
 
     <LinearLayout
@@ -107,17 +45,16 @@
         android:id="@+id/linearLayout11"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:nestedScrollingEnabled="true" >
-
+        android:nestedScrollingEnabled="true"
+        tools:targetApi="lollipop">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="可借天数"
+            android:text="@string/keepTime"
             android:id="@+id/textView19"
             android:textSize="14sp"
             android:gravity="left|center_horizontal" />
-
         <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -125,13 +62,83 @@
             android:gravity="center"
             android:inputType="number"
             android:layout_weight="1" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:background="@color/white"
+        android:text="       若没有该书数据请填写书名和作者，我们会尽快添加详细信息"
+        android:textColor="@color/black"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:gravity="center_vertical|center_horizontal"
+        android:id="@+id/linearLayout9"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:nestedScrollingEnabled="true"
+        tools:targetApi="lollipop">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/bookName"
+            android:id="@+id/bookName_sharing"
+            android:textSize="14sp"
+            android:gravity="left|center_horizontal" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/bookName"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:inputType="text" />
 
     </LinearLayout>
 
-    <Button
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:id="@+id/bookPicture"
-        android:text="上传图书图片"/>
+        android:layout_marginTop="2dp"
+        android:background="#ffffff"
+        android:gravity="center_vertical|center_horizontal"
+        android:id="@+id/linearLayout10"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:nestedScrollingEnabled="true"
+        tools:targetApi="lollipop">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/bookWriter"
+            android:id="@+id/textView18"
+            android:textSize="14sp"
+            android:gravity="left|center_horizontal" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/bookWriter"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:inputType="text" />
+
+    </LinearLayout>
+
+
+
 
 </TableLayout>

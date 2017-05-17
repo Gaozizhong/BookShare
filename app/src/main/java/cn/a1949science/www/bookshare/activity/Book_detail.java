@@ -59,6 +59,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
         shareNum = bundle.getInt("shareNum");
         booknum1 = bundle.getInt("booknum");
         objectId = bundle.getString("objectId");
+        //Toast.makeText(mContext, String.valueOf(booknum1) + String.valueOf(shareNum), Toast.LENGTH_SHORT).show();
         //显示图书信息
         BmobQuery<BookInfo> query = new BmobQuery<>();
         query.getObject(objectId, new QueryListener<BookInfo>() {

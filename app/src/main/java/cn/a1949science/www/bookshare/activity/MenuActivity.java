@@ -72,7 +72,7 @@ import static android.graphics.Color.BLUE;
  */
 
 public class MenuActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener{
 
     Context mContext = MenuActivity.this;
     Toolbar toolbar;
@@ -275,11 +275,17 @@ public class MenuActivity extends AppCompatActivity
         recyclerView.setLayoutManager(mLayoutManager);
         RedPoint= (ImageButton) findViewById(R.id.RedPoint);
         shortCut = (ImageButton) findViewById(R.id.shortcut);
+        shortCut.setOnClickListener(this);
         borrowBtn = (Button) findViewById(R.id.borrowBtn);
+        borrowBtn.setOnClickListener(this);
         loanBtn = (Button) findViewById(R.id.loanBtn);
+        loanBtn.setOnClickListener(this);
         shareBtn = (Button) findViewById(R.id.shareBtn);
+        shareBtn.setOnClickListener(this);
         returnBtn = (Button) findViewById(R.id.returnBtn);
+        returnBtn.setOnClickListener(this);
         receiveBtn = (Button) findViewById(R.id.receiveBtn);
+        receiveBtn.setOnClickListener(this);
         mine = findViewById(R.id.mine);
     }
 
@@ -419,143 +425,6 @@ public class MenuActivity extends AppCompatActivity
     }
     //点击事件
     private void onClick()  {
-        //分享按钮
-        shareBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fold();
-                //弹出信息框
-                LayoutInflater inflater = getLayoutInflater();
-                final View layout = inflater.inflate(R.layout.sharing, (ViewGroup) findViewById(R.id.sharing_Dialog));
-
-                final Button bookPicture = (Button) layout.findViewById(R.id.bookPicture);
-                //为上传图片按钮设置点击事件
-                bookPicture.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        selectBookPicture();
-                    }
-                });
-                final EditText bookName = (EditText) layout.findViewById(R.id.bookName);
-                final EditText describe = (EditText) layout.findViewById(R.id.describe);
-                final EditText bookWriter = (EditText) layout.findViewById(R.id.bookWriter);
-                final EditText shareTime = (EditText) layout.findViewById(R.id.shareTime);
-                shareTime.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mContext);
-                        final String[] sharetime = {"1","2","3","4","5","6","7"};
-                        builder.setSingleChoiceItems(sharetime, 0, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                shareTime.setText(sharetime[i]);
-                                dialogInterface.dismiss();
-                            }
-                        });
-                        builder.show();
-                    }
-                });
-                new AlertDialog.Builder(mContext)
-                        .setTitle("图书共享")
-                        .setPositiveButton("确认共享", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                if (bookName.getText().toString().equals("")  || describe.getText().toString().equals("")
-                                        || bookWriter.getText().toString() .equals("") || shareTime.getText().toString() .equals("")||picturePath.equals("")) {
-                                    Toast.makeText(mContext, "信息不全！！！", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    //用Luban压缩图片
-                                    Luban.get(mContext)
-                                            .load(new File(picturePath))
-                                            .putGear(Luban.THIRD_GEAR)
-                                            .setCompressListener(new OnCompressListener() {
-                                                @Override
-                                                public void onStart() {
-
-                                                }
-
-                                                @Override
-                                                public void onSuccess(File file) {
-                                                    bmobFile = new BmobFile(file);
-                                                    new AlertDialog.Builder(mContext)
-                                                            .setMessage("上传此图片？")
-                                                            .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(DialogInterface dialogInterface, int i) {
-                                                                    //等待框
-                                                                    final ProgressDialog progressDialog = new ProgressDialog(mContext);
-                                                                    progressDialog.setMessage("正在上传...");
-                                                                    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                                                                    progressDialog.setCanceledOnTouchOutside(false);
-                                                                    progressDialog.show();
-                                                                    //上传图片
-                                                                    bmobFile.uploadblock(new UploadFileListener() {
-                                                                        @Override
-                                                                        public void done(BmobException e) {
-                                                                            if (e == null) {
-                                                                                picturePath = "";
-                                                                                progressDialog.dismiss();
-                                                                                //上传其他信息
-                                                                                _User bmobUser = BmobUser.getCurrentUser(_User.class);
-                                                                                String username = bmobUser.getUsername();
-                                                                                Book_Info book = new Book_Info();
-                                                                                book.setOwner(bmobUser);
-                                                                                book.setOwnerName(username);
-                                                                                book.setBookName(bookName.getText().toString());
-                                                                                book.setBookDescribe(describe.getText().toString());
-                                                                                book.setBookWriter(bookWriter.getText().toString());
-                                                                                book.setkeepTime(shareTime.getText().toString());
-                                                                                book.setBeShared(false);
-                                                                                book.setBookPicture(bmobFile);
-                                                                                book.save(new SaveListener<String>() {
-                                                                                    @Override
-                                                                                    public void done(String s, BmobException e) {
-                                                                                        if (e == null) {
-                                                                                            Toast.makeText(mContext, "图书共享成功", Toast.LENGTH_SHORT).show();
-                                                                                            displayList();
-                                                                                        } else {
-                                                                                            Toast.makeText(mContext, "图书共享失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                                        }
-                                                                                    }
-                                                                                });
-                                                                                progressDialog.dismiss();
-                                                                            } else {
-                                                                                Toast.makeText(mContext, "上传失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                                progressDialog.dismiss();
-                                                                            }
-                                                                        }
-                                                                    });
-                                                                }
-                                                            })
-                                                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(DialogInterface dialogInterface, int i) {
-                                                                    Toast.makeText(mContext, "请重新填写分享信息", Toast.LENGTH_SHORT).show();
-                                                                }
-                                                            })
-                                                            .show();
-                                                }
-
-                                                @Override
-                                                public void onError(Throwable e) {
-
-                                                }
-                                            }).launch();
-
-
-                                }
-                            }
-                        })
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        })
-                        .setView(layout)
-                        .show();
-            }
-        });
 
         //归还按钮
         returnBtn.setOnClickListener(new View.OnClickListener() {
@@ -749,7 +618,7 @@ public class MenuActivity extends AppCompatActivity
         _User bmobUser = BmobUser.getCurrentUser(_User.class);
         //查询是否有书主为自己的借书信息
         BmobQuery<Shared_Info> query = new BmobQuery<>();
-        query.addWhereEqualTo("ownerName", bmobUser.getUsername());
+        query.addWhereEqualTo("ownerNum", bmobUser.getUserNum());
         query.addWhereEqualTo("ifAffirm", false);
         query.addWhereEqualTo("ifRefuse", false);
         query.findObjects(new FindListener<Shared_Info>() {
@@ -894,6 +763,7 @@ public class MenuActivity extends AppCompatActivity
         _User bmobUser = BmobUser.getCurrentUser(_User.class);
         Integer userNum = bmobUser.getUserNum();
         query.addWhereNotEqualTo("ownerNum", userNum);
+        query.order("-createdAt");
         query.findObjects(new FindListener<SharingBook>() {
             @Override
             public void done(List<SharingBook> list, BmobException e) {
@@ -902,7 +772,7 @@ public class MenuActivity extends AppCompatActivity
                     for (int i=0;i<list.size();i++) {
                         bookNum[i] = list.get(i).getBookNum();
                     }
-
+                    //Toast.makeText(mContext, String.valueOf(bookNum[0])+String.valueOf(bookNum[1]+String.valueOf(bookNum[2])), Toast.LENGTH_SHORT).show();
                     BmobQuery<BookInfo> query1 = new BmobQuery<>();
                     query1.addWhereContainedIn("bookNum", Arrays.asList(bookNum));
                     query1.setLimit(10);
@@ -978,5 +848,167 @@ public class MenuActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         MyApplication.setMenuActivity(null);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.shareBtn:
+                shareBook();
+                break;
+            case R.id.returnBtn:
+                returnBook();
+                break;
+            case R.id.loanBtn:
+                loanBook();
+                break;
+            case R.id.borrowBtn:
+                borrowBook();
+                break;
+            case R.id.receiveBtn:
+                receiveBook();
+                break;
+            case R.id.shortcut:
+                shortBtn();
+                break;
+        }
+    }
+
+    private void shortBtn() {
+
+    }
+
+    private void receiveBook() {
+
+    }
+
+    private void borrowBook() {
+
+    }
+
+    //
+    private void loanBook() {
+
+    }
+
+    private void returnBook() {
+
+    }
+
+    //分享图书
+    private void shareBook() {
+        fold();
+        //弹出信息框
+        LayoutInflater inflater = getLayoutInflater();
+        final View layout = inflater.inflate(R.layout.sharing, (ViewGroup) findViewById(R.id.sharing_Dialog));
+
+        final Button bookPicture = (Button) layout.findViewById(R.id.book);
+        //为上传图片按钮设置点击事件
+        bookPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectBookPicture();
+            }
+        });
+        final EditText bookName = (EditText) layout.findViewById(R.id.bookName);
+        final EditText bookWriter = (EditText) layout.findViewById(R.id.bookWriter);
+        final EditText shareTime = (EditText) layout.findViewById(R.id.shareTime);
+        new AlertDialog.Builder(mContext)
+                .setTitle("图书共享")
+                .setPositiveButton("确认共享", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (bookName.getText().toString().equals("") || bookWriter.getText().toString() .equals("") || shareTime.getText().toString() .equals("")||picturePath.equals("")) {
+                            Toast.makeText(mContext, "信息不全！！！", Toast.LENGTH_SHORT).show();
+                        } else {
+                            //用Luban压缩图片
+                            Luban.get(mContext)
+                                    .load(new File(picturePath))
+                                    .putGear(Luban.THIRD_GEAR)
+                                    .setCompressListener(new OnCompressListener() {
+                                        @Override
+                                        public void onStart() {
+
+                                        }
+
+                                        @Override
+                                        public void onSuccess(File file) {
+                                            bmobFile = new BmobFile(file);
+                                            new AlertDialog.Builder(mContext)
+                                                    .setMessage("上传此图片？")
+                                                    .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            //等待框
+                                                            final ProgressDialog progressDialog = new ProgressDialog(mContext);
+                                                            progressDialog.setMessage("正在上传...");
+                                                            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                                            progressDialog.setCanceledOnTouchOutside(false);
+                                                            progressDialog.show();
+                                                            //上传图片
+                                                            bmobFile.uploadblock(new UploadFileListener() {
+                                                                @Override
+                                                                public void done(BmobException e) {
+                                                                    if (e == null) {
+                                                                        picturePath = "";
+                                                                        progressDialog.dismiss();
+                                                                        //上传其他信息
+                                                                        _User bmobUser = BmobUser.getCurrentUser(_User.class);
+                                                                        String username = bmobUser.getUsername();
+                                                                        Book_Info book = new Book_Info();
+                                                                        book.setOwner(bmobUser);
+                                                                        book.setOwnerName(username);
+                                                                        book.setBookName(bookName.getText().toString());
+                                                                        book.setBookWriter(bookWriter.getText().toString());
+                                                                        book.setkeepTime(shareTime.getText().toString());
+                                                                        book.setBeShared(false);
+                                                                        book.setBookPicture(bmobFile);
+                                                                        book.save(new SaveListener<String>() {
+                                                                            @Override
+                                                                            public void done(String s, BmobException e) {
+                                                                                if (e == null) {
+                                                                                    Toast.makeText(mContext, "图书共享成功", Toast.LENGTH_SHORT).show();
+                                                                                    displayList();
+                                                                                } else {
+                                                                                    Toast.makeText(mContext, "图书共享失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                                }
+                                                                            }
+                                                                        });
+                                                                        progressDialog.dismiss();
+                                                                    } else {
+                                                                        Toast.makeText(mContext, "上传失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                        progressDialog.dismiss();
+                                                                    }
+                                                                }
+                                                            });
+                                                        }
+                                                    })
+                                                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            Toast.makeText(mContext, "请重新填写分享信息", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    })
+                                                    .show();
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+
+                                        }
+                                    }).launch();
+
+
+                        }
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .setView(layout)
+                .show();
     }
 }

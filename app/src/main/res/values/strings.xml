@@ -42,5 +42,8 @@
     <string name="readBtn">读过按钮</string>
     <string name="borrowBtn">我想借书</string>
     <string name="writerIntroduce">作者简介：</string>
+    <string name="book">图书:</string>
+    <string name="keepTime">可借天数</string>
+    <string name="select_book">选择要分享的图书</string>
 </resources>
 

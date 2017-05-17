@@ -70,7 +70,7 @@ public class myAdapterRecyclerView extends RecyclerView.Adapter<myAdapterRecycle
                 BookInfo book_info = list.get(position);
                 Bundle data = new Bundle();
                 //利用Intent传递数据
-                data.putInt("shareNum",bookNum[position]);
+                data.putInt("shareNum",bookNum[bookNum.length-1-position]);
                 data.putInt("booknum",book_info.getBookNum());
                 data.putString("objectId",book_info.getObjectId());
                 Intent intent = new Intent(context, Book_detail.class);
