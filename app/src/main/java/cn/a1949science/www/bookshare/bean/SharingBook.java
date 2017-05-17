@@ -21,7 +21,7 @@ public class SharingBook extends BmobObject {
     public void setOwnerNum(Integer ownerNum){this.ownerNum =  ownerNum;}
 
     public Integer getBookNum(){return bookNum;}
-    public void setBookNum(Integer BookNum){this.bookNum =  bookNum;}
+    public void setBookNum(Integer bookNum){this.bookNum =  bookNum;}
 
     public Boolean getBeSharing() {return beSharing;}
     public void setBeSharing(Boolean beSharing){this.beSharing = beSharing;}
