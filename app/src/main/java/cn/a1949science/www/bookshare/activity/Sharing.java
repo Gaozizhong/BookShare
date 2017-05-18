@@ -10,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -23,8 +26,10 @@ import java.util.Date;
 import java.util.List;
 
 import cn.a1949science.www.bookshare.R;
+import cn.a1949science.www.bookshare.bean.BookInfo;
 import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean.Shared_Info;
+import cn.a1949science.www.bookshare.bean.SharingBook;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -35,14 +40,15 @@ import cn.bmob.v3.listener.UpdateListener;
 
 import static android.R.color.black;
 
-public class Sharing extends AppCompatActivity {
+public class Sharing extends AppCompatActivity implements View.OnClickListener{
     Context mContext = Sharing.this;
     ImageView image;
-    TextView introduce,bookName,writename,time,bookOwner;
+    View introduce_layout, expandView;
+    TextView introduce,bookName,writename,bookPress,publishedDate,ISBN,time,bookOwner;
     ImageButton likeBtn,readBtn;
-    String objectId,objectId1,introduce1,bookname1,writername1,OwnerName1,time1,phone;
+    String objectId,objectId1,introduce1,bookname1,writername1,OwnerName1,time1,phone,bookPress1,publishedDate1,ISBN1;
     int booknum1,textNum,userNum;
-    boolean ifLike=false,ifRead=false;
+    boolean ifLike=false,ifRead=false,isExpand;
     Button borrowBtn,borrowBtn2,RefuseBtn;
     Toolbar toolbar;
     LinearLayout no_refuse, can_refuse;
@@ -391,25 +397,36 @@ public class Sharing extends AppCompatActivity {
         }
         textNum = 0;
 
-        final BmobQuery<Book_Info> query = new BmobQuery<>();
-        query.addWhereEqualTo("BookNum",booknum1);
-        query.findObjects(new FindListener<Book_Info>() {
+        final BmobQuery<BookInfo> query = new BmobQuery<>();
+        query.addWhereEqualTo("bookNum",booknum1);
+        query.findObjects(new FindListener<BookInfo>() {
             @Override
-            public void done(List<Book_Info> list, BmobException e) {
+            public void done(List<BookInfo> list, BmobException e) {
                 if (e == null) {
-                    introduce1 = list.get(0).getBookDescribe();
+                    introduce1 = list.get(0).getIntroduction();
                     bookname1 = list.get(0).getBookName();
                     writername1 = list.get(0).getBookWriter();
-                    time1 = list.get(0).getkeepTime().toString();
-                    OwnerName1 = list.get(0).getOwnerName();
+                    bookPress1 = list.get(0).getBookPress();
+                    publishedDate1 = list.get(0).getPublishedDate();
+                    ISBN1 = list.get(0).getISBN();
                     introduce.setText(introduce1);
+                    //descriptionView设置默认显示高度
+                    introduce.setHeight(introduce.getLineHeight() * 3);
+                    //根据高度来判断是否需要再点击展开
+                    isExpand = introduce.getLineCount() <= 3;
+                    introduce_layout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            expandView.setVisibility(introduce.getLineCount() > 3 ? View.VISIBLE : View.GONE);
+                        }
+                    });
                     bookName.setText(bookname1);
                     writename.setText(writername1);
-                    time.setText(time1+"天");
-                    bookOwner.setText(OwnerName1);
-                    objectId1 = list.get(0).getObjectId();
+                    bookPress.setText(bookPress1);
+                    publishedDate.setText(publishedDate1);
+                    ISBN.setText(ISBN1);
                     Glide.with(mContext)
-                            .load(list.get(0).getBookPicture().getFileUrl())
+                            .load(list.get(0).getBookImage().getFileUrl())
                             .placeholder(R.drawable.wait)
                             .into(image);
                 } else {
@@ -479,15 +496,24 @@ public class Sharing extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
             }
         });
-        image = (ImageView) findViewById(R.id.image);
+        introduce_layout = findViewById(R.id.introduce_layout);
+        introduce_layout.setOnClickListener(this);
+        expandView = findViewById(R.id.expand_view);
         introduce = (TextView) findViewById(R.id.introduce);
         bookName = (TextView) findViewById(R.id.bookName);
-        writename = (TextView) findViewById(R.id.writename);
+        writename = (TextView) findViewById(R.id.writername);
+        writename.setOnClickListener(this);
+        bookPress = (TextView) findViewById(R.id.publishedDate);
+        publishedDate = (TextView) findViewById(R.id.bookPress);
+        ISBN = (TextView) findViewById(R.id.ISBN);
         time = (TextView) findViewById(R.id.time);
         bookOwner = (TextView) findViewById(R.id.bookOwner);
         likeBtn = (ImageButton)findViewById(R.id.likeBtn);
+        likeBtn.setOnClickListener(this);
         readBtn = (ImageButton) findViewById(R.id.readBtn);
+        readBtn.setOnClickListener(this);
         borrowBtn = (Button) findViewById(R.id.borrowBtn);
+        borrowBtn.setOnClickListener(this);
         borrowBtn2 = (Button) findViewById(R.id.borrowBtn2);
         RefuseBtn = (Button) findViewById(R.id.RefuseBtn);
     }
@@ -575,5 +601,43 @@ public class Sharing extends AppCompatActivity {
                 })
                 .create();
         dlg.show();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.introduce_layout:
+                expand();
+                break;
+        }
+    }
+
+    //图书介绍的展开
+    private void expand() {
+        isExpand = !isExpand;
+        introduce.clearAnimation();//清楚动画效果
+        final int deltaValue;//默认高度，即前边由maxLine确定的高度
+        final int startValue = introduce.getHeight();//起始高度
+        int durationMillis = 350;//动画持续时间
+        if (isExpand) {
+            deltaValue = introduce.getLineHeight() * introduce.getLineCount() - startValue;
+            RotateAnimation animation = new RotateAnimation(0, 180, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            animation.setDuration(durationMillis);
+            animation.setFillAfter(true);
+            expandView.startAnimation(animation);
+        } else {
+            deltaValue = introduce.getLineHeight() * 3 - startValue;
+            RotateAnimation animation = new RotateAnimation(180, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            animation.setDuration(durationMillis);
+            animation.setFillAfter(true);
+            expandView.startAnimation(animation);
+        }
+        Animation animation = new Animation() {
+            protected void applyTransformation(float interpolatedTime, Transformation t) { //根据ImageView旋转动画的百分比来显示textview高度，达到动画效果
+                introduce.setHeight((int) (startValue + deltaValue * interpolatedTime));
+            }
+        };
+        animation.setDuration(durationMillis);
+        introduce.startAnimation(animation);
     }
 }

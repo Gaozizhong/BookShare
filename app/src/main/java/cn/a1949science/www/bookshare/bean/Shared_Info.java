@@ -16,7 +16,9 @@ public class Shared_Info extends BmobObject {
     private Integer UserNum;
     //书主序号
     private Integer ownerNum;
-    //图书序号
+    //图书共享序号
+    private Integer sharingBookNum;
+    //图书共享序号
     private Integer BookNum;
     //用createdAT作为分享时间，用z最后的updatedAT作为归还时间
     //书主是否同意
@@ -42,6 +44,9 @@ public class Shared_Info extends BmobObject {
 
     public Integer getOwnerNum(){return ownerNum;}
     public void setOwnerNum(Integer ownerNum){this.ownerNum =  ownerNum;}
+
+    public Integer getSharingBookNum(){return sharingBookNum;}
+    public void setSharingBookNum(Integer sharingBookNum){this.sharingBookNum = sharingBookNum;}
 
     public Integer getBookNum(){return BookNum;}
     public void setBookNum(Integer BookNum){this.BookNum = BookNum;}

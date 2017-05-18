@@ -88,7 +88,7 @@ public class MenuActivity extends AppCompatActivity
     boolean clicked  = false;
     String picturePath="";
     private long exitTime = 0;
-    Integer borrowBookNum,loanBookNum,textNum1,textNum2,textNum3,userNum;
+    Integer borrowBookNum,loanBookNum,textNum1,textNum2,textNum3,userNum,shareNum;
     String objectId,time;
     View mine,headerLayout;
     BmobFile bmobFile;
@@ -541,37 +541,6 @@ public class MenuActivity extends AppCompatActivity
             }
         });
 
-        loanBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fold();
-                Bundle data = new Bundle();
-                //利用Intent传递数据
-                data.putInt("booknum",loanBookNum);
-                data.putInt("textNum",textNum2);
-                data.putString("objectId",objectId);
-                data.putInt("userNum",userNum);
-                Intent intent = new Intent(mContext, Sharing.class);
-                intent.putExtras(data);
-                startActivity(intent);
-            }
-        });
-
-        borrowBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fold();
-                Bundle data = new Bundle();
-                //利用Intent传递数据
-                data.putInt("booknum",borrowBookNum);
-                data.putInt("textNum",textNum1);
-                data.putString("objectId",objectId);
-                Intent intent = new Intent(mContext, Sharing.class);
-                intent.putExtras(data);
-                startActivity(intent);
-            }
-        });
-
         receiveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -684,6 +653,7 @@ public class MenuActivity extends AppCompatActivity
                                 receiveBtn.setClickable(true);
                                 receiveBtn.setTextColor(BLUE);
                             }
+                            shareNum = list.get(i).getSharingBookNum();
                             objectId = list.get(i).getObjectId();
                             userNum = list.get(i).getUserNum();
                             //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
@@ -727,7 +697,7 @@ public class MenuActivity extends AppCompatActivity
                         time = list.get(0).getFinishAt().getDate();
                         borrowBtn.setTextColor(BLACK);
                     }
-                    objectId = list.get(0).getObjectId();
+                    shareNum = list.get(0).getSharingBookNum();
                     progress.dismiss();
                     //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
                 } else {
@@ -917,13 +887,33 @@ public class MenuActivity extends AppCompatActivity
 
     }
 
+    //借入图书
     private void borrowBook() {
-
+        fold();
+        Bundle data = new Bundle();
+        //利用Intent传递数据
+        data.putInt("textNum",textNum1);
+        data.putInt("shareNum",shareNum);
+        data.putInt("booknum",borrowBookNum);
+        data.putInt("userNum",userNum);
+        Intent intent = new Intent(mContext, Book_detail.class);
+        intent.putExtras(data);
+        startActivity(intent);
     }
 
-    //
+    //借出图书
     private void loanBook() {
-
+        fold();
+        Bundle data = new Bundle();
+        //利用Intent传递数据
+        data.putInt("textNum",textNum2);
+        data.putInt("shareNum",shareNum);
+        data.putInt("booknum",loanBookNum);
+        data.putInt("userNum",userNum);
+        data.putString("objectId",objectId);
+        Intent intent = new Intent(mContext, Book_detail.class);
+        intent.putExtras(data);
+        startActivity(intent);
     }
 
     private void returnBook() {
