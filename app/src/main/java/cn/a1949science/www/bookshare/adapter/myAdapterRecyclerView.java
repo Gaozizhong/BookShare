@@ -30,6 +30,7 @@ public class myAdapterRecyclerView extends RecyclerView.Adapter<myAdapterRecycle
     private Context context;
     private List<BookInfo> list;
     private Integer[] bookNum;
+    private Integer[] shareNum;
 
     @Override
     public void onClick(View view) {
@@ -53,10 +54,11 @@ public class myAdapterRecyclerView extends RecyclerView.Adapter<myAdapterRecycle
         }
     }
 
-    public myAdapterRecyclerView(Context context,List<BookInfo> list,Integer[] bookNum) {
+    public myAdapterRecyclerView(Context context,List<BookInfo> list,Integer[] bookNum,Integer[] shareNum) {
         this.context = context;
         this.list = list;
         this.bookNum = bookNum;
+        this.shareNum = shareNum;
     }
 
     @Override
@@ -70,7 +72,7 @@ public class myAdapterRecyclerView extends RecyclerView.Adapter<myAdapterRecycle
                 BookInfo book_info = list.get(position);
                 Bundle data = new Bundle();
                 //利用Intent传递数据
-                data.putInt("shareNum",bookNum[bookNum.length-1-position]);
+                data.putInt("shareNum",shareNum[position]);
                 data.putInt("booknum",book_info.getBookNum());
                 data.putString("objectId",book_info.getObjectId());
                 Intent intent = new Intent(context, Book_detail.class);

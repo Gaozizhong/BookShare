@@ -59,7 +59,7 @@ public class SearchPage extends AppCompatActivity {
     Boolean ifSearch = false;
     private int lastVisibleItem ;
     String searchText;
-    Integer[] bookNum;
+    Integer[] bookNum,shareNum;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -155,7 +155,7 @@ public class SearchPage extends AppCompatActivity {
                                 public void done(List<BookInfo> list2, BmobException e) {
                                     if (e == null) {
                                         bookInfoList = list2;
-                                        adapter = new myAdapterRecyclerView(mContext, bookInfoList,shareNum);
+                                        adapter = new myAdapterRecyclerView(mContext, bookInfoList,shareNum,shareNum);
                                         recyclerView.setAdapter(adapter);
 
                                     } else {
@@ -361,7 +361,7 @@ public class SearchPage extends AppCompatActivity {
                         public void done(List<BookInfo> list2, BmobException e) {
                             if (e == null) {
                                 bookInfoList = list2;
-                                adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNum);
+                                adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNum,shareNum);
                                 recyclerView.setAdapter(adapter);
 
                             } else {

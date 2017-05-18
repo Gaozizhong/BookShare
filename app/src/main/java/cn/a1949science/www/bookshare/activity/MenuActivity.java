@@ -100,7 +100,7 @@ public class MenuActivity extends AppCompatActivity
     myAdapterRecyclerView adapter;
     private LinearLayoutManager mLayoutManager;
     private int lastVisibleItem ;
-    Integer[] bookNums;
+    Integer[] bookNums,shareNums;
     int REQUEST_CODE = 5;
     EditText bookName,bookWriter;
     private Integer bookNum;
@@ -802,11 +802,12 @@ public class MenuActivity extends AppCompatActivity
             @Override
             public void done(List<SharingBook> list, BmobException e) {
                 if (e == null) {
+                    shareNums = new Integer[list.size()];
                     bookNums = new Integer[list.size()];
                     for (int i=0;i<list.size();i++) {
                         bookNums[i] = list.get(i).getBookNum();
+                        shareNums[i] = list.get(i).getShareNum();
                     }
-                    //Toast.makeText(mContext, String.valueOf(bookNum[0])+String.valueOf(bookNum[1]+String.valueOf(bookNum[2])), Toast.LENGTH_SHORT).show();
                     BmobQuery<BookInfo> query1 = new BmobQuery<>();
                     query1.addWhereContainedIn("bookNum", Arrays.asList(bookNums));
                     query1.setLimit(10);
@@ -815,7 +816,7 @@ public class MenuActivity extends AppCompatActivity
                         public void done(List<BookInfo> list2, BmobException e) {
                             if (e == null) {
                                 bookInfoList = list2;
-                                adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNums);
+                                adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNums,shareNums);
                                 recyclerView.setAdapter(adapter);
 
                             } else {
