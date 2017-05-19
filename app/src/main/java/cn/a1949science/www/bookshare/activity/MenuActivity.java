@@ -698,6 +698,7 @@ public class MenuActivity extends AppCompatActivity
                         borrowBtn.setTextColor(BLACK);
                     }
                     shareNum = list.get(0).getSharingBookNum();
+                    objectId = list.get(0).getObjectId();
                     progress.dismiss();
                     //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
                 } else {
@@ -741,7 +742,7 @@ public class MenuActivity extends AppCompatActivity
                 } else {
                     //查询是否有书主为自己的借书信息
                     BmobQuery<Shared_Info> query2 = new BmobQuery<>();
-                    query2.addWhereEqualTo("ownerName", bmobUser2.getUsername());
+                    query2.addWhereEqualTo("ownerNum", bmobUser2.getUserNum());
                     query2.addWhereEqualTo("ifAgree", false);
                     query2.addWhereEqualTo("ifRefuse", false);
                     query2.findObjects(new FindListener<Shared_Info>() {
@@ -895,7 +896,8 @@ public class MenuActivity extends AppCompatActivity
         data.putInt("textNum",textNum1);
         data.putInt("shareNum",shareNum);
         data.putInt("booknum",borrowBookNum);
-        data.putInt("userNum",userNum);
+        //data.putInt("userNum",0);
+        //data.putString("objectId",objectId);
         Intent intent = new Intent(mContext, Book_detail.class);
         intent.putExtras(data);
         startActivity(intent);

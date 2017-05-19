@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -41,7 +42,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
     View introduce_layout, expandView;
     TextView introduce,bookName,writename,bookPress,publishedDate,ISBN,time,bookOwner;
     ImageButton likeBtn,readBtn;
-    String objectId,objectId1,introduce1,bookname1,writername1,bookPress1,publishedDate1,ISBN1,time1;
+    String objectId,objectId1,introduce1,bookname1,writername1,bookPress1,publishedDate1,ISBN1,time1,phone;
     int booknum,shareNum,userNum,OwnerNum,textNum;
     boolean ifLike=false,ifRead=false,isExpand;
     Button borrowBtn,borrowBtn2,RefuseBtn;
@@ -59,7 +60,25 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
 
     //选择状态
     private void selectState() {
-        if (textNum == 1) {
+        if (textNum == 0) {
+            //显示借书信息
+            BmobQuery<SharingBook> query1 = new BmobQuery<>();
+            query1.addWhereEqualTo("shareNum", shareNum);
+            query1.findObjects(new FindListener<SharingBook>() {
+                @Override
+                public void done(List<SharingBook> list, BmobException e) {
+                    if (e == null) {
+                        if (list.get(0).getBeSharing()) {
+                            borrowBtn.setText("已被借出");
+                            borrowBtn.setClickable(false);
+                            borrowBtn.setBackgroundColor(getResources().getColor(black));
+                        }
+                    }else {
+                        Toast.makeText(Book_detail.this, "查询失败。"+ e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        } else if (textNum == 1) {
             borrowBtn.setText("等待书主响应");
             borrowBtn.setClickable(false);
             borrowBtn.setBackgroundColor(getResources().getColor(black));
@@ -123,7 +142,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
                                     //完善借书过程
                                     Shared_Info sharedInfo = new Shared_Info();
                                     sharedInfo.setIfAgree(true);
-                                    sharedInfo.update(objectId, new UpdateListener() {
+                                    sharedInfo.update(objectId1, new UpdateListener() {
                                         @Override
                                         public void done(BmobException e) {
                                             if (e == null) {
@@ -144,6 +163,30 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
                     dlg.show();
                 }
             });
+        }else if (textNum == 3) {
+            borrowBtn.setText("联系书主");
+            borrowBtn.setClickable(true);
+            borrowBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //查找owner
+                    BmobQuery<_User> query = new BmobQuery<>();
+                    query.addWhereEqualTo("userNum", OwnerNum);
+                    //列表中不显示自己分享的书
+                    query.findObjects(new FindListener<_User>() {
+                        @Override
+                        public void done(final List<_User> list, BmobException e) {
+                            if (e == null) {
+                                phone = list.get(0).getMobilePhoneNumber();
+                                Intent it = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
+                                startActivity(it);
+                            } else {
+                                Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            });
         }
     }
 
@@ -154,7 +197,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
         booknum = bundle.getInt("booknum");
         userNum = bundle.getInt("userNum");
         objectId1 = bundle.getString("objectId");
-        //Toast.makeText(mContext, String.valueOf(shareNum) + String.valueOf(booknum1), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(mContext, String.valueOf(textNum) , Toast.LENGTH_SHORT).show();
         //显示图书信息
         BmobQuery<BookInfo> query = new BmobQuery<>();
         query.addWhereEqualTo("bookNum",booknum);
@@ -205,13 +248,8 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
                     OwnerNum = list.get(0).getOwnerNum();
                     time.setText(time1+"天");
                     bookOwner.setText(String.valueOf(OwnerNum));
-                    if (list.get(0).getBeSharing()) {
-                        borrowBtn.setText("已被借出");
-                        borrowBtn.setClickable(false);
-                        borrowBtn.setBackgroundColor(getResources().getColor(black));
-                    }
                 }else {
-                    //Toast.makeText(Book_detail.this, "查询失败1。"+ e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Book_detail.this, "查询失败1。"+ e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -587,9 +625,9 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
                             }
                         });
                         //更新此书的状态
-                        Book_Info newBook = new Book_Info();
-                        newBook.setBeShared(false);
-                        newBook.update(objectId1, new UpdateListener() {
+                        SharingBook newBook = new SharingBook();
+                        newBook.setBeSharing(false);
+                        newBook.update(objectId, new UpdateListener() {
                             @Override
                             public void done(BmobException e) {
                                 if (e == null) {
