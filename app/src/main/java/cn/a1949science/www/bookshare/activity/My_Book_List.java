@@ -3,8 +3,11 @@ package cn.a1949science.www.bookshare.activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,11 +16,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Arrays;
 import java.util.List;
 
 import cn.a1949science.www.bookshare.adapter.MyAdapter;
 import cn.a1949science.www.bookshare.R;
+import cn.a1949science.www.bookshare.adapter.myAdapterRecyclerView;
+import cn.a1949science.www.bookshare.bean.BookInfo;
 import cn.a1949science.www.bookshare.bean.Book_Info;
+import cn.a1949science.www.bookshare.bean.SharingBook;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -28,9 +35,14 @@ import cn.bmob.v3.listener.UpdateListener;
 
 public class My_Book_List extends AppCompatActivity {
     Context mContext = My_Book_List.this;
-    ListView listview;
+    SwipeRefreshLayout refresh;
+    RecyclerView recyclerView;
+    int number_of_pages=1;
+    List<BookInfo> bookInfoList= null;
+    myAdapterRecyclerView adapter;
+    private LinearLayoutManager mLayoutManager;
     TextView count;
-    int[] bookNum;
+    Integer[] bookNums,shareNums;
     String countText;
     Toolbar toolbar;
     @Override
@@ -52,33 +64,60 @@ public class My_Book_List extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
             }
         });
-        listview = (ListView) findViewById(R.id.myBookList);
+        //下拉刷新
+        refresh = (SwipeRefreshLayout) findViewById(R.id.refresh);
+        recyclerView = (RecyclerView) findViewById(R.id.booklist);
+        mLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(mLayoutManager);
         count = (TextView) findViewById(R.id.count);
     }
 
     //显示列表
     private void displayList() {
-        //查找book
+        BmobQuery<SharingBook> query = new BmobQuery<>();
         _User bmobUser = BmobUser.getCurrentUser(_User.class);
-        BmobQuery<Book_Info> query = new BmobQuery<>();
         //查找出本用户发布的所有书籍
-        query.addWhereEqualTo("owner", bmobUser);
-        query.order("-updatedAt");
-        // 希望在查询书籍信息的同时也把发布人的信息查询出来
-        query.include("owner");
-        query.findObjects(new FindListener<Book_Info>() {
+        query.addWhereEqualTo("ownerNum", bmobUser.getUserNum());
+        query.order("-createdAt");
+        query.findObjects(new FindListener<SharingBook>() {
             @Override
-            public void done(final List<Book_Info> list, BmobException e) {
+            public void done(List<SharingBook> list, BmobException e) {
                 if (e == null) {
-                    bookNum = new int[list.size()];
-                    for (int i=0;i<list.size();i++) {
-                        bookNum[i] = list.get(i).getBookNum();
-                    }
                     countText = list.size() + "本";
                     count.setText(countText);
-                    listview.setAdapter(new MyAdapter(mContext,list));
+                    shareNums = new Integer[list.size()];
+                    bookNums = new Integer[list.size()];
+                    for (int i=0;i<list.size();i++) {
+                        bookNums[i] = list.get(i).getBookNum();
+                        shareNums[i] = list.get(i).getShareNum();
+                    }
+                    BmobQuery<BookInfo> query1 = new BmobQuery<>();
+                    query1.addWhereContainedIn("bookNum", Arrays.asList(bookNums));
+                    query1.setLimit(10);
+                    query1.findObjects(new FindListener<BookInfo>() {
+                        @Override
+                        public void done(List<BookInfo> list2, BmobException e) {
+                            if (e == null) {
+                                bookInfoList = list2;
+                                adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNums,shareNums);
+                                recyclerView.setAdapter(adapter);
 
-                    listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                            } else {
+                                Toast.makeText(mContext, "查询失败2。"+e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+
+                } else {
+                    Toast.makeText(mContext, "查询失败1。"+e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+
+
+
+                   /* listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                         @Override
                         public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                             final String object = list.get(i).getObjectId();
@@ -127,13 +166,9 @@ public class My_Book_List extends AppCompatActivity {
                             dlg.show();
                             return true;
                         }
-                    });
+                    });*/
 
-                    //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+
+
     }
 }

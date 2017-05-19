@@ -133,13 +133,11 @@
         <activity android:name=".activity.Edit_Detail_Info" />
         <activity android:name=".activity.MyRead" />
         <activity android:name=".activity.MyLike" />
-        <activity android:name=".activity.Sharing" />
         <activity android:name=".activity.EditNickname" />
         <activity
             android:name=".activity.MenuActivity"
             android:label="" />
         <activity android:name=".activity.ImagePicker" />
-        <activity android:name=".activity.BookDetailCan" />
         <activity android:name=".activity.ForgetPassword" />
         <activity android:name=".activity.RegisterPage2" />
         <activity android:name=".activity.Identification" />
@@ -151,7 +149,7 @@
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.WriterInfoPage"></activity>
+        <activity android:name=".activity.WriterInfoPage"/>
     </application>
 
 </manifest>

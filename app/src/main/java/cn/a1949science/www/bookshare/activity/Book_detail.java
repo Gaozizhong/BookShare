@@ -32,7 +32,6 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
@@ -53,7 +52,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book__info);
+        setContentView(R.layout.activity_book_info);
 
         findView();
         detail();
@@ -412,7 +411,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
         booknum = bundle.getInt("booknum");
         userNum = bundle.getInt("userNum");
         objectId1 = bundle.getString("objectId");
-        Toast.makeText(mContext, String.valueOf(textNum) , Toast.LENGTH_SHORT).show();
+        //Toast.makeText(mContext, String.valueOf(textNum) , Toast.LENGTH_SHORT).show();
         //显示图书信息
         BmobQuery<BookInfo> query = new BmobQuery<>();
         query.addWhereEqualTo("bookNum",booknum);
