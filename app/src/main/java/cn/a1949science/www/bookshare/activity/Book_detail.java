@@ -22,12 +22,14 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.util.Date;
 import java.util.List;
 
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean.*;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
@@ -187,7 +189,220 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
                     });
                 }
             });
+        } else if (textNum == 4) {
+            no_refuse.setVisibility(View.GONE);
+            can_refuse.setVisibility(View.VISIBLE);
+            borrowBtn2.setText("书已借出");
+            RefuseBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    refuseShare();
+                }
+            });
+            borrowBtn2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog dlg = new AlertDialog.Builder(mContext)
+                            .setTitle("确认已经借出？")
+                            .setMessage("请确认借书人点击了“完成借入”按钮以保证图书的安全")
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            })
+                            .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    final ProgressDialog progress = new ProgressDialog(mContext);
+                                    progress.setMessage("操作中...");
+                                    progress.setCanceledOnTouchOutside(false);
+                                    progress.show();
+                                    //完成借书过程
+                                    Shared_Info sharedInfo = new Shared_Info();
+                                    sharedInfo.setIfLoan(true);
+                                    sharedInfo.update(objectId1, new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                            if (e == null) {
+                                                progress.dismiss();
+                                                RefuseBtn.setClickable(false);
+                                                borrowBtn2.setClickable(false);
+                                                RefuseBtn.setBackgroundColor(getResources().getColor(black));
+                                                borrowBtn2.setBackgroundColor(getResources().getColor(black));
+                                            } else {
+                                                Toast.makeText(mContext, "书已借出失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                }
+                            })
+                            .create();
+                    dlg.show();
+                }
+            });
+        }else if (textNum == 5) {
+            borrowBtn.setText("完成借入");
+            borrowBtn.setClickable(true);
+            borrowBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog dlg = new AlertDialog.Builder(mContext)
+                            .setTitle("确认完成借入？")
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            })
+                            .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    final ProgressDialog progress = new ProgressDialog(mContext);
+                                    progress.setMessage("操作中...");
+                                    progress.setCanceledOnTouchOutside(false);
+                                    progress.show();
+                                    //完成借书过程
+                                    Shared_Info sharedInfo = new Shared_Info();
+                                    sharedInfo.setIfFinish(true);
+                                    Date date = new Date(new Date().getTime() +Integer.parseInt(time1) * 24 * 60 * 60 * 1000);
+                                    BmobDate now = new BmobDate(date);
+                                    BmobDate now1 = BmobDate.createBmobDate("yyyy-MM-dd HH:mm:ss", now.getDate());
+                                    sharedInfo.setFinishAt(now1);
+                                    sharedInfo.update(objectId1, new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                            if (e == null) {
+                                                progress.dismiss();
+                                                borrowBtn.setClickable(false);
+                                                borrowBtn.setBackgroundColor(getResources().getColor(black));
+                                            } else {
+                                                Toast.makeText(mContext, "完成借入失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                }
+                            })
+                            .create();
+                    dlg.show();
+                }
+            });
+        } else if (textNum == 6) {
+            borrowBtn.setText("确认归还");
+            borrowBtn.setClickable(true);
+            borrowBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog dlg = new AlertDialog.Builder(mContext)
+                            .setTitle("确认归还？")
+                            .setMessage("请确认书已归还")
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            })
+                            .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    final ProgressDialog progress = new ProgressDialog(mContext);
+                                    progress.setMessage("操作中...");
+                                    progress.setCanceledOnTouchOutside(false);
+                                    progress.show();
+                                    //完成借书过程
+                                    Shared_Info sharedInfo = new Shared_Info();
+                                    sharedInfo.setIfAffirm(true);
+                                    sharedInfo.update(objectId1, new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                            if (e == null) {
+                                                progress.dismiss();
+                                                borrowBtn.setClickable(false);
+                                                borrowBtn.setBackgroundColor(getResources().getColor(black));
+                                            } else {
+                                                Toast.makeText(mContext, "确认还书失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                }
+                            })
+                            .create();
+                    dlg.show();
+                }
+            });
+        } else if (textNum == 7) {
+            borrowBtn.setText("完成归还");
+            borrowBtn.setClickable(true);
+            borrowBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog dlg = new AlertDialog.Builder(mContext)
+                            .setTitle("完成归还？")
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            })
+                            .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    final ProgressDialog progress = new ProgressDialog(mContext);
+                                    progress.setMessage("操作中...");
+                                    progress.setCanceledOnTouchOutside(false);
+                                    progress.show();
+                                    //完成借书过程
+                                    Shared_Info sharedInfo = new Shared_Info();
+                                    sharedInfo.setIfReturn(true);
+                                    sharedInfo.update(objectId1, new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                            if (e == null) {
+                                                //更新此书的状态
+                                                SharingBook newBook = new SharingBook();
+                                                newBook.setBeSharing(false);
+                                                newBook.update(objectId, new UpdateListener() {
+                                                    @Override
+                                                    public void done(BmobException e) {
+                                                        if (e == null) {
+                                                            //更新用户借书状态
+                                                            _User newUser = new _User();
+                                                            newUser.setNeedReturn(false);
+                                                            BmobUser bmobUser = BmobUser.getCurrentUser();
+                                                            newUser.update(bmobUser.getObjectId(), new UpdateListener() {
+                                                                @Override
+                                                                public void done(BmobException e) {
+                                                                    if (e == null) {
+                                                                        borrowBtn.setClickable(false);
+                                                                        borrowBtn.setBackgroundColor(getResources().getColor(black));
+                                                                        ifNeedReturn();
+                                                                    } else {
+                                                                        Toast.makeText(mContext, "还书失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                }
+                                                            });
+                                                            progress.dismiss();
+                                                        } else {
+                                                            Toast.makeText(mContext, "更新信息失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                });
+
+                                            } else {
+                                                Toast.makeText(mContext, "完成归还失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                }
+                            })
+                            .create();
+                    dlg.show();
+                }
+            });
         }
+
+        textNum = 0;
+
     }
 
     private void detail() {
@@ -197,7 +412,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
         booknum = bundle.getInt("booknum");
         userNum = bundle.getInt("userNum");
         objectId1 = bundle.getString("objectId");
-        //Toast.makeText(mContext, String.valueOf(textNum) , Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, String.valueOf(textNum) , Toast.LENGTH_SHORT).show();
         //显示图书信息
         BmobQuery<BookInfo> query = new BmobQuery<>();
         query.addWhereEqualTo("bookNum",booknum);

@@ -161,7 +161,6 @@ public class MenuActivity extends AppCompatActivity
         ZXingLibrary.initDisplayOpinion(this);
         findView();
         setListener();
-        onClick();
         displayList();
         display();
         ifNeedReturn();
@@ -457,120 +456,7 @@ public class MenuActivity extends AppCompatActivity
             }
         }
     }
-    //点击事件
-    private void onClick()  {
 
-        //归还按钮
-        returnBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fold();
-                //弹出信息框
-                LayoutInflater inflater = getLayoutInflater();
-                _User bmobUser = BmobUser.getCurrentUser(_User.class);
-                if (bmobUser.getNeedReturn()){
-                    View layout = inflater.inflate(R.layout.raturning_yes, (ViewGroup) findViewById(R.id.returning_Yes_Dialog));
-                    TextView returnTime = (TextView) layout.findViewById(R.id.returnTime);
-                    returnTime.setText("截止时间："+ time);
-                    new AlertDialog.Builder(mContext)
-                            .setPositiveButton("确认还书", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    _User bmobUser = BmobUser.getCurrentUser(_User.class);
-                                    //查询是否有借书人为自己的借书信息
-                                    BmobQuery<Shared_Info> query = new BmobQuery<>();
-                                    query.addWhereEqualTo("UserNum", bmobUser.getUserNum());
-                                    query.addWhereEqualTo("ifReturn", false);
-                                    query.findObjects(new FindListener<Shared_Info>() {
-                                        @Override
-                                        public void done(final List<Shared_Info> list, BmobException e) {
-                                            if (e == null && list.size() != 0) {
-                                                borrowBookNum = list.get(0).getBookNum();
-                                                if (!list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
-                                                    textNum1 = 3;
-                                                } else if (list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
-                                                    textNum1 = 7;
-                                                }
-                                                objectId = list.get(0).getObjectId();
-
-                                                Bundle data = new Bundle();
-                                                //利用Intent传递数据
-                                                data.putInt("booknum",borrowBookNum);
-                                                data.putInt("textNum",textNum1);
-                                                data.putString("objectId",objectId);
-                                                Intent intent = new Intent(mContext, Sharing.class);
-                                                intent.putExtras(data);
-                                                startActivity(intent);
-                                                //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                //Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
-                                                borrowBtn.setClickable(false);
-                                            }
-                                        }
-                                    });
-                                }
-                            })
-                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                }
-                            })
-                            .setView(layout)
-                            .setTitle("图书归还")
-                            .show();
-                }else {
-                    View layout = inflater.inflate(R.layout.returning_no, (ViewGroup) findViewById(R.id.raturning_No_Dialog));
-                    new AlertDialog.Builder(mContext)
-                            .setPositiveButton("我要借书", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                }
-                            })
-                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                }
-                            })
-                            .setView(layout)
-                            .setTitle("图书归还")
-                            .show();
-                }
-            }
-        });
-
-        receiveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fold();
-                Bundle data = new Bundle();
-                //利用Intent传递数据
-                data.putInt("booknum",loanBookNum);
-                data.putInt("textNum",textNum3);
-                data.putString("objectId",objectId);
-                Intent intent = new Intent(mContext, Sharing.class);
-                intent.putExtras(data);
-                startActivity(intent);
-            }
-        });
-
-
-        assert shortCut != null;
-        shortCut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!clicked ) {
-                    unfold();
-                } else {
-                    fold();
-                }
-            }
-        });
-
-
-    }
     //折叠按钮
     private void fold() {
         shareBtn.setVisibility(!clicked ? View.VISIBLE : View.GONE);
@@ -656,7 +542,6 @@ public class MenuActivity extends AppCompatActivity
                             shareNum = list.get(i).getSharingBookNum();
                             objectId = list.get(i).getObjectId();
                             userNum = list.get(i).getUserNum();
-                            //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
                             dialogInterface.dismiss();
                         }
                     });
@@ -694,9 +579,9 @@ public class MenuActivity extends AppCompatActivity
                         borrowBtn.setTextColor(BLUE);
                     }else if (list.get(0).getIfAgree() && list.get(0).getIfLoan() && list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
                         //借书过程完成
-                        time = list.get(0).getFinishAt().getDate();
                         borrowBtn.setTextColor(BLACK);
                     }
+                    time = list.get(0).getFinishAt().getDate();
                     shareNum = list.get(0).getSharingBookNum();
                     objectId = list.get(0).getObjectId();
                     progress.dismiss();
@@ -881,11 +766,24 @@ public class MenuActivity extends AppCompatActivity
     }
 
     private void shortBtn() {
-
+        if (!clicked ) {
+            unfold();
+        } else {
+            fold();
+        }
     }
 
     private void receiveBook() {
-
+        fold();
+        Bundle data = new Bundle();
+        //利用Intent传递数据
+        data.putInt("textNum",textNum3);
+        data.putInt("shareNum",shareNum);
+        data.putInt("booknum",loanBookNum);
+        data.putString("objectId",objectId);
+        Intent intent = new Intent(mContext, Book_detail.class);
+        intent.putExtras(data);
+        startActivity(intent);
     }
 
     //借入图书
@@ -897,7 +795,7 @@ public class MenuActivity extends AppCompatActivity
         data.putInt("shareNum",shareNum);
         data.putInt("booknum",borrowBookNum);
         //data.putInt("userNum",0);
-        //data.putString("objectId",objectId);
+        data.putString("objectId",objectId);
         Intent intent = new Intent(mContext, Book_detail.class);
         intent.putExtras(data);
         startActivity(intent);
@@ -918,8 +816,83 @@ public class MenuActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    //归还图书
     private void returnBook() {
+        fold();
+        //弹出信息框
+        LayoutInflater inflater = getLayoutInflater();
+        _User bmobUser = BmobUser.getCurrentUser(_User.class);
+        if (bmobUser.getNeedReturn()){
+            View layout = inflater.inflate(R.layout.raturning_yes, (ViewGroup) findViewById(R.id.returning_Yes_Dialog));
+            TextView returnTime = (TextView) layout.findViewById(R.id.returnTime);
+            returnTime.setText("截止时间："+ time);
+            new AlertDialog.Builder(mContext)
+                    .setPositiveButton("确认还书", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            _User bmobUser = BmobUser.getCurrentUser(_User.class);
+                            //查询是否有借书人为自己的借书信息
+                            BmobQuery<Shared_Info> query = new BmobQuery<>();
+                            query.addWhereEqualTo("UserNum", bmobUser.getUserNum());
+                            query.addWhereEqualTo("ifReturn", false);
+                            query.findObjects(new FindListener<Shared_Info>() {
+                                @Override
+                                public void done(final List<Shared_Info> list, BmobException e) {
+                                    if (e == null && list.size() != 0) {
+                                        borrowBookNum = list.get(0).getBookNum();
+                                        if (!list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
+                                            textNum1 = 3;
+                                        } else if (list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
+                                            textNum1 = 7;
+                                        }
+                                        objectId = list.get(0).getObjectId();
 
+                                        Bundle data = new Bundle();
+                                        //利用Intent传递数据
+                                        data.putInt("textNum",textNum1);
+                                        data.putInt("shareNum",shareNum);
+                                        data.putInt("booknum",borrowBookNum);
+                                        data.putString("objectId",objectId);
+                                        Intent intent = new Intent(mContext, Book_detail.class);
+                                        intent.putExtras(data);
+                                        startActivity(intent);
+                                        //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        //Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
+                                        borrowBtn.setClickable(false);
+                                    }
+                                }
+                            });
+                        }
+                    })
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    })
+                    .setView(layout)
+                    .setTitle("图书归还")
+                    .show();
+        }else {
+            View layout = inflater.inflate(R.layout.returning_no, (ViewGroup) findViewById(R.id.raturning_No_Dialog));
+            new AlertDialog.Builder(mContext)
+                    .setPositiveButton("我要借书", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    })
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    })
+                    .setView(layout)
+                    .setTitle("图书归还")
+                    .show();
+        }
     }
 
     //分享图书
