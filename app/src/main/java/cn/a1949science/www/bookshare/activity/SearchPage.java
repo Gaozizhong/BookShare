@@ -35,6 +35,7 @@ import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.adapter.myAdapterRecyclerView;
 import cn.a1949science.www.bookshare.bean.BookInfo;
 import cn.a1949science.www.bookshare.bean.Book_Info;
+import cn.a1949science.www.bookshare.bean.Like_Book;
 import cn.a1949science.www.bookshare.bean.SharingBook;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.v3.BmobQuery;
@@ -43,6 +44,7 @@ import cn.bmob.v3.datatype.BmobQueryResult;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SQLQueryListener;
+import cn.bmob.v3.listener.SaveListener;
 
 public class SearchPage extends AppCompatActivity {
     Context mContext = SearchPage.this;
@@ -390,8 +392,8 @@ public class SearchPage extends AppCompatActivity {
                     return;
                 }
                 if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
-                    String result = bundle.getString(CodeUtils.RESULT_STRING);
-                    Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
+                    final String result = bundle.getString(CodeUtils.RESULT_STRING);
+                    //Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
                     //查询扫描的书
                     BmobQuery<BookInfo> query = new BmobQuery<>();
                     query.addWhereEqualTo("ISBN", result);
@@ -399,16 +401,44 @@ public class SearchPage extends AppCompatActivity {
                         @Override
                         public void done(List<BookInfo> list, BmobException e) {
                             if (e == null) {
-                                Bundle data = new Bundle();
-                                //利用Intent传递数据
-                                data.putInt("booknum",list.get(0).getBookNum());
-                                data.putString("objectId",list.get(0).getObjectId());
-                                Intent intent = new Intent(mContext, Book_detail.class);
-                                intent.putExtras(data);
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
+                                bookInfoList = list;
+                                BmobQuery<SharingBook> query = new BmobQuery<>();
+                                //列表中不显示自己分享的书
+                                _User bmobUser = BmobUser.getCurrentUser(_User.class);
+                                Integer userNum = bmobUser.getUserNum();
+                                query.addWhereNotEqualTo("ownerNum", userNum);
+                                query.addWhereEqualTo("bookNum", list.get(0).getBookNum());
+                                query.findObjects(new FindListener<SharingBook>() {
+                                    @Override
+                                    public void done(List<SharingBook> list, BmobException e) {
+                                        if (e == null) {
+                                            shareNums = new Integer[list.size()];
+                                            bookNums = new Integer[list.size()];
+                                            for (int i=0;i<list.size();i++) {
+                                                bookNums[i] = list.get(i).getBookNum();
+                                                shareNums[i] = list.get(i).getShareNum();
+                                            }
+                                            adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNums,shareNums);
+                                            recyclerView.setAdapter(adapter);
+                                        } else {
+                                            Toast.makeText(mContext, "查询失败。"+e.getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
                             } else {
-                                Toast.makeText(mContext, "暂时没有这本书", Toast.LENGTH_SHORT).show();
+                                //添加书籍信息
+                                BookInfo bookInfo = new BookInfo();
+                                bookInfo.setISBN(result);
+                                bookInfo.save(new SaveListener<String>() {
+                                    @Override
+                                    public void done(String s, BmobException e) {
+                                        if (e == null) {
+                                            Toast.makeText(mContext, "暂时没有这本书,信息已反馈，请耐心等待！", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(mContext, "失败", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
                             }
                         }
                     });

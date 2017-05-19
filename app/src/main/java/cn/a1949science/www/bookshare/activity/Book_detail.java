@@ -75,6 +75,13 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
                             borrowBtn.setText("已被借出");
                             borrowBtn.setClickable(false);
                             borrowBtn.setBackgroundColor(getResources().getColor(black));
+                        } else {
+                            borrowBtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    addShareInfo();
+                                }
+                            });
                         }
                     }else {
                         Toast.makeText(Book_detail.this, "查询失败。"+ e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -400,7 +407,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
         booknum = bundle.getInt("booknum");
         userNum = bundle.getInt("userNum");
         objectId1 = bundle.getString("objectId");
-        //Toast.makeText(mContext, String.valueOf(textNum) , Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, String.valueOf(shareNum) , Toast.LENGTH_SHORT).show();
         //显示图书信息
         BmobQuery<BookInfo> query = new BmobQuery<>();
         query.addWhereEqualTo("bookNum",booknum);
@@ -608,9 +615,6 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
                 break;
             case R.id.readBtn:
                 addReadBook();
-                break;
-            case R.id.borrowBtn:
-                addShareInfo();
                 break;
         }
     }

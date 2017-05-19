@@ -88,7 +88,7 @@ public class MenuActivity extends AppCompatActivity
     boolean clicked  = false;
     String picturePath="";
     private long exitTime = 0;
-    Integer borrowBookNum,loanBookNum,textNum1,textNum2,textNum3,userNum,shareNum;
+    Integer borrowBookNum,loanBookNum,textNum1,textNum2,textNum3,userNum,shareNum,shareNum1;
     String objectId,time;
     View mine,headerLayout;
     BmobFile bmobFile;
@@ -489,7 +489,6 @@ public class MenuActivity extends AppCompatActivity
         borrowBtn.setTextColor(BLACK);
         receiveBtn.setTextColor(BLACK);
 
-
         queryShareInfo();
 
         animation = AnimationUtils.loadAnimation(mContext, R.anim.rotate_add);
@@ -554,7 +553,8 @@ public class MenuActivity extends AppCompatActivity
 
         //查询是否有借书人为自己的借书信息
         BmobQuery<Shared_Info> query1 = new BmobQuery<>();
-        query1.addWhereEqualTo("UserNum", bmobUser.getUserNum());
+        userNum = bmobUser.getUserNum();
+        query1.addWhereEqualTo("UserNum", userNum);
         query1.addWhereEqualTo("ifReturn", false);
         query1.addWhereEqualTo("ifRefuse", false);
         query1.findObjects(new FindListener<Shared_Info>() {
@@ -562,6 +562,7 @@ public class MenuActivity extends AppCompatActivity
             public void done(final List<Shared_Info> list, BmobException e) {
                 if (e == null && list.size()!=0) {
                     borrowBookNum = list.get(0).getBookNum();
+                    shareNum1 = list.get(0).getSharingBookNum();
                     if (!list.get(0).getIfAgree() && !list.get(0).getIfLoan() && !list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
                         //借书人刚发送借书请求
                         textNum1 = 1;
@@ -582,10 +583,8 @@ public class MenuActivity extends AppCompatActivity
                         borrowBtn.setTextColor(BLACK);
                     }
                     time = list.get(0).getFinishAt().getDate();
-                    shareNum = list.get(0).getSharingBookNum();
                     objectId = list.get(0).getObjectId();
                     progress.dismiss();
-                    //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
                 } else {
                     progress.dismiss();
                     //Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
@@ -667,6 +666,7 @@ public class MenuActivity extends AppCompatActivity
                     BmobQuery<BookInfo> query1 = new BmobQuery<>();
                     query1.addWhereContainedIn("bookNum", Arrays.asList(bookNums));
                     query1.setLimit(10);
+                    query1.order("-createdAt");
                     query1.findObjects(new FindListener<BookInfo>() {
                         @Override
                         public void done(List<BookInfo> list2, BmobException e) {
@@ -793,9 +793,9 @@ public class MenuActivity extends AppCompatActivity
         Bundle data = new Bundle();
         //利用Intent传递数据
         data.putInt("textNum",textNum1);
-        data.putInt("shareNum",shareNum);
+        data.putInt("shareNum",shareNum1);
         data.putInt("booknum",borrowBookNum);
-        //data.putInt("userNum",0);
+        data.putInt("userNum",userNum);
         data.putString("objectId",objectId);
         Intent intent = new Intent(mContext, Book_detail.class);
         intent.putExtras(data);
@@ -899,7 +899,7 @@ public class MenuActivity extends AppCompatActivity
         }
     }
 
-    //分享图书
+    //共享图书
     private void shareBook() {
         fold();
         //弹出信息框
@@ -928,7 +928,7 @@ public class MenuActivity extends AppCompatActivity
                             Toast.makeText(mContext, "信息不全！！！", Toast.LENGTH_SHORT).show();
                         } else {
                             new AlertDialog.Builder(mContext)
-                                    .setMessage("上传此书？")
+                                    .setMessage("共享此书？")
                                     .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {

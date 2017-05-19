@@ -94,6 +94,7 @@ public class My_Book_List extends AppCompatActivity {
                     BmobQuery<BookInfo> query1 = new BmobQuery<>();
                     query1.addWhereContainedIn("bookNum", Arrays.asList(bookNums));
                     query1.setLimit(10);
+                    query1.order("-createdAt");
                     query1.findObjects(new FindListener<BookInfo>() {
                         @Override
                         public void done(List<BookInfo> list2, BmobException e) {
