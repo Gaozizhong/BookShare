@@ -827,6 +827,9 @@ public class MenuActivity extends AppCompatActivity
             View layout = inflater.inflate(R.layout.raturning_yes, (ViewGroup) findViewById(R.id.returning_Yes_Dialog));
             TextView returnTime = (TextView) layout.findViewById(R.id.returnTime);
             returnTime.setText("截止时间："+ time);
+            if (time == null) {
+                returnTime.setText("还未完成借书");
+            }
             new AlertDialog.Builder(mContext)
                     .setPositiveButton("确认还书", new DialogInterface.OnClickListener() {
                         @Override

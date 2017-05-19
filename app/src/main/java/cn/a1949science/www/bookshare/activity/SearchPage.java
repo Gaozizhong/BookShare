@@ -59,7 +59,7 @@ public class SearchPage extends AppCompatActivity {
     Boolean ifSearch = false;
     private int lastVisibleItem ;
     String searchText;
-    Integer[] bookNum,shareNum;
+    Integer[] bookNums,shareNums;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,9 +120,9 @@ public class SearchPage extends AppCompatActivity {
                         List<BookInfo> list = bmobQueryResult.getResults();
                         if (e == null) {
                             if (list != null && list.size() > 0) {
-                                bookNum = new Integer[list.size()];
+                                bookNums = new Integer[list.size()];
                                 for (int i=0;i<list.size();i++) {
-                                    bookNum[i] = list.get(i).getBookNum();
+                                    bookNums[i] = list.get(i).getBookNum();
                                 }
                             } else {
                                 bookInfoList.clear();
@@ -137,7 +137,7 @@ public class SearchPage extends AppCompatActivity {
                 });
                 //查找book
                 BmobQuery<SharingBook> query2 = new BmobQuery<>();
-                query2.addWhereContainedIn("bookNum", Arrays.asList(bookNum));
+                query2.addWhereContainedIn("bookNum", Arrays.asList(bookNums));
                 query2.findObjects(new FindListener<SharingBook>() {
                     @Override
                     public void done(List<SharingBook> list, BmobException e) {
@@ -348,20 +348,22 @@ public class SearchPage extends AppCompatActivity {
             @Override
             public void done(List<SharingBook> list, BmobException e) {
                 if (e == null) {
-                    final Integer[] bookNum = new Integer[list.size()];
+                    shareNums = new Integer[list.size()];
+                    bookNums = new Integer[list.size()];
                     for (int i=0;i<list.size();i++) {
-                        bookNum[i] = list.get(i).getBookNum();
+                        bookNums[i] = list.get(i).getBookNum();
+                        shareNums[i] = list.get(i).getShareNum();
                     }
 
                     BmobQuery<BookInfo> query1 = new BmobQuery<>();
-                    query1.addWhereContainedIn("bookNum", Arrays.asList(bookNum));
+                    query1.addWhereContainedIn("bookNum", Arrays.asList(bookNums));
                     query1.setLimit(10);
                     query1.findObjects(new FindListener<BookInfo>() {
                         @Override
                         public void done(List<BookInfo> list2, BmobException e) {
                             if (e == null) {
                                 bookInfoList = list2;
-                                adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNum,shareNum);
+                                adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNums,shareNums);
                                 recyclerView.setAdapter(adapter);
 
                             } else {

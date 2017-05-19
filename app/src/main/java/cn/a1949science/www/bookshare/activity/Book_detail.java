@@ -41,14 +41,16 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
     Context mContext = Book_detail.this;
     ImageView image;
     View introduce_layout, expandView;
-    TextView introduce,bookName,writename,bookPress,publishedDate,ISBN,time,bookOwner;
+    TextView introduce,bookName,writename,translator,bookPress,publishedDate,ISBN,time,bookOwner
+            ,borrowName,borrowPhone,borrowAddress;
     ImageButton likeBtn,readBtn;
-    String objectId,objectId1,introduce1,bookname1,writername1,bookPress1,publishedDate1,ISBN1,time1,phone;
+    String objectId,objectId1,introduce1,bookname1,writername1,translator1,bookPress1,publishedDate1
+            ,ISBN1,time1,phone;
     int booknum,shareNum,userNum,OwnerNum,textNum;
     boolean ifLike=false,ifRead=false,isExpand;
     Button borrowBtn,borrowBtn2,RefuseBtn;
     Toolbar toolbar;
-    LinearLayout no_refuse, can_refuse;
+    LinearLayout no_refuse, can_refuse,translator_layout,borrowInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +88,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
         }else if (textNum == 2) {
             no_refuse.setVisibility(View.GONE);
             can_refuse.setVisibility(View.VISIBLE);
+            borrowInfo.setVisibility(View.VISIBLE);
             //借书人信息查询
             BmobQuery<_User> query = new BmobQuery<>();
             query.addWhereEqualTo("userNum", userNum);
@@ -93,23 +96,9 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
                 @Override
                 public void done(List<_User> list, BmobException e) {
                     if (e == null) {
-                        AlertDialog dlg = new AlertDialog.Builder(mContext)
-                                .setTitle("借书人信息")
-                                .setMessage("借书人："+list.get(0).getUsername()+"\n"+"借书人电话："+list.get(0).getMobilePhoneNumber()+"\n"+
-                                        "借书人地址："+list.get(0).getUserSchool())
-                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                                    }
-                                })
-                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                    }
-                                })
-                                .create();
-                        dlg.show();
+                        borrowName.setText(list.get(0).getUsername());
+                        borrowPhone.setText(list.get(0).getMobilePhoneNumber());
+                        borrowAddress.setText(list.get(0).getUserSchool());
                     } else {
                         Toast.makeText(mContext, "借书人信息查询失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -422,6 +411,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
                     introduce1 = list.get(0).getIntroduction();
                     bookname1 = list.get(0).getBookName();
                     writername1 = list.get(0).getBookWriter();
+                    translator1 = list.get(0).getTranslator();
                     bookPress1 = list.get(0).getBookPress();
                     publishedDate1 = list.get(0).getPublishedDate();
                     ISBN1 = list.get(0).getISBN();
@@ -438,6 +428,10 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
                     });
                     bookName.setText(bookname1);
                     writename.setText(writername1);
+                    if (translator1 != "") {
+                        translator_layout.setVisibility(View.VISIBLE);
+                        translator.setText(translator1);
+                    }
                     bookPress.setText(bookPress1);
                     publishedDate.setText(publishedDate1);
                     ISBN.setText(ISBN1);
@@ -506,6 +500,8 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
 
     //查找地址
     private void findView(){
+        translator_layout = (LinearLayout) findViewById(R.id.translator_layout);
+        borrowInfo = (LinearLayout) findViewById(R.id.borrowInfo);
         no_refuse = (LinearLayout) findViewById(R.id.no_refuse);
         can_refuse = (LinearLayout) findViewById(R.id.can_refuse);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -525,11 +521,16 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
         bookName = (TextView) findViewById(R.id.bookName);
         writename = (TextView) findViewById(R.id.writername);
         writename.setOnClickListener(this);
+        translator = (TextView) findViewById(R.id.translator);
+        translator.setOnClickListener(this);
         bookPress = (TextView) findViewById(R.id.publishedDate);
         publishedDate = (TextView) findViewById(R.id.bookPress);
         ISBN = (TextView) findViewById(R.id.ISBN);
         time = (TextView) findViewById(R.id.time);
         bookOwner = (TextView) findViewById(R.id.bookOwner);
+        borrowName = (TextView) findViewById(R.id.borrowName);
+        borrowPhone = (TextView) findViewById(R.id.borrowPhone);
+        borrowAddress = (TextView) findViewById(R.id.borrowAddress);
         likeBtn = (ImageButton)findViewById(R.id.likeBtn);
         likeBtn.setOnClickListener(this);
         readBtn = (ImageButton) findViewById(R.id.readBtn);
@@ -539,7 +540,6 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
         borrowBtn2 = (Button) findViewById(R.id.borrowBtn2);
         RefuseBtn = (Button) findViewById(R.id.RefuseBtn);
     }
-
 
     //看自己是否可以借书
     private void ifNeedReturn() {
