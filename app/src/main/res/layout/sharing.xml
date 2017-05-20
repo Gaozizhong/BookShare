@@ -72,7 +72,7 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:background="@color/white"
-        android:text="       若没有该书数据请填写书名和作者，我们会尽快添加详细信息"
+        android:text="       若没有该书数据，请在扫描ISBN码后手动填写书名和作者，我们会尽快增加详细信息。"
         android:textColor="@color/black"/>
 
     <LinearLayout

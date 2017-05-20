@@ -407,7 +407,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
         booknum = bundle.getInt("booknum");
         userNum = bundle.getInt("userNum");
         objectId1 = bundle.getString("objectId");
-        Toast.makeText(mContext, String.valueOf(shareNum) , Toast.LENGTH_SHORT).show();
+        //Toast.makeText(mContext, objectId1, Toast.LENGTH_SHORT).show();
         //显示图书信息
         BmobQuery<BookInfo> query = new BmobQuery<>();
         query.addWhereEqualTo("bookNum",booknum);
@@ -435,7 +435,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
                     });
                     bookName.setText(bookname1);
                     writename.setText(writername1);
-                    if (translator1 != "") {
+                    if (translator1 != null) {
                         translator_layout.setVisibility(View.VISIBLE);
                         translator.setText(translator1);
                     }

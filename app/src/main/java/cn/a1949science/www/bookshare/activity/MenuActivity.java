@@ -89,7 +89,7 @@ public class MenuActivity extends AppCompatActivity
     String picturePath="";
     private long exitTime = 0;
     Integer borrowBookNum,loanBookNum,textNum1,textNum2,textNum3,userNum,shareNum,shareNum1;
-    String objectId,time;
+    String objectId,objectId1,time;
     View mine,headerLayout;
     BmobFile bmobFile;
     private com.lzy.imagepicker.ImagePicker imagePicker;
@@ -400,40 +400,17 @@ public class MenuActivity extends AppCompatActivity
             }
         }).start();
     }
-    //选择图书图片
-    private void selectBookPicture() {
-        imagePicker.setImageLoader(new GlideImageLoader());
-        imagePicker.setMultiMode(false);
-        imagePicker.setStyle(CropImageView.Style.RECTANGLE);
-        Integer width = 200;
-        Integer height = 300;
-        width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, width, getResources().getDisplayMetrics());
-        height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, getResources().getDisplayMetrics());
-        imagePicker.setFocusWidth(width);
-        imagePicker.setFocusHeight(height);
-        imagePicker.setOutPutX(800);
-        imagePicker.setOutPutY(1200);
 
-        Intent intent1 = new Intent(this, ImageGridActivity.class);
-        startActivityForResult(intent1, 100);
-    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
-            if (data != null && requestCode == 100) {
-                ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
-                picturePath = images.get(0).path;
-            } else {
-                Toast.makeText(this, "没有数据", Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestCode == REQUEST_CODE) {
+        if (requestCode == REQUEST_CODE) {
             Bundle bundle = data.getExtras();
             if (bundle == null) {
                 return;
             }
             if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
-                String result = bundle.getString(CodeUtils.RESULT_STRING);
+                final String result = bundle.getString(CodeUtils.RESULT_STRING);
                 //Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
                 //查询扫描的书
                 BmobQuery<BookInfo> query = new BmobQuery<>();
@@ -446,7 +423,32 @@ public class MenuActivity extends AppCompatActivity
                             bookName.setText(list.get(0).getBookName());
                             bookWriter.setText(list.get(0).getBookWriter());
                         } else {
-                            Toast.makeText(mContext, "暂时没有这本书", Toast.LENGTH_SHORT).show();
+                            //添加书籍信息
+                            BookInfo bookInfo = new BookInfo();
+                            bookInfo.setISBN(result);
+                            bookInfo.save(new SaveListener<String>() {
+                                @Override
+                                public void done(String s, BmobException e) {
+                                    if (e == null) {
+                                        //再次查询扫描的书
+                                        BmobQuery<BookInfo> query1 = new BmobQuery<>();
+                                        query1.addWhereEqualTo("ISBN", result);
+                                        query1.findObjects(new FindListener<BookInfo>() {
+                                            @Override
+                                            public void done(List<BookInfo> list, BmobException e) {
+                                                if (e == null) {
+                                                    bookNum = list.get(0).getBookNum();
+                                                } else {
+                                                    Toast.makeText(mContext, "失败1", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                                        Toast.makeText(mContext, "暂时没有这本书的详细信息，请手动填写书名和作者后，继续完成共享！", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(mContext, "失败", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                         }
                     }
                 });
@@ -563,6 +565,8 @@ public class MenuActivity extends AppCompatActivity
                 if (e == null && list.size()!=0) {
                     borrowBookNum = list.get(0).getBookNum();
                     shareNum1 = list.get(0).getSharingBookNum();
+                    objectId1 = list.get(0).getObjectId();
+                    //Toast.makeText(mContext, objectId1, Toast.LENGTH_SHORT).show();
                     if (!list.get(0).getIfAgree() && !list.get(0).getIfLoan() && !list.get(0).getIfFinish() && !list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
                         //借书人刚发送借书请求
                         textNum1 = 1;
@@ -583,7 +587,6 @@ public class MenuActivity extends AppCompatActivity
                         borrowBtn.setTextColor(BLACK);
                     }
                     time = list.get(0).getFinishAt().getDate();
-                    objectId = list.get(0).getObjectId();
                     progress.dismiss();
                 } else {
                     progress.dismiss();
@@ -796,7 +799,7 @@ public class MenuActivity extends AppCompatActivity
         data.putInt("shareNum",shareNum1);
         data.putInt("booknum",borrowBookNum);
         data.putInt("userNum",userNum);
-        data.putString("objectId",objectId);
+        data.putString("objectId",objectId1);
         Intent intent = new Intent(mContext, Book_detail.class);
         intent.putExtras(data);
         startActivity(intent);
@@ -835,13 +838,14 @@ public class MenuActivity extends AppCompatActivity
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             _User bmobUser = BmobUser.getCurrentUser(_User.class);
+                            Toast.makeText(MenuActivity.this, String.valueOf(bmobUser.getUserNum()), Toast.LENGTH_SHORT).show();
                             //查询是否有借书人为自己的借书信息
                             BmobQuery<Shared_Info> query = new BmobQuery<>();
                             query.addWhereEqualTo("UserNum", bmobUser.getUserNum());
                             query.addWhereEqualTo("ifReturn", false);
                             query.findObjects(new FindListener<Shared_Info>() {
                                 @Override
-                                public void done(final List<Shared_Info> list, BmobException e) {
+                                public void done(List<Shared_Info> list, BmobException e) {
                                     if (e == null && list.size() != 0) {
                                         borrowBookNum = list.get(0).getBookNum();
                                         if (!list.get(0).getIfAffirm() && !list.get(0).getIfReturn()) {
@@ -850,7 +854,6 @@ public class MenuActivity extends AppCompatActivity
                                             textNum1 = 7;
                                         }
                                         objectId = list.get(0).getObjectId();
-
                                         Bundle data = new Bundle();
                                         //利用Intent传递数据
                                         data.putInt("textNum",textNum1);
@@ -862,7 +865,7 @@ public class MenuActivity extends AppCompatActivity
                                         startActivity(intent);
                                         //Toast.makeText(mContext, "查询成功：共" + list.get(1).getBookName() + "条数据。", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        //Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(mContext, "查询失败。"+e.getMessage(), Toast.LENGTH_SHORT).show();
                                         borrowBtn.setClickable(false);
                                     }
                                 }
