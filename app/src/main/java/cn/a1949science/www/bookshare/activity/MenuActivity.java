@@ -87,7 +87,7 @@ public class MenuActivity extends AppCompatActivity
     TextView nickname;
     boolean clicked  = false,ifReturn = false;
     private long exitTime = 0;
-    Integer borrowBookNum,loanBookNum,textNum1,textNum2,textNum3,userNum,shareNum,shareNum1;
+    Integer borrowBookNum,loanBookNum,textNum1,textNum2,textNum3,userNum,userNum1,shareNum,shareNum1;
     Integer needCall = 3;
     String objectId,objectId1,time;
     View mine,headerLayout;
@@ -538,7 +538,7 @@ public class MenuActivity extends AppCompatActivity
                             }
                             shareNum = list.get(i).getSharingBookNum();
                             objectId = list.get(i).getObjectId();
-                            userNum = list.get(i).getUserNum();
+                            userNum1 = list.get(i).getUserNum();
                             dialogInterface.dismiss();
                         }
                     });
@@ -780,6 +780,7 @@ public class MenuActivity extends AppCompatActivity
         data.putInt("textNum",textNum3);
         data.putInt("shareNum",shareNum);
         data.putInt("booknum",loanBookNum);
+        data.putInt("userNum",userNum1);
         data.putString("objectId",objectId);
         Intent intent = new Intent(mContext, Book_detail.class);
         intent.putExtras(data);
@@ -868,6 +869,7 @@ public class MenuActivity extends AppCompatActivity
         }
     }
 
+    //归还时的查询
     private void returnQuery() {
         _User bmobUser = BmobUser.getCurrentUser(_User.class);
         //查询是否有借书人为自己的借书信息

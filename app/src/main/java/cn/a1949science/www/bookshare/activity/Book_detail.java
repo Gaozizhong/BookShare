@@ -105,6 +105,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
                     if (e == null) {
                         borrowName.setText(list.get(0).getUsername());
                         borrowPhone.setText(list.get(0).getMobilePhoneNumber());
+                        phone = list.get(0).getMobilePhoneNumber();
                         borrowAddress.setText(list.get(0).getUserSchool());
                     } else {
                         Toast.makeText(mContext, "借书人信息查询失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -175,8 +176,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
                         public void done(final List<_User> list, BmobException e) {
                             if (e == null) {
                                 phone = list.get(0).getMobilePhoneNumber();
-                                Intent it = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
-                                startActivity(it);
+                                callSomeone();
                             } else {
                                 Toast.makeText(mContext, "查询失败。", Toast.LENGTH_SHORT).show();
                             }
@@ -187,6 +187,22 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
         } else if (textNum == 4) {
             no_refuse.setVisibility(View.GONE);
             can_refuse.setVisibility(View.VISIBLE);
+            borrowInfo.setVisibility(View.VISIBLE);
+            //借书人信息查询
+            BmobQuery<_User> query = new BmobQuery<>();
+            query.addWhereEqualTo("userNum", userNum);
+            query.findObjects(new FindListener<_User>() {
+                @Override
+                public void done(List<_User> list, BmobException e) {
+                    if (e == null) {
+                        borrowName.setText(list.get(0).getUsername());
+                        borrowPhone.setText(list.get(0).getMobilePhoneNumber());
+                        borrowAddress.setText(list.get(0).getUserSchool());
+                    } else {
+                        Toast.makeText(mContext, "借书人信息查询失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
             borrowBtn2.setText("书已借出");
             RefuseBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -283,6 +299,22 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
                 }
             });
         } else if (textNum == 6) {
+            borrowInfo.setVisibility(View.VISIBLE);
+            //借书人信息查询
+            BmobQuery<_User> query = new BmobQuery<>();
+            query.addWhereEqualTo("userNum", userNum);
+            query.findObjects(new FindListener<_User>() {
+                @Override
+                public void done(List<_User> list, BmobException e) {
+                    if (e == null) {
+                        borrowName.setText(list.get(0).getUsername());
+                        borrowPhone.setText(list.get(0).getMobilePhoneNumber());
+                        borrowAddress.setText(list.get(0).getUserSchool());
+                    } else {
+                        Toast.makeText(mContext, "借书人信息查询失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
             borrowBtn.setText("确认归还");
             borrowBtn.setClickable(true);
             borrowBtn.setOnClickListener(new View.OnClickListener() {
@@ -407,7 +439,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
         booknum = bundle.getInt("booknum");
         userNum = bundle.getInt("userNum");
         objectId1 = bundle.getString("objectId");
-        Toast.makeText(mContext, String.valueOf(shareNum), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(mContext, String.valueOf(shareNum), Toast.LENGTH_SHORT).show();
         //显示图书信息
         BmobQuery<BookInfo> query = new BmobQuery<>();
         query.addWhereEqualTo("bookNum",booknum);
@@ -537,6 +569,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
         bookOwner = (TextView) findViewById(R.id.bookOwner);
         borrowName = (TextView) findViewById(R.id.borrowName);
         borrowPhone = (TextView) findViewById(R.id.borrowPhone);
+        borrowPhone.setOnClickListener(this);
         borrowAddress = (TextView) findViewById(R.id.borrowAddress);
         likeBtn = (ImageButton)findViewById(R.id.likeBtn);
         likeBtn.setOnClickListener(this);
@@ -569,7 +602,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
                         @Override
                         public void done(BmobException e1) {
                             if (e1 == null) {
-                                Toast.makeText(mContext, "修改状态成功", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(mContext, "修改状态成功", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(mContext, "修改状态失败:" + e1.getMessage(), Toast.LENGTH_SHORT).show();
                             }
@@ -584,7 +617,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
                         @Override
                         public void done(BmobException e1) {
                             if (e1 == null) {
-                                Toast.makeText(mContext, "修改状态成功", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(mContext, "修改状态成功", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(mContext, "修改状态失败:" + e1.getMessage(), Toast.LENGTH_SHORT).show();
                             }
@@ -616,7 +649,16 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
             case R.id.readBtn:
                 addReadBook();
                 break;
+            case R.id.borrowPhone:
+                callSomeone();
+                break;
         }
+    }
+
+    //打电话
+    private void callSomeone() {
+        Intent it = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
+        startActivity(it);
     }
 
     //添加到分享信息列表
