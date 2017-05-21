@@ -121,15 +121,52 @@ public class SearchPage extends AppCompatActivity {
                     public void done(BmobQueryResult<BookInfo> bmobQueryResult, BmobException e) {
                         List<BookInfo> list = bmobQueryResult.getResults();
                         if (e == null) {
-                            if (list != null && list.size() > 0) {
+                            if (list.size() != 0) {
                                 bookNums = new Integer[list.size()];
                                 for (int i=0;i<list.size();i++) {
                                     bookNums[i] = list.get(i).getBookNum();
                                 }
+                                //根据图书信息找出分享信息
+                                BmobQuery<SharingBook> query1 = new BmobQuery<SharingBook>();
+                                query1.addWhereContainedIn("bookNum", Arrays.asList(bookNums));
+                                query1.findObjects(new FindListener<SharingBook>() {
+                                    @Override
+                                    public void done(List<SharingBook> list, BmobException e) {
+                                        if (e == null) {
+                                            bookNums = new Integer[list.size()];
+                                            shareNums = new Integer[list.size()];
+                                            for (int i=0;i<list.size();i++) {
+                                                shareNums[i] = list.get(i).getBookNum();
+                                                bookNums[i] = list.get(i).getBookNum();
+                                            }
+
+                                            BmobQuery<BookInfo> query1 = new BmobQuery<>();
+                                            query1.addWhereContainedIn("bookNum", Arrays.asList(shareNums));
+                                            query1.setLimit(10);
+                                            query1.findObjects(new FindListener<BookInfo>() {
+                                                @Override
+                                                public void done(List<BookInfo> list2, BmobException e) {
+                                                    if (e == null) {
+                                                        bookInfoList = list2;
+                                                        adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNums,shareNums);
+                                                        recyclerView.setAdapter(adapter);
+
+                                                    } else {
+                                                        Toast.makeText(mContext, "查询失败2。"+e.getMessage(), Toast.LENGTH_LONG).show();
+                                                    }
+                                                }
+                                            });
+
+                                        } else {
+                                            Toast.makeText(mContext, "查询失败1。"+e.getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
+
                             } else {
                                 bookInfoList.clear();
                                 adapter.notifyDataSetChanged();
-                                Toast.makeText(mContext, "对不起，还没有这本书", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, "对不起，还没有这本书(我们暂时还不支持模糊搜索)", Toast.LENGTH_SHORT).show();
                             }
                             ifSearch = true;
                         } else {
@@ -137,41 +174,6 @@ public class SearchPage extends AppCompatActivity {
                         }
                     }
                 });
-                //查找book
-                BmobQuery<SharingBook> query2 = new BmobQuery<>();
-                query2.addWhereContainedIn("bookNum", Arrays.asList(bookNums));
-                query2.findObjects(new FindListener<SharingBook>() {
-                    @Override
-                    public void done(List<SharingBook> list, BmobException e) {
-                        if (e == null) {
-                            final Integer[] shareNum = new Integer[list.size()];
-                            for (int i=0;i<list.size();i++) {
-                                shareNum[i] = list.get(i).getBookNum();
-                            }
-
-                            BmobQuery<BookInfo> query1 = new BmobQuery<>();
-                            query1.addWhereContainedIn("bookNum", Arrays.asList(shareNum));
-                            query1.setLimit(10);
-                            query1.findObjects(new FindListener<BookInfo>() {
-                                @Override
-                                public void done(List<BookInfo> list2, BmobException e) {
-                                    if (e == null) {
-                                        bookInfoList = list2;
-                                        adapter = new myAdapterRecyclerView(mContext, bookInfoList,shareNum,shareNum);
-                                        recyclerView.setAdapter(adapter);
-
-                                    } else {
-                                        Toast.makeText(mContext, "查询失败2。"+e.getMessage(), Toast.LENGTH_LONG).show();
-                                    }
-                                }
-                            });
-
-                        } else {
-                            Toast.makeText(mContext, "查询失败1。"+e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-
                 return true;
             }
             // 当搜索内容改变时触发该方法
