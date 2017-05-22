@@ -43,7 +43,6 @@ public class myAdapterRecyclerView extends RecyclerView.Adapter<myAdapterRecycle
         ImageView image;
         TextView book;
         TextView writer;
-        TextView status;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -51,7 +50,6 @@ public class myAdapterRecyclerView extends RecyclerView.Adapter<myAdapterRecycle
             image = (ImageView) itemView.findViewById(R.id.image);
             book = (TextView) itemView.findViewById(R.id.book);
             writer = (TextView) itemView.findViewById(R.id.writer);
-            status = (TextView) itemView.findViewById(R.id.status);
         }
     }
 
