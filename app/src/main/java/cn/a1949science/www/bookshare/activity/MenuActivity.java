@@ -93,7 +93,7 @@ public class MenuActivity extends AppCompatActivity
     View mine,headerLayout;
     SwipeRefreshLayout refresh;
     RecyclerView recyclerView;
-    int number_of_pages=1;
+    private int number_of_pages=1;
     List<BookInfo> bookInfoList= null;
     myAdapterRecyclerView adapter;
     private LinearLayoutManager mLayoutManager;
@@ -338,33 +338,39 @@ public class MenuActivity extends AppCompatActivity
                 _User bmobUser = BmobUser.getCurrentUser(_User.class);
                 Integer userNum = bmobUser.getUserNum();
                 query.addWhereNotEqualTo("ownerNum", userNum);
+                query.order("-createdAt");
                 query.findObjects(new FindListener<SharingBook>() {
                     @Override
-                    public void done(List<SharingBook> list, BmobException e) {
+                    public void done(final List<SharingBook> list, BmobException e) {
                         if (e == null) {
-                            final Integer[] bookNum = new Integer[list.size()];
+                            shareNums = new Integer[list.size()];
+                            bookNums = new Integer[list.size()];
                             for (int i=0;i<list.size();i++) {
-                                bookNum[i] = list.get(i).getBookNum();
+                                bookNums[i] = list.get(i).getBookNum();
+                                shareNums[i] = list.get(i).getShareNum();
                             }
-                            BmobQuery<BookInfo> query1 = new BmobQuery<BookInfo>();
-                            query1.addWhereContainedIn("bookNum", Arrays.asList(bookNum));
+                            BmobQuery<BookInfo> query1 = new BmobQuery<>();
+                            query1.addWhereContainedIn("bookNum", Arrays.asList(bookNums));
+                            query1.order("-createdAt");
                             query1.setSkip(10 * number_of_pages);
                             query1.setLimit(10);
                             number_of_pages=number_of_pages+1;
                             query1.findObjects(new FindListener<BookInfo>() {
                                 @Override
                                 public void done(List<BookInfo> list2, BmobException e) {
-                                    if (e == null) {
+                                    if (e == null && list2.size() != 0) {
                                         bookInfoList.addAll(list2);
 
-                                    } else {
-                                        Toast.makeText(mContext, "查询失败。"+e.getMessage(), Toast.LENGTH_LONG).show();
+                                    } else if (list.size() == 0) {
+                                        Toast.makeText(mContext, "没有更多图书了。" , Toast.LENGTH_LONG).show();
+                                    } else if (e != null) {
+                                        Toast.makeText(mContext, "查询失败2。" + e.getMessage(), Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });
 
                         } else {
-                            Toast.makeText(mContext, "查询失败。"+e.getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(mContext, "查询失败1。"+e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -664,8 +670,8 @@ public class MenuActivity extends AppCompatActivity
                     }
                     BmobQuery<BookInfo> query1 = new BmobQuery<>();
                     query1.addWhereContainedIn("bookNum", Arrays.asList(bookNums));
-                    query1.setLimit(10);
                     query1.order("-createdAt");
+                    query1.setLimit(10);
                     query1.findObjects(new FindListener<BookInfo>() {
                         @Override
                         public void done(List<BookInfo> list2, BmobException e) {
