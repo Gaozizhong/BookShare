@@ -11,6 +11,7 @@ public class SharingBook extends BmobObject {
     private Integer shareNum;//序号
     private Integer ownerNum;//书主序号
     private Integer bookNum;//图书序号
+    private Boolean canBeSharing;//能否被借出
     private Boolean beSharing;//是否借出
     private Integer keepTime;//可借时间
 
@@ -22,6 +23,9 @@ public class SharingBook extends BmobObject {
 
     public Integer getBookNum(){return bookNum;}
     public void setBookNum(Integer bookNum){this.bookNum =  bookNum;}
+
+    public Boolean getCanBeSharing() {return canBeSharing;}
+    public void setCanBeSharing(Boolean canBeSharing){this.canBeSharing = canBeSharing;}
 
     public Boolean getBeSharing() {return beSharing;}
     public void setBeSharing(Boolean beSharing){this.beSharing = beSharing;}

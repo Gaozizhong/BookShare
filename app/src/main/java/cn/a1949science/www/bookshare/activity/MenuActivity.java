@@ -86,10 +86,10 @@ public class MenuActivity extends AppCompatActivity
     ImageButton shortCut,RedPoint;
     CircleImageView favicon;
     TextView nickname;
-    boolean clicked  = false,ifReturn = false;
+    boolean clicked  = false,ifReturn = false,canBeSharing;
     private long exitTime = 0;
     Integer borrowBookNum,loanBookNum,textNum1,textNum2,textNum3,userNum,userNum1,shareNum,shareNum1;
-    String objectId,objectId1,time;
+    String objectId,objectId1,time,newBookObjectId;
     View mine,headerLayout;
     SwipeRefreshLayout refresh;
     RecyclerView recyclerView;
@@ -100,7 +100,7 @@ public class MenuActivity extends AppCompatActivity
     private int lastVisibleItem;
     Integer[] bookNums,shareNums;
     int REQUEST_CODE = 5;
-    EditText bookName,bookWriter;
+    EditText bookName,bookWriter,bookIsbn;
     private Integer bookNum;
 
     @Override
@@ -348,6 +348,7 @@ public class MenuActivity extends AppCompatActivity
             //列表中不显示自己分享的书
             _User bmobUser = BmobUser.getCurrentUser(_User.class);
             Integer userNum = bmobUser.getUserNum();
+            query.addWhereEqualTo("canBeSharing", true);
             query.addWhereNotEqualTo("ownerNum", userNum);
             query.order("-createdAt");
             query.findObjects(new FindListener<SharingBook>() {
@@ -420,11 +421,16 @@ public class MenuActivity extends AppCompatActivity
                 query.findObjects(new FindListener<BookInfo>() {
                     @Override
                     public void done(List<BookInfo> list, BmobException e) {
-                        if (e == null) {
+                        if (e == null && list.size() != 0) {
                             bookNum = list.get(0).getBookNum();
+                            newBookObjectId = list.get(0).getObjectId();
                             bookName.setText(list.get(0).getBookName());
                             bookWriter.setText(list.get(0).getBookWriter());
-                        } else {
+                            bookIsbn.setText(list.get(0).getISBN());
+                            canBeSharing = true;
+                        } else if (e == null && list.size() == 0){
+                            bookIsbn.setText(result);
+                            canBeSharing = false;
                             //添加书籍信息
                             BookInfo bookInfo = new BookInfo();
                             bookInfo.setISBN(result);
@@ -440,6 +446,7 @@ public class MenuActivity extends AppCompatActivity
                                             public void done(List<BookInfo> list, BmobException e) {
                                                 if (e == null) {
                                                     bookNum = list.get(0).getBookNum();
+                                                    newBookObjectId = list.get(0).getObjectId();
                                                 } else {
                                                     Toast.makeText(mContext, "失败1", Toast.LENGTH_SHORT).show();
                                                 }
@@ -451,6 +458,8 @@ public class MenuActivity extends AppCompatActivity
                                     }
                                 }
                             });
+                        } else if (e != null){
+                            Toast.makeText(mContext, "查询失败"+e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -656,6 +665,7 @@ public class MenuActivity extends AppCompatActivity
         //列表中不显示自己分享的书
         _User bmobUser = BmobUser.getCurrentUser(_User.class);
         Integer userNum = bmobUser.getUserNum();
+        query.addWhereEqualTo("canBeSharing", true);
         query.addWhereNotEqualTo("ownerNum", userNum);
         query.order("-createdAt");
         query.findObjects(new FindListener<SharingBook>() {
@@ -920,10 +930,11 @@ public class MenuActivity extends AppCompatActivity
 
         bookName = (EditText) layout.findViewById(R.id.bookName);
         bookWriter = (EditText) layout.findViewById(R.id.bookWriter);
+        bookIsbn = (EditText) layout.findViewById(R.id.ISBN);
         final EditText shareTime = (EditText) layout.findViewById(R.id.shareTime);
-        final Button bookPicture = (Button) layout.findViewById(R.id.book);
-        //为上传图片按钮设置点击事件
-        bookPicture.setOnClickListener(new View.OnClickListener() {
+        final Button bookScan = (Button) layout.findViewById(R.id.book);
+        //为扫描按钮设置点击事件
+        bookScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent it = new Intent(mContext, CaptureActivity.class);
@@ -936,7 +947,7 @@ public class MenuActivity extends AppCompatActivity
                 .setPositiveButton("确认共享", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (bookName.getText().toString().equals("") || bookWriter.getText().toString() .equals("") || shareTime.getText().toString() .equals("")) {
+                        if (bookName.getText().toString().equals("") || bookWriter.getText().toString() .equals("") || shareTime.getText().toString() .equals("")|| bookIsbn.getText().toString() .equals("")) {
                             Toast.makeText(mContext, "信息不全！！！", Toast.LENGTH_SHORT).show();
                         } else {
                             new AlertDialog.Builder(mContext)
@@ -951,6 +962,22 @@ public class MenuActivity extends AppCompatActivity
                                             progressDialog.setCanceledOnTouchOutside(false);
                                             progressDialog.show();
 
+                                            if (!canBeSharing) {
+                                                BookInfo bookInfo = new BookInfo();
+                                                bookInfo.setBookName(bookName.getText().toString());
+                                                bookInfo.setBookWriter(bookWriter.getText().toString());
+                                                bookInfo.update(newBookObjectId, new UpdateListener() {
+                                                    @Override
+                                                    public void done(BmobException e1) {
+                                                        if (e1 == null) {
+                                                            //Toast.makeText(mContext, "修改状态成功", Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            Toast.makeText(mContext, "修改状态失败:" + e1.getMessage(), Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                });
+                                            }
+
                                             //上传其他信息
                                             _User bmobUser = BmobUser.getCurrentUser(_User.class);
                                             Integer userNum = bmobUser.getUserNum();
@@ -958,6 +985,7 @@ public class MenuActivity extends AppCompatActivity
                                             sharingBook.setOwnerNum(userNum);
                                             sharingBook.setBookNum(bookNum);
                                             sharingBook.setkeepTime(Integer.valueOf(shareTime.getText().toString()));
+                                            sharingBook.setCanBeSharing(canBeSharing);
                                             sharingBook.setBeSharing(false);
                                             sharingBook.save(new SaveListener<String>() {
                                                 @Override

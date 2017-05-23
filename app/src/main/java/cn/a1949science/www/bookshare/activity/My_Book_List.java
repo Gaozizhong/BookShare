@@ -112,6 +112,7 @@ public class My_Book_List extends AppCompatActivity {
             BmobQuery<SharingBook> query = new BmobQuery<>();
             _User bmobUser = BmobUser.getCurrentUser(_User.class);
             //查找出本用户发布的所有书籍
+            query.addWhereEqualTo("canBeSharing", true);
             query.addWhereEqualTo("ownerNum", bmobUser.getUserNum());
             query.order("-createdAt");
             query.findObjects(new FindListener<SharingBook>() {
@@ -189,6 +190,7 @@ public class My_Book_List extends AppCompatActivity {
         BmobQuery<SharingBook> query = new BmobQuery<>();
         _User bmobUser = BmobUser.getCurrentUser(_User.class);
         //查找出本用户发布的所有书籍
+        query.addWhereEqualTo("canBeSharing", true);
         query.addWhereEqualTo("ownerNum", bmobUser.getUserNum());
         query.order("-createdAt");
         query.findObjects(new FindListener<SharingBook>() {
