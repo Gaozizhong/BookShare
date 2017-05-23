@@ -790,7 +790,6 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
                     }
                 }
             });
-
             ifRead = true;
         } else {
             Toast.makeText(mContext, "请到菜单中编辑所有看过书籍", Toast.LENGTH_SHORT).show();
