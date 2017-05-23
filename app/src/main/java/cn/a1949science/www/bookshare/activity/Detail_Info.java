@@ -20,7 +20,7 @@ public class Detail_Info extends AppCompatActivity {
 
     Context mContext = Detail_Info.this;
     ImageView before;
-    TextView dorm,phoneNum,Class,school,gender,name,edit;
+    TextView phoneNum,Class,school,gender,name,edit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +34,6 @@ public class Detail_Info extends AppCompatActivity {
     //查找地址
     private void findView(){
         before = (ImageView) findViewById(R.id.before);
-        dorm = (TextView) findViewById(R.id.dorm);
         phoneNum = (TextView) findViewById(R.id.phoneNum);
         Class = (TextView) findViewById(R.id.Class);
         school = (TextView) findViewById(R.id.school);
@@ -72,7 +71,6 @@ public class Detail_Info extends AppCompatActivity {
             @Override
             public void done(_User user, BmobException e) {
                 if (e == null) {
-                    dorm.setText(user.getUserDorm());
                     phoneNum.setText(user.getMobilePhoneNumber());
                     Class.setText(user.getUserClass());
                     school.setText(user.getUserSchool());

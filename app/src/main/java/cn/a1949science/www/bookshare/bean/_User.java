@@ -22,8 +22,6 @@ public class _User extends BmobUser {
     private Boolean usersex;
     //用户学校
     private String userSchool;
-    //宿舍号
-    private String userDorm;
     //班级
     private String userClass;
     //学号
@@ -50,13 +48,6 @@ public class _User extends BmobUser {
     }
     public void setUserSchool(String userSchool) {
         this.userSchool = userSchool;
-    }
-
-    public String getUserDorm() {
-        return userDorm;
-    }
-    public void setUserDorm(String userDorm) {
-        this.userDorm = userDorm;
     }
 
     public String getUserClass() {

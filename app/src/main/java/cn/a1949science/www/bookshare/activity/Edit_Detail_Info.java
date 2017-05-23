@@ -21,14 +21,14 @@ public class Edit_Detail_Info extends AppCompatActivity {
 
     Context mContext = Edit_Detail_Info.this;
     ImageView before;
-    TextView dorm,phoneNum,Class,school,gender,name,editok;
-    View editDorm,editPhone,editClass,editSchool,editGender,editname;
+    TextView phoneNum,Class,school,gender,name,editok;
+    View editPhone,editClass,editSchool,editGender,editname;
     boolean sex1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit__detail__info);
+        setContentView(R.layout.activity_edit_detail_info);
         findView();
         onClick();
     }
@@ -37,13 +37,11 @@ public class Edit_Detail_Info extends AppCompatActivity {
     private void findView(){
         before = (ImageView) findViewById(R.id.before);
         editok = (TextView) findViewById(R.id.editOk);
-        dorm = (TextView) findViewById(R.id.dorm);
         phoneNum = (TextView) findViewById(R.id.phoneNum);
         Class = (TextView) findViewById(R.id.Class);
         school = (TextView) findViewById(R.id.school);
         gender = (TextView) findViewById(R.id.gender);
         name = (TextView) findViewById(R.id.name);
-        editDorm = findViewById(R.id.editDorm);
         editPhone = findViewById(R.id.editPhone);
         editClass = findViewById(R.id.editClass);
         editSchool = findViewById(R.id.editSchool);
@@ -67,7 +65,6 @@ public class Edit_Detail_Info extends AppCompatActivity {
             public void onClick(View view) {
                 //更新数据
                 _User newUser = new _User();
-                newUser.setUserDorm(dorm.getText().toString());
                 newUser.setMobilePhoneNumber(phoneNum.getText().toString());
                 newUser.setUserClass(Class.getText().toString());
                 newUser.setUserSchool(school.getText().toString());
@@ -90,65 +87,6 @@ public class Edit_Detail_Info extends AppCompatActivity {
             }
         });
 
-        editDorm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final AlertDialog.Builder builder1 = new AlertDialog.Builder(mContext);
-                final String[] dromText = {"西一","西二","西三","西四","西五",
-                        "东一","东二","东三","东四", "东五","东六", "东七","东八","东九",
-                        "其他"};
-                builder1.setSingleChoiceItems(dromText, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dorm.setText(dromText[i]);
-
-                        final AlertDialog.Builder builder2 = new AlertDialog.Builder(mContext);
-                        final String[] drom2Text = {"A","B"};
-                        builder2.setSingleChoiceItems(drom2Text, 0, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dorm.setText(dorm.getText().toString()+drom2Text[i]);
-
-                                final AlertDialog.Builder builder3 = new AlertDialog.Builder(mContext);
-                                final String[] drom3Text = {"1","2","3","4","5"};
-                                builder3.setSingleChoiceItems(drom3Text, 0, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        dorm.setText(dorm.getText().toString()+drom3Text[i]);
-
-                                        final AlertDialog.Builder builder4 = new AlertDialog.Builder(mContext);
-                                        final String[] drom4Text = {"01","02","03","04","05","06","07","08","09","10"
-                                                ,"11","12","13","14","15","16","17","18","19","20"
-                                                ,"21","22","23","24","25","26","27","28","29","30"
-                                                ,"31","32","33","34","35","36","37","38","39","40"
-                                                ,"41","42","43","44","45","46","47","48","49","50"
-                                                ,"51","52","53","54","55","56","57","58","59","60"
-                                                ,"61","62","63","64","65","66","67","68","69","70"};
-                                        builder4.setSingleChoiceItems(drom4Text, 0, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                dorm.setText(dorm.getText().toString()+drom4Text[i]);
-                                                dialogInterface.dismiss();
-                                            }
-                                        });
-                                        builder4.show();
-
-                                        dialogInterface.dismiss();
-                                    }
-                                });
-                                builder3.show();
-
-                                dialogInterface.dismiss();
-                            }
-                        });
-                        builder2.show();
-
-                        dialogInterface.dismiss();
-                    }
-                });
-                builder1.show();
-            }
-        });
 
         editPhone.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -57,7 +57,7 @@ public class SearchPage extends AppCompatActivity {
     List<BookInfo> bookInfoList= null;
     myAdapterRecyclerView adapter;
     private int number_of_pages,REQUEST_CODE = 5,REQUEST_CAMERA_PERMISSION = 0,lastVisibleItem;//页数
-    Boolean ifSearch;
+    Boolean ifSearch = false;
     String searchText;
     Integer[] bookNums,shareNums;
     @Override
@@ -113,7 +113,7 @@ public class SearchPage extends AppCompatActivity {
                 String bql ="select * from BookInfo where bookWriter='"+s+ "' or bookName ='" +s+"'";
                 final BmobQuery<BookInfo> query = new BmobQuery<>();
                 query.setSQL(bql);
-                query.setLimit(10);
+                query.order("-createdAt");
                 query.doSQLQuery(new SQLQueryListener<BookInfo>() {
                     @Override
                     public void done(BmobQueryResult<BookInfo> bmobQueryResult, BmobException e) {
@@ -258,33 +258,67 @@ public class SearchPage extends AppCompatActivity {
         protected void onPostExecute(Integer integer) {
             super.onPostExecute(integer);
             if (ifSearch) {
-                    /*String bql ="select * from BookInfo where bookWriter='"+searchText+ "' or bookName ='" +searchText+"'";
-                    BmobQuery<BookInfo> query = new BmobQuery<>();
-                    query.setSQL(bql);
-                    query.setSkip(10 * number_of_pages);
-                    query.setLimit(10);
-                    number_of_pages=number_of_pages+1;
-                    query.doSQLQuery(new SQLQueryListener<BookInfo>() {
-                        @Override
-                        public void done(BmobQueryResult<BookInfo> bmobQueryResult, BmobException e) {
-                            List<BookInfo> list = bmobQueryResult.getResults();
-                            if (e == null) {
-                                if (list != null && list.size() > 0) {
-                                    bookInfoList = list;
-                                    adapter = new myAdapterRecyclerView(mContext, bookInfoList);
-                                    recyclerView.setAdapter(adapter);
-                                } else {
-                                    bookInfoList.clear();
-                                    adapter.notifyDataSetChanged();
-                                    Toast.makeText(mContext, "查询成功，无数据返回", Toast.LENGTH_SHORT).show();
+                String bql ="select * from BookInfo where bookWriter='"+searchText+ "' or bookName ='" +searchText+"'";
+                final BmobQuery<BookInfo> query = new BmobQuery<>();
+                query.setSQL(bql);
+                query.order("-createdAt");
+                query.doSQLQuery(new SQLQueryListener<BookInfo>() {
+                    @Override
+                    public void done(BmobQueryResult<BookInfo> bmobQueryResult, BmobException e) {
+                        List<BookInfo> list = bmobQueryResult.getResults();
+                        if (e == null) {
+                            if (list.size() != 0) {
+                                bookNums = new Integer[list.size()];
+                                for (int i=0;i<list.size();i++) {
+                                    bookNums[i] = list.get(i).getBookNum();
                                 }
-                                ifSearch = true;
-                            } else {
-                                Toast.makeText(mContext, "查询失败"+e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
+                                //根据图书信息找出分享信息
+                                BmobQuery<SharingBook> query1 = new BmobQuery<SharingBook>();
+                                query1.addWhereEqualTo("canBeSharing", true);
+                                query1.addWhereContainedIn("bookNum", Arrays.asList(bookNums));
+                                query1.order("-createdAt");
+                                query1.findObjects(new FindListener<SharingBook>() {
+                                    @Override
+                                    public void done(List<SharingBook> list, BmobException e) {
+                                        if (e == null) {
+                                            bookNums = new Integer[list.size()];
+                                            shareNums = new Integer[list.size()];
+                                            for (int i=0;i<list.size();i++) {
+                                                shareNums[i] = list.get(i).getBookNum();
+                                                bookNums[i] = list.get(i).getBookNum();
+                                            }
+                                            BmobQuery<BookInfo> query2 = new BmobQuery<>();
+                                            query2.addWhereContainedIn("bookNum", Arrays.asList(shareNums));
+                                            query2.order("-createdAt");
+                                            query2.setSkip(10 * number_of_pages);
+                                            query2.setLimit(10);
+                                            number_of_pages=number_of_pages+1;
+                                            query2.findObjects(new FindListener<BookInfo>() {
+                                                @Override
+                                                public void done(List<BookInfo> list2, BmobException e) {
+                                                    if (e == null) {
+                                                        bookInfoList.addAll(list2);
+                                                    } else {
+                                                        Toast.makeText(mContext, "查询失败2。"+e.getMessage(), Toast.LENGTH_LONG).show();
+                                                    }
+                                                }
+                                            });
 
+                                        } else {
+                                            Toast.makeText(mContext, "查询失败1。"+e.getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
+                            } else {
+                                bookInfoList.clear();
+                                adapter.notifyDataSetChanged();
+                                Toast.makeText(mContext, "对不起，还没有这本书(我们暂时还不支持模糊搜索)", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(mContext, "查询失败"+e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
-                    });*/
+                    }
+                });
             } else {
                 //查找book
                 BmobQuery<SharingBook> query = new BmobQuery<>();
@@ -419,22 +453,23 @@ public class SearchPage extends AppCompatActivity {
                                 //列表中不显示自己分享的书
                                 _User bmobUser = BmobUser.getCurrentUser(_User.class);
                                 Integer userNum = bmobUser.getUserNum();
+                                query.addWhereEqualTo("canBeSharing", true);
                                 query.addWhereNotEqualTo("ownerNum", userNum);
                                 query.addWhereEqualTo("bookNum", list.get(0).getBookNum());
                                 query.findObjects(new FindListener<SharingBook>() {
                                     @Override
-                                    public void done(List<SharingBook> list, BmobException e) {
-                                        if (e == null) {
-                                            shareNums = new Integer[list.size()];
-                                            bookNums = new Integer[list.size()];
-                                            for (int i=0;i<list.size();i++) {
-                                                bookNums[i] = list.get(i).getBookNum();
-                                                shareNums[i] = list.get(i).getShareNum();
+                                    public void done(List<SharingBook> list2, BmobException e) {
+                                        if (e == null&&list2.size()!=0) {
+                                            shareNums = new Integer[list2.size()];
+                                            bookNums = new Integer[list2.size()];
+                                            for (int i=0;i<list2.size();i++) {
+                                                bookNums[i] = list2.get(i).getBookNum();
+                                                shareNums[i] = list2.get(i).getShareNum();
                                             }
                                             adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNums,shareNums);
                                             recyclerView.setAdapter(adapter);
-                                        } else {
-                                            Toast.makeText(mContext, "查询失败。"+e.getMessage(), Toast.LENGTH_LONG).show();
+                                        } else if (list2.size()==0){
+                                            Toast.makeText(mContext, "正在补充该书的详细信息，请耐心等待！", Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 });
