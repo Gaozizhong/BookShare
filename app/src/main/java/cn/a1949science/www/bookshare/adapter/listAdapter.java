@@ -27,7 +27,6 @@ public class listAdapter extends RecyclerView.Adapter<myAdapterRecyclerView.View
         implements View.OnClickListener{
     private Context context;
     private List<BookInfo> list;
-    private Integer[] bookNum;
 
     @Override
     public void onClick(View view) {
@@ -49,10 +48,9 @@ public class listAdapter extends RecyclerView.Adapter<myAdapterRecyclerView.View
         }
     }
 
-    public listAdapter(Context context,List<BookInfo> list,Integer[] bookNum) {
+    public listAdapter(Context context,List<BookInfo> list) {
         this.context = context;
         this.list = list;
-        this.bookNum = bookNum;
     }
 
     @Override

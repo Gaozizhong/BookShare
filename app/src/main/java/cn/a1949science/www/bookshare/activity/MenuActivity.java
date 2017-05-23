@@ -97,7 +97,7 @@ public class MenuActivity extends AppCompatActivity
     List<BookInfo> bookInfoList= null;
     myAdapterRecyclerView adapter;
     private LinearLayoutManager mLayoutManager;
-    private int lastVisibleItem ;
+    private int lastVisibleItem;
     Integer[] bookNums,shareNums;
     int REQUEST_CODE = 5;
     EditText bookName,bookWriter;

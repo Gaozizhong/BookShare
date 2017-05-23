@@ -94,7 +94,7 @@ public class MyRead extends AppCompatActivity {
                         public void done(List<BookInfo> list2, BmobException e) {
                             if (e == null) {
                                 bookInfoList = list2;
-                                adapter = new listAdapter(mContext, bookInfoList,bookNums);
+                                adapter = new listAdapter(mContext, bookInfoList);
                                 recyclerView.setAdapter(adapter);
 
                             } else {
