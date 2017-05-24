@@ -93,7 +93,6 @@ public class RegisterPage extends AppCompatActivity {
                     timer.start();
                     //请求发送验证码
                     BmobSMS.requestSMSCode(mContext, number, "登录验证", new RequestSMSCodeListener() {
-
                         @Override
                         public void done(Integer integer, BmobException e) {
                             if (e == null) {

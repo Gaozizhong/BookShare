@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.lzy.imagepicker.*;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
@@ -136,6 +137,11 @@ public class RegisterPage2 extends AppCompatActivity implements View.OnClickList
             if (data != null && requestCode == 100) {
                 ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(com.lzy.imagepicker.ImagePicker.EXTRA_RESULT_ITEMS);
                 picturePath = images.get(0).path;
+                Glide.with(mContext)
+                        .load(picturePath)
+                        .thumbnail(0.5f)
+                        .override((int)(mContext.getResources().getDisplayMetrics().density*80+0.5f),(int)(mContext.getResources().getDisplayMetrics().density*80+0.5f))
+                        .into(favicon);
             } else {
                 Toast.makeText(this, "没有数据", Toast.LENGTH_SHORT).show();
             }
