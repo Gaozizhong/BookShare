@@ -73,6 +73,7 @@
             android:text="图片示例："
             android:textColor="#000"/>
         <ImageView
+            android:id="@+id/idCard"
             android:layout_width="300dp"
             android:layout_height="200dp"
             android:layout_gravity="center"

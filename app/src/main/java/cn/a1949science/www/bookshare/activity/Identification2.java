@@ -9,9 +9,11 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.lzy.imagepicker.view.CropImageView;
@@ -38,6 +40,7 @@ public class Identification2 extends AppCompatActivity implements View.OnClickLi
     private com.lzy.imagepicker.ImagePicker imagePicker;
     String picturePath="";
     BmobFile bmobFile;
+    ImageView idCard;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +63,7 @@ public class Identification2 extends AppCompatActivity implements View.OnClickLi
         update.setOnClickListener(this);
         updateOk = (Button) findViewById(R.id.updateOk);
         updateOk.setOnClickListener(this);
+        idCard = (ImageView) findViewById(R.id.idCard);
     }
 
     @Override
@@ -84,7 +88,7 @@ public class Identification2 extends AppCompatActivity implements View.OnClickLi
         height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, getResources().getDisplayMetrics());
         imagePicker.setFocusWidth(width);
         imagePicker.setFocusHeight(height);
-        imagePicker.setOutPutX(800);
+        imagePicker.setOutPutX(1200);
         imagePicker.setOutPutY(800);
 
         Intent intent1 = new Intent(this, ImageGridActivity.class);
@@ -98,6 +102,12 @@ public class Identification2 extends AppCompatActivity implements View.OnClickLi
             if (data != null && requestCode == 100) {
                 ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(com.lzy.imagepicker.ImagePicker.EXTRA_RESULT_ITEMS);
                 picturePath = images.get(0).path;
+                Glide.with(mContext)
+                        .load(picturePath)
+                        .thumbnail(0.5f)
+                        .override((int)(mContext.getResources().getDisplayMetrics().density*300+0.5f),(int)(mContext.getResources().getDisplayMetrics().density*200+0.5f))
+                        .into(idCard);
+
             } else {
                 Toast.makeText(this, "没有数据", Toast.LENGTH_SHORT).show();
             }

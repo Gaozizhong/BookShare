@@ -156,7 +156,7 @@ public class RegisterPage extends AppCompatActivity {
     private void registerUser(){
         //注册
         final _User user = new _User();
-        user.setUsername("123");
+        user.setUsername((phoneNum.getText().toString()));
         user.setMobilePhoneNumber(phoneNum.getText().toString());
         user.setPassword(password.getText().toString());
         user.setNickname(phoneNum.getText().toString());

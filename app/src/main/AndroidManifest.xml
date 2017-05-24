@@ -48,7 +48,7 @@
         android:theme="@style/AppTheme">
 
         <!-- 小米更新 -->
-        <provider
+        <!--<provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="cn.a1949science.www.bookshare.selfupdate.fileprovider"
             android:exported="false"
@@ -57,12 +57,12 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-         <!--SDK调用系统下载管理器进行下载，需要注册receiver，在下载完成后进行增量包合成与安装-->
+        &lt;!&ndash; SDK调用系统下载管理器进行下载，需要注册receiver，在下载完成后进行增量包合成与安装 &ndash;&gt;
         <receiver android:name="com.xiaomi.market.sdk.DownloadCompleteReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
-        </receiver>
+        </receiver>-->
 
         <service
             android:name="com.xiaomi.push.service.XMPushService"
@@ -149,7 +149,8 @@
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.WriterInfoPage"/>
+        <activity android:name=".activity.WriterInfoPage" />
+        <activity android:name=".activity.ScanISBN"></activity>
     </application>
 
 </manifest>

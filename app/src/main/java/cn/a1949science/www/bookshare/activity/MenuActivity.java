@@ -1,14 +1,18 @@
 package cn.a1949science.www.bookshare.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,7 +21,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,18 +35,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.bean.ImageItem;
-import com.lzy.imagepicker.ui.ImageGridActivity;
-import com.lzy.imagepicker.view.CropImageView;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
-import com.xiaomi.market.sdk.XiaomiUpdateAgent;
-import com.xiaomi.market.sdk.XiaomiUpdateListener;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,24 +46,18 @@ import cn.a1949science.www.bookshare.MyApplication;
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.adapter.myAdapterRecyclerView;
 import cn.a1949science.www.bookshare.bean.BookInfo;
-import cn.a1949science.www.bookshare.bean.Book_Info;
 import cn.a1949science.www.bookshare.bean.Shared_Info;
 import cn.a1949science.www.bookshare.bean.SharingBook;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.a1949science.www.bookshare.widget.CircleImageView;
-import cn.a1949science.www.bookshare.widget.GlideImageLoader;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
-import cn.bmob.v3.listener.UploadFileListener;
-import top.zibin.luban.Luban;
-import top.zibin.luban.OnCompressListener;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.BLUE;
@@ -101,14 +90,14 @@ public class MenuActivity extends AppCompatActivity
     private LinearLayoutManager mLayoutManager;
     private int lastVisibleItem;
     Integer[] bookNums,shareNums;
-    int REQUEST_CODE = 5;
+    int REQUEST_CODE = 5,REQUEST_CAMERA_PERMISSION = 0;
     EditText bookName,bookWriter,bookIsbn;
     private Integer bookNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        XiaomiUpdateAgent.setCheckUpdateOnlyWifi(true);
+        /*XiaomiUpdateAgent.setCheckUpdateOnlyWifi(true);
         XiaomiUpdateAgent.setUpdateAutoPopup(false);
         XiaomiUpdateAgent.setUpdateListener(new XiaomiUpdateListener() {
 
@@ -141,7 +130,7 @@ public class MenuActivity extends AppCompatActivity
                 }
             }
         });
-        XiaomiUpdateAgent.update(this);
+        XiaomiUpdateAgent.update(this);*/
         setContentView(R.layout.activity_main);
         Bmob.initialize(this, "13d736220ecc496d7dcb63c7cf918ba7");
         MyApplication.setMenuActivity(this);
@@ -470,6 +459,19 @@ public class MenuActivity extends AppCompatActivity
                 Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_CAMERA_PERMISSION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent it = new Intent(mContext, CaptureActivity.class);
+                startActivityForResult(it, REQUEST_CODE);
+            } else {
+                Toast.makeText(mContext, "权限已被拒绝", Toast.LENGTH_SHORT).show();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     //折叠按钮
@@ -939,8 +941,14 @@ public class MenuActivity extends AppCompatActivity
         bookScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(mContext, CaptureActivity.class);
-                startActivityForResult(it, REQUEST_CODE);
+                //如果有权限
+                if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    Intent it = new Intent(mContext, ScanISBN.class);
+                    startActivityForResult(it, REQUEST_CODE);
+                    overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
+                } else {//没有权限
+                    ActivityCompat.requestPermissions(MenuActivity.this,new String[]{Manifest.permission.CAMERA},REQUEST_CAMERA_PERMISSION);
+                }
             }
         });
 

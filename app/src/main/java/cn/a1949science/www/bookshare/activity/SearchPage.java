@@ -365,7 +365,6 @@ public class SearchPage extends AppCompatActivity {
         }
     }
 
-
     //下拉刷新
     private void refreshBookList() {
         new Thread(new Runnable() {
