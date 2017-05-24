@@ -87,7 +87,7 @@ public class SearchPage extends AppCompatActivity {
                 if (menuItemId == R.id.action_scan) {
                     //如果有权限
                     if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                        Intent it = new Intent(mContext, CaptureActivity.class);
+                        Intent it = new Intent(mContext, ScanISBN.class);
                         startActivityForResult(it, REQUEST_CODE);
                     } else {//没有权限
                         ActivityCompat.requestPermissions(SearchPage.this,new String[]{Manifest.permission.CAMERA},REQUEST_CAMERA_PERMISSION);
