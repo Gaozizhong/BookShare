@@ -8,6 +8,8 @@ import android.graphics.Bitmap;
 import android.media.Image;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CaptureFragment;
@@ -46,10 +49,9 @@ public class ScanISBN extends AppCompatActivity implements View.OnClickListener{
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setClass(mContext, MenuActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  //注意本行的FLAG设置
-                startActivity(intent);
+                Intent resultIntent = new Intent();
+                ScanISBN.this.setResult(RESULT_OK, resultIntent);
+                ScanISBN.this.finish();
                 overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
             }
         });
@@ -98,5 +100,13 @@ public class ScanISBN extends AppCompatActivity implements View.OnClickListener{
                 break;
 
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent resultIntent = new Intent();
+        ScanISBN.this.setResult(RESULT_OK, resultIntent);
+        ScanISBN.this.finish();
+        overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
     }
 }

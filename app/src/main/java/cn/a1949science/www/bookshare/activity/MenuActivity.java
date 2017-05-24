@@ -110,6 +110,7 @@ public class MenuActivity extends AppCompatActivity
                         // 有更新， UpdateResponse为本次更新的详细信息
                         // 其中包含更新信息，下载地址，MD5校验信息等，可自行处理下载安装
                         // 如果希望 SDK继续接管下载安装事宜，可调用
+                        Toast.makeText(mContext, "123", Toast.LENGTH_SHORT).show();
                         XiaomiUpdateAgent.arrange();
                         break;
                     case com.xiaomi.market.sdk.UpdateStatus.STATUS_NO_UPDATE:
@@ -459,6 +460,8 @@ public class MenuActivity extends AppCompatActivity
 
             } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
                 Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
+            } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == 0) {
+                return;
             }
         }
     }
@@ -947,7 +950,6 @@ public class MenuActivity extends AppCompatActivity
                 if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                     Intent it = new Intent(mContext, ScanISBN.class);
                     startActivityForResult(it, REQUEST_CODE);
-                    overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
                 } else {//没有权限
                     ActivityCompat.requestPermissions(MenuActivity.this,new String[]{Manifest.permission.CAMERA},REQUEST_CAMERA_PERMISSION);
                 }
