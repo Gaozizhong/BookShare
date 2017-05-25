@@ -65,6 +65,7 @@ import static android.graphics.Color.BLACK;
 import static android.graphics.Color.BLUE;
 
 /**
+ * app首页
  * Created by 高子忠 on 2017/3/22.
  */
 

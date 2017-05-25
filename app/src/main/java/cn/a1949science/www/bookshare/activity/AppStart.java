@@ -22,7 +22,7 @@ public class AppStart extends AppCompatActivity {
     // 所需的全部权限
     static final String[] PERMISSIONS = new String[]{
             Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.CALL_PHONE
+            Manifest.permission.CAMERA
     };
     private PermissionsChecker mPermissionsChecker; // 权限检测器
 

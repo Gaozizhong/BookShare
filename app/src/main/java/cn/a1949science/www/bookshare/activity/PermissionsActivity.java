@@ -115,18 +115,18 @@ public class PermissionsActivity extends AppCompatActivity {
     // 显示缺失权限提示
     private void showMissingPermissionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(PermissionsActivity.this);
-        builder.setTitle("帮助");
-        builder.setMessage("当前应用缺少必要权限。\\n\\n请点击\\\"设置\\\"-\\\"权限\\\"-打开所需权限。\\n\\n最后点击两次后退按钮，即可返回。");
+        builder.setTitle(R.string.help);
+        builder.setMessage(R.string.string_help_text);
 
         // 拒绝, 退出应用
-        builder.setNegativeButton("退出", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.quit, new DialogInterface.OnClickListener() {
             @Override public void onClick(DialogInterface dialog, int which) {
                 setResult(PERMISSIONS_DENIED);
                 finish();
             }
         });
 
-        builder.setPositiveButton("设置", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.setting, new DialogInterface.OnClickListener() {
             @Override public void onClick(DialogInterface dialog, int which) {
                 startAppSettings();
             }
