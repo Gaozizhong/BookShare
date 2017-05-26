@@ -43,6 +43,7 @@ import com.xiaomi.market.sdk.XiaomiUpdateListener;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import cn.a1949science.www.bookshare.MyApplication;
 import cn.a1949science.www.bookshare.R;
@@ -87,7 +88,7 @@ public class MenuActivity extends AppCompatActivity
     boolean clicked  = false,ifReturn = false,canBeSharing;
     private long exitTime = 0;
     Integer borrowBookNum,loanBookNum,textNum1,textNum2,textNum3,userNum,userNum1,shareNum,shareNum1;
-    String objectId,objectId1,time,newBookObjectId;
+    String objectId,objectId1,time,newBookObjectId,result;
     View mine,headerLayout;
     SwipeRefreshLayout refresh;
     RecyclerView recyclerView;
@@ -477,7 +478,7 @@ public class MenuActivity extends AppCompatActivity
                 return;
             }
             if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
-                final String result = bundle.getString(CodeUtils.RESULT_STRING);
+                result = bundle.getString(CodeUtils.RESULT_STRING);
                 //Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
                 //查询扫描的书
                 BmobQuery<BookInfo> query = new BmobQuery<>();
@@ -516,12 +517,34 @@ public class MenuActivity extends AppCompatActivity
                                                 }
                                             }
                                         });
-                                        Toast.makeText(mContext, "暂时没有这本书的详细信息，请手动填写书名和作者后，继续完成共享！", Toast.LENGTH_SHORT).show();
+                                        AlertDialog dlg = new AlertDialog.Builder(mContext)
+                                                .setTitle("提醒")
+                                                .setMessage("暂时没有这本书的详细信息，请手动填写书名和作者后，继续完成共享！")
+                                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                    }
+                                                })
+                                                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                    }
+                                                })
+                                                .create();
+                                        dlg.show();
                                     } else {
                                         Toast.makeText(mContext, "失败", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
+                        }else if (list.get(0).getBookImage()==null){
+                            bookNum = list.get(0).getBookNum();
+                            newBookObjectId = list.get(0).getObjectId();
+                            bookName.setText(list.get(0).getBookName());
+                            bookWriter.setText(list.get(0).getBookWriter());
+                            bookIsbn.setText(list.get(0).getISBN());
+                            canBeSharing = false;
                         } else if (e != null){
                             Toast.makeText(mContext, "查询失败"+e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -1048,6 +1071,9 @@ public class MenuActivity extends AppCompatActivity
                                                 BookInfo bookInfo = new BookInfo();
                                                 bookInfo.setBookName(bookName.getText().toString());
                                                 bookInfo.setBookWriter(bookWriter.getText().toString());
+                                                if (!Objects.equals(result, bookIsbn.getText().toString())) {
+                                                    bookInfo.setISBN(bookIsbn.getText().toString());
+                                                }
                                                 bookInfo.update(newBookObjectId, new UpdateListener() {
                                                     @Override
                                                     public void done(BmobException e1) {
