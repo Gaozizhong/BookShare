@@ -56,10 +56,14 @@ import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.BmobUpdateListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
+import cn.bmob.v3.update.BmobUpdateAgent;
+import cn.bmob.v3.update.UpdateResponse;
+import cn.bmob.v3.update.UpdateStatus;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.BLUE;
@@ -101,6 +105,7 @@ public class MenuActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         updataApp();
+        BmobUpdateApp();
         setContentView(R.layout.activity_main);
         Bmob.initialize(this, "13d736220ecc496d7dcb63c7cf918ba7");
         MyApplication.setMenuActivity(this);
@@ -144,6 +149,33 @@ public class MenuActivity extends AppCompatActivity
         favicon = (CircleImageView) headerLayout.findViewById(R.id.favicon);
     }
 
+    //Bmob更新
+    private void BmobUpdateApp() {
+        BmobUpdateAgent.setUpdateOnlyWifi(false);
+        BmobUpdateAgent.setUpdateListener(new BmobUpdateListener() {
+
+            @Override
+            public void onUpdateReturned(int updateStatus, UpdateResponse updateInfo) {
+                // TODO Auto-generated method stub
+                if (updateStatus == UpdateStatus.Yes) {//版本有更新
+                    //Toast.makeText(mContext, "版本更新", Toast.LENGTH_SHORT).show();
+                }else if(updateStatus == UpdateStatus.No){
+                    Toast.makeText(mContext, "版本无更新", Toast.LENGTH_SHORT).show();
+                }else if(updateStatus==UpdateStatus.EmptyField){//此提示只是提醒开发者关注那些必填项，测试成功后，无需对用户提示
+                    Toast.makeText(mContext, "请检查你AppVersion表的必填项，1、target_size（文件大小）是否填写；2、path或者android_url两者必填其中一项。", Toast.LENGTH_SHORT).show();
+                }else if(updateStatus==UpdateStatus.IGNORED){
+                    Toast.makeText(mContext, "该版本已被忽略更新", Toast.LENGTH_SHORT).show();
+                }else if(updateStatus==UpdateStatus.ErrorSizeFormat){
+                    Toast.makeText(mContext, "请检查target_size填写的格式，请使用file.length()方法获取apk大小。", Toast.LENGTH_SHORT).show();
+                }else if(updateStatus==UpdateStatus.TimeOut){
+                    Toast.makeText(mContext, "查询出错或查询超时", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        BmobUpdateAgent.update(this);
+    }
+
+    //小米更新
     private void updataApp() {
         XiaomiUpdateAgent.setCheckUpdateOnlyWifi(true);
         XiaomiUpdateAgent.setUpdateAutoPopup(false);
@@ -235,7 +267,7 @@ public class MenuActivity extends AppCompatActivity
             startActivity(it);
             overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
         } else if (id == R.id.refrush) {
-            //BmobUpdateAgent.forceUpdate(mContext);
+            BmobUpdateAgent.forceUpdate(mContext);
         } else if (id == R.id.quit) {
             AlertDialog dlg = new AlertDialog.Builder(mContext)
                     .setTitle("确认退出？")
