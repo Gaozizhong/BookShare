@@ -10,8 +10,8 @@ android {
         applicationId "cn.a1949science.www.bookshare"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 12
-        versionName "1.2.5"
+        versionCode 14
+        versionName "1.2.7"
     }
     buildTypes {
         release {
