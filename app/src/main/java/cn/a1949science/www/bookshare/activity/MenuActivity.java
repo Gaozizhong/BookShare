@@ -100,41 +100,7 @@ public class MenuActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        XiaomiUpdateAgent.setCheckUpdateOnlyWifi(true);
-        XiaomiUpdateAgent.setUpdateAutoPopup(false);
-        XiaomiUpdateAgent.setUpdateListener(new XiaomiUpdateListener() {
-
-            @Override
-            public void onUpdateReturned(int updateStatus, com.xiaomi.market.sdk.UpdateResponse updateInfo) {
-                switch (updateStatus) {
-                    case com.xiaomi.market.sdk.UpdateStatus.STATUS_UPDATE:
-                        Toast.makeText(mContext, "123", Toast.LENGTH_SHORT).show();
-                        // 有更新， UpdateResponse为本次更新的详细信息
-                        // 其中包含更新信息，下载地址，MD5校验信息等，可自行处理下载安装
-                        // 如果希望 SDK继续接管下载安装事宜，可调用
-                        XiaomiUpdateAgent.arrange();
-                        break;
-                    case com.xiaomi.market.sdk.UpdateStatus.STATUS_NO_UPDATE:
-                        // 无更新， UpdateResponse为null
-                        break;
-                    case com.xiaomi.market.sdk.UpdateStatus.STATUS_NO_WIFI:
-                        // 设置了只在WiFi下更新，且WiFi不可用时， UpdateResponse为null
-                        break;
-                    case com.xiaomi.market.sdk.UpdateStatus.STATUS_NO_NET:
-                        // 没有网络， UpdateResponse为null
-                        break;
-                    case com.xiaomi.market.sdk.UpdateStatus.STATUS_FAILED:
-                        // 检查更新与服务器通讯失败，可稍后再试， UpdateResponse为null
-                        break;
-                    case com.xiaomi.market.sdk.UpdateStatus.STATUS_LOCAL_APP_FAILED:
-                        // 检查更新获取本地安装应用信息失败， UpdateResponse为null
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
-        XiaomiUpdateAgent.update(this);
+        updataApp();
         setContentView(R.layout.activity_main);
         Bmob.initialize(this, "13d736220ecc496d7dcb63c7cf918ba7");
         MyApplication.setMenuActivity(this);
@@ -176,6 +142,43 @@ public class MenuActivity extends AppCompatActivity
         });
         nickname = (TextView) headerLayout.findViewById(R.id.nickname);
         favicon = (CircleImageView) headerLayout.findViewById(R.id.favicon);
+    }
+
+    private void updataApp() {
+        XiaomiUpdateAgent.setCheckUpdateOnlyWifi(true);
+        XiaomiUpdateAgent.setUpdateAutoPopup(false);
+        XiaomiUpdateAgent.setUpdateListener(new XiaomiUpdateListener() {
+
+            @Override
+            public void onUpdateReturned(int updateStatus, com.xiaomi.market.sdk.UpdateResponse updateInfo) {
+                switch (updateStatus) {
+                    case com.xiaomi.market.sdk.UpdateStatus.STATUS_UPDATE:
+                        // 有更新， UpdateResponse为本次更新的详细信息
+                        // 其中包含更新信息，下载地址，MD5校验信息等，可自行处理下载安装
+                        // 如果希望 SDK继续接管下载安装事宜，可调用
+                        XiaomiUpdateAgent.arrange();
+                        break;
+                    case com.xiaomi.market.sdk.UpdateStatus.STATUS_NO_UPDATE:
+                        // 无更新， UpdateResponse为null
+                        break;
+                    case com.xiaomi.market.sdk.UpdateStatus.STATUS_NO_WIFI:
+                        // 设置了只在WiFi下更新，且WiFi不可用时， UpdateResponse为null
+                        break;
+                    case com.xiaomi.market.sdk.UpdateStatus.STATUS_NO_NET:
+                        // 没有网络， UpdateResponse为null
+                        break;
+                    case com.xiaomi.market.sdk.UpdateStatus.STATUS_FAILED:
+                        // 检查更新与服务器通讯失败，可稍后再试， UpdateResponse为null
+                        break;
+                    case com.xiaomi.market.sdk.UpdateStatus.STATUS_LOCAL_APP_FAILED:
+                        // 检查更新获取本地安装应用信息失败， UpdateResponse为null
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        XiaomiUpdateAgent.update(this);
     }
 
     @Override

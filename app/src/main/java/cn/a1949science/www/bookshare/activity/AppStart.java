@@ -10,6 +10,8 @@ import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
+import com.xiaomi.market.sdk.XiaomiUpdateAgent;
+
 import cn.a1949science.www.bookshare.PermissionsChecker;
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean._User;
@@ -29,6 +31,7 @@ public class AppStart extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         //加载启动页面
         final View view = View.inflate(this, R.layout.activity_app_start, null);
         setContentView(view);
