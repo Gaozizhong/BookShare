@@ -53,5 +53,7 @@
     <string name="help">帮助</string>
     <string name="quit">退出</string>
     <string name="setting">设置</string>
+    <string name="refuse_loan">拒绝借出</string>
+    <string name="agree_loan">同意借出</string>
 </resources>
 

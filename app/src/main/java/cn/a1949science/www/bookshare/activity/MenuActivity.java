@@ -926,7 +926,7 @@ public class MenuActivity extends AppCompatActivity
         data.putInt("textNum",textNum2);
         data.putInt("shareNum",shareNum);
         data.putInt("booknum",loanBookNum);
-        data.putInt("userNum",userNum);
+        data.putInt("userNum",userNum1);
         data.putString("objectId",objectId);
         Intent intent = new Intent(mContext, Book_detail.class);
         intent.putExtras(data);
@@ -946,23 +946,23 @@ public class MenuActivity extends AppCompatActivity
                 returnTime.setText("还未完成借书");
             } else {
                 returnTime.setText("截止时间："+ time);
-                new AlertDialog.Builder(mContext)
-                        .setPositiveButton("确认还书", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                returnQuery();
-                            }
-                        })
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        })
-                        .setView(layout)
-                        .setTitle("图书归还")
-                        .show();
             }
+            new AlertDialog.Builder(mContext)
+                    .setPositiveButton("确认还书", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            returnQuery();
+                        }
+                    })
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    })
+                    .setView(layout)
+                    .setTitle("图书归还")
+                    .show();
 
         }else {
             View layout = inflater.inflate(R.layout.returning_no, (ViewGroup) findViewById(R.id.raturning_No_Dialog));
@@ -992,6 +992,7 @@ public class MenuActivity extends AppCompatActivity
         BmobQuery<Shared_Info> query = new BmobQuery<>();
         query.addWhereEqualTo("UserNum", bmobUser.getUserNum());
         query.addWhereEqualTo("ifReturn", ifReturn);
+        query.addWhereEqualTo("ifRefuse", false);
         query.findObjects(new FindListener<Shared_Info>() {
             @Override
             public void done(List<Shared_Info> list, BmobException e) {

@@ -7,5 +7,6 @@
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
     <color name="blue">#0d9ffb</color>
+    <color name="red">#dc2727</color>
     <color name="scan_corner_color">#000000</color>
 </resources>

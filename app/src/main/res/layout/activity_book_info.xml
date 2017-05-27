@@ -12,14 +12,16 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <ImageView
+                android:id="@+id/image"
                 android:layout_width="match_parent"
                 android:layout_height="360dp"
-                android:id="@+id/image"
                 android:layout_gravity="center_horizontal"
                 android:background="@color/white"
                 android:contentDescription="@string/bookImage" />
@@ -29,261 +31,275 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:orientation="vertical"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:gravity="center_horizontal"
                     android:text="@string/introduce"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:gravity="center_horizontal" />
+                    android:textSize="20sp" />
 
                 <TextView
-                    android:ellipsize="end"
+                    android:id="@+id/introduce"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:id="@+id/introduce"
-                    android:textIsSelectable="false"
                     android:background="#ffffff"
-                    android:textSize="15sp"
+                    android:ellipsize="end"
                     android:paddingLeft="20dp"
-                    android:paddingRight="20dp" />
+                    android:paddingRight="20dp"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textIsSelectable="false"
+                    android:textSize="15sp" />
 
                 <ImageView
                     android:id="@+id/expand_view"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="right"
+                    android:contentDescription="@string/expand_introduce"
                     android:paddingBottom="5dip"
                     android:paddingLeft="5dip"
                     android:paddingRight="5dip"
                     android:paddingTop="5dip"
                     android:src="@mipmap/expand"
-                    android:visibility="gone"
-                    android:contentDescription="@string/expand_introduce" />
+                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="3dp"
                 android:background="#ffffff"
                 android:gravity="center_vertical"
-                android:weightSum="1"
+                android:orientation="horizontal"
                 android:paddingLeft="15dp"
-                android:paddingRight="10dp">
+                android:paddingRight="10dp"
+                android:weightSum="1">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:gravity="center_horizontal"
                     android:text="@string/bookName"
-                    android:textSize="16sp"
-                    android:gravity="center_horizontal" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="16sp" />
+
                 <TextView
+                    android:id="@+id/bookName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:id="@+id/bookName"
-                    android:textSize="14sp"
+                    android:layout_weight="1"
                     android:gravity="center_horizontal"
-                    android:layout_weight="1" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
                 android:background="#ffffff"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingLeft="15dp"
                 android:paddingRight="10dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:gravity="center_horizontal"
                     android:text="@string/bookWriter"
-                    android:textSize="16sp"
-                    android:gravity="center_horizontal" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="16sp" />
+
                 <TextView
+                    android:id="@+id/writername"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:id="@+id/writername"
-                    android:textSize="14sp"
-                    android:textColor="@color/blue"
+                    android:layout_weight="1"
                     android:gravity="center_horizontal"
-                    android:layout_weight="1" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/blue"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/translator_layout"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
                 android:background="#ffffff"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingLeft="15dp"
                 android:paddingRight="10dp"
                 android:visibility="gone">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:gravity="center_horizontal"
                     android:text="@string/translater"
-                    android:textSize="16sp"
-                    android:gravity="center_horizontal" />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="16sp" />
+
+                <TextView
                     android:id="@+id/translator"
-                    android:textSize="14sp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/blue"
-                    android:gravity="center_horizontal"
-                    android:layout_weight="1" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
                 android:background="#ffffff"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingLeft="15dp"
                 android:paddingRight="10dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:gravity="center_horizontal"
                     android:text="@string/bookPress"
-                    android:textSize="16sp"
-                    android:gravity="center_horizontal" />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="16sp" />
+
+                <TextView
                     android:id="@+id/bookPress"
-                    android:textSize="14sp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center_horizontal"
-                    android:layout_weight="1" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
                 android:background="#ffffff"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingLeft="15dp"
                 android:paddingRight="10dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:gravity="center_horizontal"
                     android:text="@string/publishedDate"
-                    android:textSize="16sp"
-                    android:gravity="center_horizontal" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="16sp" />
+
                 <TextView
+                    android:id="@+id/publishedDate"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:id="@+id/publishedDate"
-                    android:textSize="14sp"
+                    android:layout_weight="1"
                     android:gravity="center_horizontal"
-                    android:layout_weight="1" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
                 android:background="#ffffff"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingLeft="15dp"
                 android:paddingRight="10dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:gravity="center_horizontal"
                     android:text="@string/isbn"
-                    android:textSize="16sp"
-                    android:gravity="center_horizontal" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="16sp" />
+
                 <TextView
+                    android:id="@+id/ISBN"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:id="@+id/ISBN"
-                    android:textSize="14sp"
+                    android:layout_weight="1"
                     android:gravity="center_horizontal"
-                    android:layout_weight="1" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
+                android:id="@+id/owner"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="3dp"
                 android:background="#ffffff"
+                android:clickable="false"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingLeft="15dp"
                 android:paddingRight="10dp">
+
                 <TextView
                     android:layout_width="40dp"
                     android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/bookowner"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/time"
-                    android:textSize="16sp"
-                    android:gravity="center_horizontal" />
+                    android:textSize="15sp" />
+
                 <TextView
+                    android:id="@+id/bookOwner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center|center_horizontal"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:id="@+id/time"
-                    android:textSize="14sp"
-                    android:gravity="center_horizontal"
-                    android:layout_weight="1" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
                 android:background="#ffffff"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingLeft="15dp"
-                android:paddingRight="10dp"
-                android:id="@+id/owner"
-                android:clickable="false">
+                android:paddingRight="10dp">
 
                 <TextView
                     android:layout_width="40dp"
                     android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/time"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/bookowner"
-                    android:textSize="15sp"
-                    android:gravity="center_horizontal" />
+                    android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/time"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:id="@+id/bookOwner"
-                    android:gravity="center|center_horizontal"
-                    android:textSize="14sp"
-                    android:layout_weight="1" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -292,225 +308,233 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="gone">
+
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="3dp"
                     android:background="#ffffff"
                     android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     android:paddingLeft="15dp"
                     android:paddingRight="10dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="@string/borrowName"
-                        android:textSize="16sp"
-                        android:gravity="center_horizontal" />
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:id="@+id/borrowName"
-                        android:textSize="14sp"
                         android:gravity="center_horizontal"
-                        android:layout_weight="1" />
+                        android:text="@string/borrowName"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/borrowName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="14sp" />
                 </LinearLayout>
+
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="1dp"
                     android:background="#ffffff"
+                    android:clickable="false"
                     android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     android:paddingLeft="15dp"
-                    android:paddingRight="10dp"
-                    android:clickable="false">
+                    android:paddingRight="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:gravity="center_horizontal"
                         android:text="@string/borrowPhone"
-                        android:textSize="15sp"
-                        android:gravity="center_horizontal" />
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="15sp" />
 
                     <TextView
+                        android:id="@+id/borrowPhone"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:id="@+id/borrowPhone"
+                        android:layout_weight="1"
                         android:gravity="center|center_horizontal"
-                        android:textSize="14sp"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textColor="@color/blue"
-                        android:layout_weight="1" />
+                        android:textSize="14sp" />
                 </LinearLayout>
+
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="1dp"
                     android:background="#ffffff"
+                    android:clickable="false"
                     android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     android:paddingLeft="15dp"
-                    android:paddingRight="10dp"
-                    android:clickable="false">
+                    android:paddingRight="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:gravity="center_horizontal"
                         android:text="@string/borrowAddress"
-                        android:textSize="15sp"
-                        android:gravity="center_horizontal" />
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="15sp" />
 
                     <TextView
+                        android:id="@+id/borrowAddress"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:id="@+id/borrowAddress"
+                        android:layout_weight="1"
                         android:gravity="center|center_horizontal"
-                        android:textSize="14sp"
-                        android:layout_weight="1" />
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/no_refuse"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
                 android:background="#ebecf0"
+                android:baselineAligned="false"
                 android:gravity="center_vertical"
-                android:weightSum="1"
-                android:baselineAligned="false">
+                android:orientation="horizontal"
+                android:weightSum="1">
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:background="#ffffff"
-                    android:gravity="center_vertical|center_horizontal">
+                    android:gravity="center_vertical|center_horizontal"
+                    android:orientation="vertical">
 
                     <ImageButton
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
                         android:id="@+id/likeBtn"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:background="#ffffff"
-                        android:src="@mipmap/favourite"
+                        android:contentDescription="@string/likeBtn"
                         android:scaleType="fitXY"
-                        android:contentDescription="@string/likeBtn" />
+                        android:src="@mipmap/favourite" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:background="#ffffff"
-                    android:gravity="center_vertical|center_horizontal" >
+                    android:gravity="center_vertical|center_horizontal"
+                    android:orientation="vertical">
+
                     <ImageButton
+                        android:id="@+id/readBtn"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:id="@+id/readBtn"
                         android:background="#ffffff"
-                        android:src="@mipmap/not_seen"
+                        android:contentDescription="@string/readBtn"
                         android:scaleType="fitXY"
-                        android:contentDescription="@string/readBtn" />
+                        android:src="@mipmap/not_seen" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
-                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_marginLeft="1dp"
                     android:layout_weight="1"
-                    android:layout_marginLeft="1dp">
+                    android:gravity="center_vertical|center_horizontal"
+                    android:orientation="vertical">
+
                     <Button
+                        android:id="@+id/borrowBtn"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="@string/borrowBtn"
-                        android:id="@+id/borrowBtn"
-                        android:textSize="20sp"
                         android:background="#dc2727"
-                        android:textColor="#ffffff" />
+                        android:text="@string/borrowBtn"
+                        android:textColor="#ffffff"
+                        android:textSize="20sp" />
                 </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/can_refuse"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
                 android:background="#ebecf0"
+                android:baselineAligned="false"
                 android:gravity="center_vertical"
-                android:weightSum="1"
+                android:orientation="horizontal"
                 android:visibility="gone"
-                android:baselineAligned="false">
+                android:weightSum="1">
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:background="#ffffff"
-                    android:gravity="center_vertical|center_horizontal">
+                    android:gravity="center_vertical|center_horizontal"
+                    android:orientation="vertical">
 
                     <ImageButton
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
                         android:id="@+id/likeBtn2"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:background="#ffffff"
-                        android:src="@mipmap/favourite"
+                        android:contentDescription="@string/likeBtn"
                         android:scaleType="fitXY"
-                        android:contentDescription="@string/likeBtn"/>
+                        android:src="@mipmap/favourite" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:background="#ffffff"
-                    android:gravity="center_vertical|center_horizontal" >
+                    android:gravity="center_vertical|center_horizontal"
+                    android:orientation="vertical">
 
                     <ImageButton
+                        android:id="@+id/readBtn2"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:id="@+id/readBtn2"
                         android:background="#ffffff"
-                        android:src="@mipmap/not_seen"
+                        android:contentDescription="@string/readBtn"
                         android:scaleType="fitXY"
-                        android:contentDescription="@string/readBtn"/>
+                        android:src="@mipmap/not_seen" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
-                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_marginLeft="1dp"
                     android:layout_weight="1"
-                    android:layout_marginLeft="1dp">
+                    android:gravity="center_vertical|center_horizontal"
+                    android:orientation="horizontal">
 
                     <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="拒绝借出"
                         android:id="@+id/RefuseBtn"
-                        android:textSize="15sp"
-                        android:background="#dc2727"
-                        android:textColor="#ffffff" />
-                    <Button
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="同意借出"
+                        android:background="@color/red"
+                        android:text="@string/refuse_loan"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+
+                    <Button
                         android:id="@+id/borrowBtn2"
-                        android:textSize="15sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
                         android:background="#dc2727"
-                        android:textColor="#ffffff" />
+                        android:text="@string/agree_loan"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
                 </LinearLayout>
 
             </LinearLayout>
