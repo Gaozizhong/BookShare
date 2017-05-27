@@ -105,41 +105,7 @@ public class MenuActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        XiaomiUpdateAgent.setCheckUpdateOnlyWifi(true);
-        XiaomiUpdateAgent.setUpdateAutoPopup(false);
-        XiaomiUpdateAgent.setUpdateListener(new XiaomiUpdateListener() {
-
-            @Override
-            public void onUpdateReturned(int updateStatus, com.xiaomi.market.sdk.UpdateResponse updateInfo) {
-                switch (updateStatus) {
-                    case com.xiaomi.market.sdk.UpdateStatus.STATUS_UPDATE:
-                        // 有更新， UpdateResponse为本次更新的详细信息
-                        // 其中包含更新信息，下载地址，MD5校验信息等，可自行处理下载安装
-                        // 如果希望 SDK继续接管下载安装事宜，可调用
-                        XiaomiUpdateAgent.arrange();
-                        break;
-                    case com.xiaomi.market.sdk.UpdateStatus.STATUS_NO_UPDATE:
-                        // 无更新， UpdateResponse为null
-                        break;
-                    case com.xiaomi.market.sdk.UpdateStatus.STATUS_NO_WIFI:
-                        // 设置了只在WiFi下更新，且WiFi不可用时， UpdateResponse为null
-                        break;
-                    case com.xiaomi.market.sdk.UpdateStatus.STATUS_NO_NET:
-                        // 没有网络， UpdateResponse为null
-                        break;
-                    case com.xiaomi.market.sdk.UpdateStatus.STATUS_FAILED:
-                        // 检查更新与服务器通讯失败，可稍后再试， UpdateResponse为null
-                        break;
-                    case com.xiaomi.market.sdk.UpdateStatus.STATUS_LOCAL_APP_FAILED:
-                        // 检查更新获取本地安装应用信息失败， UpdateResponse为null
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
-        XiaomiUpdateAgent.update(this);
-        //updataApp();
+        updataApp();
         BmobUpdateApp();
         setContentView(R.layout.activity_main);
         Bmob.initialize(this, "13d736220ecc496d7dcb63c7cf918ba7");
@@ -772,11 +738,9 @@ public class MenuActivity extends AppCompatActivity
             @Override
             public void done(List<SharingBook> list, BmobException e) {
                 if (e == null) {
-                    shareNums = new Integer[list.size()];
                     bookNums = new Integer[list.size()];
                     for (int i=0;i<list.size();i++) {
                         bookNums[i] = list.get(i).getBookNum();
-                        shareNums[i] = list.get(i).getShareNum();
                     }
                     BmobQuery<BookInfo> query1 = new BmobQuery<>();
                     query1.addWhereContainedIn("bookNum", Arrays.asList(bookNums));
@@ -787,7 +751,7 @@ public class MenuActivity extends AppCompatActivity
                         public void done(List<BookInfo> list2, BmobException e) {
                             if (e == null) {
                                 bookInfoList = list2;
-                                adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNums,shareNums);
+                                adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNums);
                                 recyclerView.setAdapter(adapter);
 
                             } else {
@@ -951,7 +915,9 @@ public class MenuActivity extends AppCompatActivity
                     .setPositiveButton("确认还书", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            returnQuery();
+                            if (time != null) {
+                                returnQuery();
+                            }
                         }
                     })
                     .setNegativeButton("取消", new DialogInterface.OnClickListener() {

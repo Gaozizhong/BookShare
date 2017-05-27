@@ -26,6 +26,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by 高子忠 on 2017/4/22.
@@ -36,9 +37,6 @@ public class myAdapterRecyclerView extends RecyclerView.Adapter<myAdapterRecycle
     private Context context;
     private List<BookInfo> list;
     private Integer[] bookNum;
-    private Integer[] shareNum;
-    BmobFile bookImage;
-    String bookName,bookWriter;
 
     @Override
     public void onClick(View view) {
@@ -60,11 +58,10 @@ public class myAdapterRecyclerView extends RecyclerView.Adapter<myAdapterRecycle
         }
     }
 
-    public myAdapterRecyclerView(Context context,List<BookInfo> list,Integer[] bookNum,Integer[] shareNum) {
+    public myAdapterRecyclerView(Context context,List<BookInfo> list,Integer[] bookNum) {
         this.context = context;
         this.list = list;
         this.bookNum = bookNum;
-        this.shareNum = shareNum;
     }
 
     @Override
@@ -79,7 +76,6 @@ public class myAdapterRecyclerView extends RecyclerView.Adapter<myAdapterRecycle
                 Bundle data = new Bundle();
                 //利用Intent传递数据
                 data.putInt("textNum",0);
-                data.putInt("shareNum",shareNum[position]);
                 data.putInt("booknum",book_info.getBookNum());
                 data.putInt("userNum",bookNum[position]);
                 Intent intent = new Intent(context, Book_detail.class);

@@ -446,7 +446,6 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
     private void detail() {
         Bundle bundle = this.getIntent().getExtras();
         textNum = bundle.getInt("textNum");
-        shareNum = bundle.getInt("shareNum");
         booknum = bundle.getInt("booknum");
         userNum = bundle.getInt("userNum");
         objectId1 = bundle.getString("objectId");

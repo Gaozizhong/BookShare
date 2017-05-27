@@ -132,9 +132,7 @@ public class SearchPage extends AppCompatActivity {
                                     public void done(List<SharingBook> list, BmobException e) {
                                         if (e == null) {
                                             bookNums = new Integer[list.size()];
-                                            shareNums = new Integer[list.size()];
                                             for (int i=0;i<list.size();i++) {
-                                                shareNums[i] = list.get(i).getBookNum();
                                                 bookNums[i] = list.get(i).getBookNum();
                                             }
 
@@ -146,7 +144,7 @@ public class SearchPage extends AppCompatActivity {
                                                 public void done(List<BookInfo> list2, BmobException e) {
                                                     if (e == null) {
                                                         bookInfoList = list2;
-                                                        adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNums,shareNums);
+                                                        adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNums);
                                                         recyclerView.setAdapter(adapter);
 
                                                     } else {
@@ -395,11 +393,9 @@ public class SearchPage extends AppCompatActivity {
             @Override
             public void done(List<SharingBook> list, BmobException e) {
                 if (e == null) {
-                    shareNums = new Integer[list.size()];
                     bookNums = new Integer[list.size()];
                     for (int i=0;i<list.size();i++) {
                         bookNums[i] = list.get(i).getBookNum();
-                        shareNums[i] = list.get(i).getShareNum();
                     }
 
                     BmobQuery<BookInfo> query1 = new BmobQuery<>();
@@ -411,7 +407,7 @@ public class SearchPage extends AppCompatActivity {
                         public void done(List<BookInfo> list2, BmobException e) {
                             if (e == null) {
                                 bookInfoList = list2;
-                                adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNums,shareNums);
+                                adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNums);
                                 recyclerView.setAdapter(adapter);
 
                             } else {
@@ -459,13 +455,11 @@ public class SearchPage extends AppCompatActivity {
                                     @Override
                                     public void done(List<SharingBook> list2, BmobException e) {
                                         if (e == null&&list2.size()!=0) {
-                                            shareNums = new Integer[list2.size()];
                                             bookNums = new Integer[list2.size()];
                                             for (int i=0;i<list2.size();i++) {
                                                 bookNums[i] = list2.get(i).getBookNum();
-                                                shareNums[i] = list2.get(i).getShareNum();
                                             }
-                                            adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNums,shareNums);
+                                            adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNums);
                                             recyclerView.setAdapter(adapter);
                                         } else if (list2.size()==0){
                                             Toast.makeText(mContext, "正在补充该书的详细信息，请耐心等待！", Toast.LENGTH_LONG).show();

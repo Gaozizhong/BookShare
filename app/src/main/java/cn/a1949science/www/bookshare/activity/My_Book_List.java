@@ -214,7 +214,7 @@ public class My_Book_List extends AppCompatActivity {
                         public void done(List<BookInfo> list2, BmobException e) {
                             if (e == null) {
                                 bookInfoList = list2;
-                                adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNums,shareNums);
+                                adapter = new myAdapterRecyclerView(mContext, bookInfoList,bookNums);
                                 recyclerView.setAdapter(adapter);
 
                             } else {
