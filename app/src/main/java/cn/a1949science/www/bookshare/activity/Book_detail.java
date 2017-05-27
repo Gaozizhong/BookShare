@@ -490,8 +490,10 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
         });
 
         //显示借书信息
+        _User bmobUser = BmobUser.getCurrentUser(_User.class);
         BmobQuery<SharingBook> query2 = new BmobQuery<>();
         query2.addWhereEqualTo("bookNum", booknum);
+        query2.addWhereNotEqualTo("ownerNum", bmobUser.getUserNum());
         query2.findObjects(new FindListener<SharingBook>() {
             @Override
             public void done(List<SharingBook> list, BmobException e) {
@@ -517,7 +519,6 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
 
         //判断是否喜欢
         BmobQuery<Like_Book> likeQuery = new BmobQuery<>();
-        _User bmobUser = BmobUser.getCurrentUser(_User.class);
         likeQuery.addWhereEqualTo("userNum", bmobUser.getUserNum());
         likeQuery.addWhereEqualTo("BookNum", booknum);
         likeQuery.findObjects(new FindListener<Like_Book>() {
