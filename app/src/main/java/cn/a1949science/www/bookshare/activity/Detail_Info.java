@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,51 +17,39 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
 
-public class Detail_Info extends AppCompatActivity {
+public class Detail_Info extends AppCompatActivity implements View.OnClickListener{
 
     Context mContext = Detail_Info.this;
-    ImageView before;
     TextView phoneNum,Class,school,gender,name,edit;
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail__info);
 
         findView();
-        onClick();
         showDetailInfo();
 
     }
     //查找地址
     private void findView(){
-        before = (ImageView) findViewById(R.id.before);
-        phoneNum = (TextView) findViewById(R.id.phoneNum);
-        Class = (TextView) findViewById(R.id.Class);
-        school = (TextView) findViewById(R.id.school);
-        gender = (TextView) findViewById(R.id.gender);
-        name = (TextView) findViewById(R.id.name);
-        edit = (TextView)findViewById(R.id.edit);
-    }
-
-    //点击事件
-    protected void onClick(){
-        assert before != null;
-        before.setOnClickListener(new View.OnClickListener() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
                 overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
             }
         });
+        edit = (TextView)findViewById(R.id.text);
+        edit.setText("编辑");
+        edit.setOnClickListener(this);
+        phoneNum = (TextView) findViewById(R.id.phoneNum);
+        Class = (TextView) findViewById(R.id.Class);
+        school = (TextView) findViewById(R.id.school);
+        gender = (TextView) findViewById(R.id.gender);
+        name = (TextView) findViewById(R.id.name);
 
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent it = new Intent(mContext,Edit_Detail_Info.class);
-                startActivity(it);
-                overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
-            }
-        });
     }
 
     private void showDetailInfo() {
@@ -85,5 +74,16 @@ public class Detail_Info extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.text:
+                Intent it = new Intent(mContext,Edit_Detail_Info.class);
+                startActivity(it);
+                overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
+                break;
+        }
     }
 }

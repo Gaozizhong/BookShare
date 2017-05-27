@@ -7,34 +7,7 @@
     tools:context="cn.a1949science.www.bookshare.activity.Edit_Detail_Info"
     android:background="#ebecf0">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="#ffffff"
-        android:id="@+id/relativeLayout3">
-
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:id="@+id/before"
-            android:src="@drawable/before"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <TextView
-            android:text="完成"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="21dp"
-            android:layout_marginEnd="21dp"
-            android:id="@+id/editOk"
-            android:textSize="20sp"
-            android:textColor="@android:color/black"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-    </RelativeLayout>
+    <include layout="@layout/bar_main_text" />
 
     <LinearLayout
         android:orientation="horizontal"

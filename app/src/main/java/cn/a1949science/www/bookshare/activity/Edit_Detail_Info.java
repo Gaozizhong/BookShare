@@ -5,11 +5,14 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Objects;
 
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean._User;
@@ -17,13 +20,14 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 
-public class Edit_Detail_Info extends AppCompatActivity {
+public class Edit_Detail_Info extends AppCompatActivity implements View.OnClickListener{
 
     Context mContext = Edit_Detail_Info.this;
-    ImageView before;
     TextView phoneNum,Class,school,gender,name,editok;
     View editPhone,editClass,editSchool,editGender,editname;
     boolean sex1;
+    Toolbar toolbar;
+    _User bmobUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +39,17 @@ public class Edit_Detail_Info extends AppCompatActivity {
 
     //查找地址
     private void findView(){
-        before = (ImageView) findViewById(R.id.before);
-        editok = (TextView) findViewById(R.id.editOk);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
+            }
+        });
+        editok = (TextView)findViewById(R.id.text);
+        editok.setText("完成");
+        editok.setOnClickListener(this);
         phoneNum = (TextView) findViewById(R.id.phoneNum);
         Class = (TextView) findViewById(R.id.Class);
         school = (TextView) findViewById(R.id.school);
@@ -47,46 +60,22 @@ public class Edit_Detail_Info extends AppCompatActivity {
         editSchool = findViewById(R.id.editSchool);
         editGender = findViewById(R.id.editGender);
         editname = findViewById(R.id.editname);
+        bmobUser = BmobUser.getCurrentUser(_User.class);
+        phoneNum.setText(bmobUser.getMobilePhoneNumber());
+        Class.setText(bmobUser.getUserClass());
+        school.setText(bmobUser.getUserSchool());
+        if (bmobUser.getUsersex()) {
+            gender.setText("男");
+            sex1 = true;
+        } else {
+            gender.setText("女");
+            sex1 = false;
+        }
+        name.setText(bmobUser.getUsername());
     }
 
     //点击事件
     protected void onClick(){
-        assert before != null;
-        before.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-                overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
-            }
-        });
-
-        editok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //更新数据
-                _User newUser = new _User();
-                newUser.setMobilePhoneNumber(phoneNum.getText().toString());
-                newUser.setUserClass(Class.getText().toString());
-                newUser.setUserSchool(school.getText().toString());
-                newUser.setUsersex(sex1);
-                newUser.setUsername(name.getText().toString());
-                BmobUser bmobUser = BmobUser.getCurrentUser();
-                newUser.update(bmobUser.getObjectId(), new UpdateListener() {
-                    @Override
-                    public void done(BmobException e) {
-                        if (e == null) {
-                            Toast.makeText(mContext, "更新用户信息成功", Toast.LENGTH_SHORT).show();
-                            finish();
-                            overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
-
-                        } else {
-                            Toast.makeText(mContext, "更新用户信息失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-        });
-
 
         editPhone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,4 +164,39 @@ public class Edit_Detail_Info extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.editOk:
+                updateInfo();
+                break;
+        }
+    }
+
+    private void updateInfo() {
+        //更新数据
+        _User newUser = new _User();
+        if (bmobUser.getMobilePhoneNumber() != phoneNum.getText().toString()) {
+            newUser.setMobilePhoneNumber(phoneNum.getText().toString());
+        }
+        if (!Objects.equals(bmobUser.getUsername(), name.getText().toString())) {
+            newUser.setUsername(name.getText().toString());
+        }
+        newUser.setUserClass(Class.getText().toString());
+        newUser.setUserSchool(school.getText().toString());
+        newUser.setUsersex(sex1);
+        BmobUser bmobUser = BmobUser.getCurrentUser();
+        newUser.update(bmobUser.getObjectId(), new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    Toast.makeText(mContext, "更新用户信息成功", Toast.LENGTH_SHORT).show();
+                    finish();
+                    overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
+                } else {
+                    Toast.makeText(mContext, "更新用户信息失败:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
 }
