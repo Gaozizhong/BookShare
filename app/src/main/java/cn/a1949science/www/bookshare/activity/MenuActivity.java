@@ -93,7 +93,7 @@ public class MenuActivity extends AppCompatActivity
     SwipeRefreshLayout refresh;
     RecyclerView recyclerView;
     private int number_of_pages=1;
-    List<BookInfo> bookInfoList= null;
+    List<BookInfo> bookInfoList;
     myAdapterRecyclerView adapter;
     private LinearLayoutManager mLayoutManager;
     private int lastVisibleItem;
@@ -761,7 +761,7 @@ public class MenuActivity extends AppCompatActivity
     //显示列表
     private void displayList() {
         //查找book
-        BmobQuery<SharingBook> query = new BmobQuery<>();
+        final BmobQuery<SharingBook> query = new BmobQuery<>();
         //列表中不显示自己分享的书
         _User bmobUser = BmobUser.getCurrentUser(_User.class);
         Integer userNum = bmobUser.getUserNum();

@@ -15,12 +15,17 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.util.Arrays;
 import java.util.List;
 
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.activity.Book_detail;
 import cn.a1949science.www.bookshare.bean.BookInfo;
 import cn.a1949science.www.bookshare.bean.Book_Info;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 /**
  * Created by 高子忠 on 2017/4/22.
@@ -32,6 +37,8 @@ public class myAdapterRecyclerView extends RecyclerView.Adapter<myAdapterRecycle
     private List<BookInfo> list;
     private Integer[] bookNum;
     private Integer[] shareNum;
+    BmobFile bookImage;
+    String bookName,bookWriter;
 
     @Override
     public void onClick(View view) {
@@ -74,7 +81,7 @@ public class myAdapterRecyclerView extends RecyclerView.Adapter<myAdapterRecycle
                 data.putInt("textNum",0);
                 data.putInt("shareNum",shareNum[position]);
                 data.putInt("booknum",book_info.getBookNum());
-                data.putInt("userNum",0);
+                data.putInt("userNum",bookNum[position]);
                 Intent intent = new Intent(context, Book_detail.class);
                 intent.putExtras(data);
                 context.startActivity(intent);

@@ -13,15 +13,19 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.view.animation.Transformation;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -51,6 +55,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
     Button borrowBtn,borrowBtn2,RefuseBtn;
     Toolbar toolbar;
     LinearLayout no_refuse, can_refuse,translator_layout,borrowInfo;
+    private String[] sharing_list,objectIds,times;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -439,7 +444,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
         booknum = bundle.getInt("booknum");
         userNum = bundle.getInt("userNum");
         objectId1 = bundle.getString("objectId");
-        //Toast.makeText(mContext, String.valueOf(shareNum), Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, String.valueOf(shareNum)+":"+String.valueOf(booknum)+":"+String.valueOf(userNum), Toast.LENGTH_SHORT).show();
         //显示图书信息
         BmobQuery<BookInfo> query = new BmobQuery<>();
         query.addWhereEqualTo("bookNum",booknum);
@@ -483,23 +488,33 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
                 }
             }
         });
+
         //显示借书信息
-        BmobQuery<SharingBook> query1 = new BmobQuery<>();
-        query1.addWhereEqualTo("shareNum", shareNum);
-        query1.findObjects(new FindListener<SharingBook>() {
+        BmobQuery<SharingBook> query2 = new BmobQuery<>();
+        query2.addWhereEqualTo("bookNum", booknum);
+        query2.findObjects(new FindListener<SharingBook>() {
             @Override
             public void done(List<SharingBook> list, BmobException e) {
                 if (e == null) {
-                    objectId = list.get(0).getObjectId();
-                    time1 = list.get(0).getkeepTime().toString();
-                    OwnerNum = list.get(0).getOwnerNum();
+                    sharing_list =new String[list.size()];
+                    objectIds = new String[list.size()];
+                    times = new String[list.size()];
+                    for (int i=0;i<list.size();i++) {
+                        sharing_list[i]=list.get(i).getOwnerNum().toString();
+                        objectIds[i] = list.get(i).getObjectId();
+                        times[i] = list.get(i).getkeepTime().toString();
+                    }
+                    objectId = objectIds[0];
+                    time1 = times[0];
+                    OwnerNum = Integer.parseInt(sharing_list[0]);
                     time.setText(time1+"天");
-                    bookOwner.setText(String.valueOf(OwnerNum));
+                    bookOwner.setText(sharing_list[0]);
                 }else {
                     Toast.makeText(Book_detail.this, "查询失败1。"+ e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
         //判断是否喜欢
         BmobQuery<Like_Book> likeQuery = new BmobQuery<>();
         _User bmobUser = BmobUser.getCurrentUser(_User.class);
@@ -567,6 +582,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
         ISBN = (TextView) findViewById(R.id.ISBN);
         time = (TextView) findViewById(R.id.time);
         bookOwner = (TextView) findViewById(R.id.bookOwner);
+        bookOwner.setOnClickListener(this);
         borrowName = (TextView) findViewById(R.id.borrowName);
         borrowPhone = (TextView) findViewById(R.id.borrowPhone);
         borrowPhone.setOnClickListener(this);
@@ -652,7 +668,29 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
             case R.id.borrowPhone:
                 callSomeone();
                 break;
+            case R.id.bookOwner:
+                showChoise();
+                break;
         }
+    }
+
+    private void showChoise() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle("选择书主");
+        //    设置一个下拉的列表选择项
+        builder.setItems(sharing_list, new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                objectId = objectIds[which];
+                time1 = times[which];
+                OwnerNum = Integer.parseInt(sharing_list[which]);
+                time.setText(time1+"天");
+                bookOwner.setText(sharing_list[which]);
+            }
+        });
+        builder.show();
     }
 
     //打电话
