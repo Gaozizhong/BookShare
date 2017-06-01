@@ -16,7 +16,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
             <LinearLayout
                 android:id="@+id/introduce_layout"
                 android:layout_width="match_parent"
@@ -64,4 +63,9 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/writer_info">
+    </WebView>
 </LinearLayout>

@@ -272,6 +272,16 @@
                     android:gravity="center|center_horizontal"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textSize="14sp" />
+                <ImageView
+                    android:id="@+id/change_owner"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:contentDescription="@string/change_owner"
+                    android:paddingBottom="5dip"
+                    android:paddingLeft="5dip"
+                    android:paddingRight="5dip"
+                    android:paddingTop="5dip"
+                    android:src="@mipmap/expand" />
             </LinearLayout>
 
             <LinearLayout

@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.view.animation.Transformation;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +28,7 @@ public class WriterInfoPage extends AppCompatActivity implements View.OnClickLis
     String writer;
     View introduce_layout, expandView;
     boolean isExpand;
+    WebView writer_info;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +52,7 @@ public class WriterInfoPage extends AppCompatActivity implements View.OnClickLis
         introduce_layout = findViewById(R.id.introduce_layout);
         introduce_layout.setOnClickListener(this);
         expandView = findViewById(R.id.expand_view);
+        writer_info = (WebView) findViewById(R.id.writer_info);
     }
 
     private void detail() {
@@ -77,6 +82,14 @@ public class WriterInfoPage extends AppCompatActivity implements View.OnClickLis
                 }
             }
         });
+        writer_info.setWebViewClient(new WebViewClient(){
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+        });
+        writer_info.loadUrl("http://baike.baidu.com/item/"+writer);
     }
 
     @Override

@@ -45,7 +45,7 @@ import static android.R.color.black;
 public class Book_detail extends AppCompatActivity implements View.OnClickListener{
     Context mContext = Book_detail.this;
     ImageView image;
-    View introduce_layout, expandView;
+    View introduce_layout, expandView,owner;
     TextView introduce,bookName,writename,translator,bookPress,publishedDate,ISBN,time,bookOwner
             ,borrowName,borrowPhone,borrowAddress;
     ImageButton likeBtn,readBtn;
@@ -595,8 +595,9 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
         publishedDate = (TextView) findViewById(R.id.bookPress);
         ISBN = (TextView) findViewById(R.id.ISBN);
         time = (TextView) findViewById(R.id.time);
+        owner = findViewById(R.id.owner);
+        owner.setOnClickListener(this);
         bookOwner = (TextView) findViewById(R.id.bookOwner);
-        bookOwner.setOnClickListener(this);
         borrowName = (TextView) findViewById(R.id.borrowName);
         borrowPhone = (TextView) findViewById(R.id.borrowPhone);
         borrowPhone.setOnClickListener(this);
@@ -681,7 +682,7 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
             case R.id.borrowPhone:
                 callSomeone();
                 break;
-            case R.id.bookOwner:
+            case R.id.owner:
                 if (textNum == 0) {
                     showChoise();
                 }
