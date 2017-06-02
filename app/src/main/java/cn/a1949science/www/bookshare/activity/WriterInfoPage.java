@@ -101,7 +101,7 @@ public class WriterInfoPage extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    //图书介绍的展开
+    //作者介绍的展开
     private void expand() {
         isExpand = !isExpand;
         introduce.clearAnimation();//清楚动画效果

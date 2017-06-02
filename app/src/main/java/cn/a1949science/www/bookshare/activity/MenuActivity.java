@@ -192,7 +192,7 @@ public class MenuActivity extends AppCompatActivity
                         break;
                     case com.xiaomi.market.sdk.UpdateStatus.STATUS_NO_UPDATE:
                         // 无更新， UpdateResponse为null
-                        Toast.makeText(mContext, "版本无更新", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(mContext, "版本无更新", Toast.LENGTH_SHORT).show();
                         break;
                     case com.xiaomi.market.sdk.UpdateStatus.STATUS_NO_WIFI:
                         // 设置了只在WiFi下更新，且WiFi不可用时， UpdateResponse为null

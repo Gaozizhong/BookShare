@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.bean._User;
 import cn.bmob.sms.BmobSMS;
@@ -20,6 +22,8 @@ import cn.bmob.sms.exception.BmobException;
 import cn.bmob.sms.listener.RequestSMSCodeListener;
 import cn.bmob.sms.listener.VerifySMSCodeListener;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 
 public class RegisterPage extends AppCompatActivity {
@@ -141,12 +145,28 @@ public class RegisterPage extends AppCompatActivity {
                     @Override
                     public void done(BmobException e) {
                         if (e == null) {
-                            registerUser();
+                            phoneVerify();
                         } else {
                             Toast.makeText(mContext, "验证失败", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+            }
+        });
+    }
+
+    //手机号验重
+    private void phoneVerify() {
+        BmobQuery<_User> query = new BmobQuery<>();
+        query.addWhereEqualTo("mobilePhoneNumber", phoneNum.getText().toString());
+        query.findObjects(new FindListener<_User>() {
+            @Override
+            public void done(List<_User> list, cn.bmob.v3.exception.BmobException e) {
+                if (e == null && list.size() != 0) {
+                    registerUser();
+                } else {
+                    Toast.makeText(mContext, "手机号已被注册！" + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -172,7 +192,7 @@ public class RegisterPage extends AppCompatActivity {
                     finish();
                     overridePendingTransition(R.anim.slide_left_out,R.anim.slide_right_in);
                 } else {
-                    Toast.makeText(mContext, "手机号已被注册！"+e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "注册失败！"+e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
