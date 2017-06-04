@@ -1,6 +1,8 @@
 package cn.a1949science.www.bookshare.activity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -80,9 +82,32 @@ public class Detail_Info extends AppCompatActivity implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.text:
-                Intent it = new Intent(mContext,Edit_Detail_Info.class);
-                startActivity(it);
-                overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
+                _User bmobUser = BmobUser.getCurrentUser(_User.class);
+                if (bmobUser.getCertificationOk()) {
+                    Intent it = new Intent(mContext, Edit_Detail_Info.class);
+                    startActivity(it);
+                    overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                } else {
+                    AlertDialog dlg = new AlertDialog.Builder(mContext)
+                            .setTitle("请先进行实名认证")
+                            .setMessage("请进行实名认证")
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            })
+                            .setPositiveButton("去认证", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Intent it = new Intent(mContext, Identification.class);
+                                    startActivity(it);
+                                    overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
+                                }
+                            })
+                            .create();
+                    dlg.show();
+                }
                 break;
         }
     }

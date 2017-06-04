@@ -3,7 +3,6 @@ package cn.a1949science.www.bookshare.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,22 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
-import java.util.Arrays;
 import java.util.List;
 
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.activity.Book_detail;
 import cn.a1949science.www.bookshare.bean.BookInfo;
-import cn.a1949science.www.bookshare.bean.Book_Info;
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.datatype.BmobFile;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
-import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by 高子忠 on 2017/4/22.
