@@ -38,8 +38,7 @@ import com.bumptech.glide.Glide;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
-import com.xiaomi.market.sdk.XiaomiUpdateAgent;
-import com.xiaomi.market.sdk.XiaomiUpdateListener;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -105,7 +104,7 @@ public class MenuActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        updataApp();
+        //updataApp();
         BmobUpdateApp();
         setContentView(R.layout.activity_main);
         Bmob.initialize(this, "13d736220ecc496d7dcb63c7cf918ba7");
@@ -176,7 +175,7 @@ public class MenuActivity extends AppCompatActivity
     }
 
     //小米更新
-    private void updataApp() {
+    /*private void updataApp() {
         XiaomiUpdateAgent.setCheckUpdateOnlyWifi(true);
         XiaomiUpdateAgent.setUpdateAutoPopup(false);
         XiaomiUpdateAgent.setUpdateListener(new XiaomiUpdateListener() {
@@ -212,7 +211,7 @@ public class MenuActivity extends AppCompatActivity
             }
         });
         XiaomiUpdateAgent.update(this,true);
-    }
+    }*/
 
     @Override
     public void onBackPressed() {

@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -516,6 +517,21 @@ public class Book_detail extends AppCompatActivity implements View.OnClickListen
                         time1 = times[0];
                         OwnerNum = Integer.parseInt(sharing_list[0]);
                         time.setText(time1+"天");
+                       /* BmobQuery<_User> query1 = new BmobQuery<_User>();
+                        query1.addWhereContainedIn("userNum", Arrays.asList(sharing_list));
+                        query1.findObjects(new FindListener<_User>() {
+                            @Override
+                            public void done(List<_User> list2, BmobException e) {
+                                if (e == null) {
+                                    sharing_list = new String[list2.size()];
+                                    for (int i=0;i<list2.size();i++) {
+                                        sharing_list[i] = list2.get(i).getNickname();
+                                    }
+                                }else {
+                                    Toast.makeText(Book_detail.this, "查询失败。"+ e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });*/
                         bookOwner.setText(sharing_list[0]);
                         if (list.get(0).getBeSharing()) {
                             borrowBtn.setText("已被借出");

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.a1949science.www.bookshare">
-    <!--Bmob更新-->
+
+    <!-- Bmob更新 -->
+
 
     <!-- 小米更新SDK -->
     <uses-permission android:name="com.xiaomi.market.sdk.UPDATE" />
@@ -47,11 +49,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <meta-data android:value="test" android:name="BMOB_CHANNEL"/>
+        <meta-data
+            android:name="BMOB_CHANNEL"
+            android:value="test" />
 
         <!-- 小米更新 -->
-        <provider
+        <!--<provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="cn.a1949science.www.bookshare.selfupdate.fileprovider"
             android:exported="false"
@@ -59,13 +62,15 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider>
+        </provider>-->
         <!-- SDK调用系统下载管理器进行下载，需要注册receiver，在下载完成后进行增量包合成与安装 -->
-        <!--<receiver android:name="com.xiaomi.market.sdk.DownloadCompleteReceiver">
+        <!--
+        <receiver android:name="com.xiaomi.market.sdk.DownloadCompleteReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
-        </receiver>-->
+        </receiver>
+        -->
 
         <service
             android:name="com.xiaomi.push.service.XMPushService"
@@ -153,12 +158,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.WriterInfoPage" />
-        <activity android:name=".activity.ScanISBN"/>
-        <activity android:name=".activity.PermissionsActivity"/>
+        <activity android:name=".activity.ScanISBN" />
+        <activity android:name=".activity.PermissionsActivity" />
         <activity
             android:name="cn.bmob.v3.update.UpdateDialogActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
-        </activity>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
+        <activity android:name=".activity.ShareActivity"></activity>
     </application>
 
 </manifest>

@@ -17,6 +17,7 @@ import java.util.List;
 
 import cn.a1949science.www.bookshare.R;
 import cn.a1949science.www.bookshare.adapter.listAdapter;
+import cn.a1949science.www.bookshare.adapter.readAdapter;
 import cn.a1949science.www.bookshare.bean.BookInfo;
 import cn.a1949science.www.bookshare.bean.Read_Book;
 import cn.a1949science.www.bookshare.bean._User;
@@ -31,7 +32,7 @@ public class MyRead extends AppCompatActivity {
     RecyclerView recyclerView;
     private int lastVisibleItem,number_of_pages,selectNum=2;
     List<BookInfo> bookInfoList= null;
-    listAdapter adapter;
+    readAdapter adapter;
     private LinearLayoutManager mLayoutManager;
     TextView count;
     Integer[] bookNums;
@@ -208,7 +209,7 @@ public class MyRead extends AppCompatActivity {
                         public void done(List<BookInfo> list2, BmobException e) {
                             if (e == null) {
                                 bookInfoList = list2;
-                                adapter = new listAdapter(mContext, bookInfoList,objects,selectNum);
+                                adapter = new readAdapter(mContext, bookInfoList,objects,selectNum);
                                 recyclerView.setAdapter(adapter);
 
                             } else {
